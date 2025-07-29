@@ -32,6 +32,7 @@ Thumbs.db
 
 # Project specific
 DEVELOPMENT_PLAN.md
+appsettings.Development.json
 
 # Logs
 *.log
