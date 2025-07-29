@@ -1,0 +1,42 @@
+services:
+  postgres:
+    container_name: postgres
+    image: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: real_estate
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: bc6Hs&L
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  api:
+    container_name: real-estate-api
+    build:
+      context: ./Backend/RealEstate
+      dockerfile: RealEstate/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "5000:8080"
+    depends_on:
+      - postgres
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=real_estate;Username=postgres;Password=bc6Hs&L
+
+  frontend:
+    container_name: real-estate-frontend
+    build:
+      context: ./Frontend/real-estate-front
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    environment:
+      - REACT_APP_API_URL=http://localhost:5000
+
+volumes:
+  postgres_data:
