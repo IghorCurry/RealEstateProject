@@ -86,7 +86,7 @@ namespace RealEstate.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> ValidateToken([FromBody] string token)
+        public IActionResult ValidateToken([FromBody] string token)
         {
             if (string.IsNullOrEmpty(token))
                 return BadRequest(ModelState);
@@ -94,7 +94,7 @@ namespace RealEstate.WebApi.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await _manager.ValidateTokenAsync(token);
+            var result = _manager.ValidateTokenAsync(token);
             return Ok(result);
         }
     }

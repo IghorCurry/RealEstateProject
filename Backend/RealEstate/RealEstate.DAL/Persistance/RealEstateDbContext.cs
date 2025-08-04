@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using RealEstate.DAL.Entities;
 using RealEstate.DAL.Persistance.Configuration;
+using RealEstate.DAL.Persistance.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,6 +46,13 @@ namespace RealEstate.DAL.Persistance
             modelBuilder.ApplyConfiguration(new PropertyImageConfiguration());
             modelBuilder.ApplyConfiguration(new InquiryConfiguration());
             modelBuilder.ApplyConfiguration(new FavoriteConfiguration());
+
+            // Add seed data
+            var defaultAdminSettings = _configuration.GetSection(nameof(DefaultAdminSettings)).Get<DefaultAdminSettings>();
+            if (defaultAdminSettings != null)
+            {
+                modelBuilder.AddTestableData(defaultAdminSettings);
+            }
         }
     }
 }

@@ -1,23 +1,27 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using RealEstate.DAL.Entities;
 using RealEstate.BLL.Models.AuthModels;
+using RealEstate.DAL.Persistance.Settings;
 
 namespace RealEstate.BLL.Managers
 {
     public class AuthManager : IAuthManager
     {
-        protected UserManager<User> _userManager;
-        protected IConfiguration _configuration;
+        private readonly UserManager<User> _userManager;
+        private readonly AccessTokenSettings _accessTokenSettings;
 
-        public AuthManager(UserManager<User> userManager, IConfiguration configuration)
+        public AuthManager(
+            UserManager<User> userManager, 
+            IOptions<AccessTokenSettings> accessTokenSettings)
         {
             _userManager = userManager;
-            _configuration = configuration;
+            _accessTokenSettings = accessTokenSettings.Value;
         }
 
         public async Task<TokenPairModel> LoginAsync(UserLoginModel model)
@@ -70,7 +74,7 @@ namespace RealEstate.BLL.Managers
             // and check if it's expired or revoked
             
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["Jwt:SecretKey"] ?? "default-secret-key");
+            var key = Encoding.ASCII.GetBytes(_accessTokenSettings.SecretKey ?? "default-secret-key");
             
             try
             {
@@ -112,10 +116,10 @@ namespace RealEstate.BLL.Managers
             return true;
         }
 
-        public async Task<bool> ValidateTokenAsync(string token)
+        public bool ValidateTokenAsync(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["Jwt:SecretKey"] ?? "default-secret-key");
+            var key = Encoding.ASCII.GetBytes(_accessTokenSettings.SecretKey ?? "default-secret-key");
             
             try
             {
@@ -140,7 +144,7 @@ namespace RealEstate.BLL.Managers
         private async Task<TokenPairModel> GenerateTokenPairAsync(User user)
         {
             var accessToken = await GenerateAccessTokenAsync(user);
-            var refreshToken = await GenerateRefreshTokenAsync(user);
+            var refreshToken = GenerateRefreshTokenAsync(user);
 
             return new TokenPairModel
             {
@@ -152,7 +156,7 @@ namespace RealEstate.BLL.Managers
         private async Task<string> GenerateAccessTokenAsync(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["Jwt:SecretKey"] ?? "default-secret-key");
+            var key = Encoding.ASCII.GetBytes(_accessTokenSettings.SecretKey ?? "default-secret-key");
             
             var claims = new List<Claim>
             {
@@ -178,10 +182,10 @@ namespace RealEstate.BLL.Managers
             return tokenHandler.WriteToken(token);
         }
 
-        private async Task<string> GenerateRefreshTokenAsync(User user)
+        private string GenerateRefreshTokenAsync(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["Jwt:SecretKey"] ?? "default-secret-key");
+            var key = Encoding.ASCII.GetBytes(_accessTokenSettings.SecretKey ?? "default-secret-key");
             
             var claims = new List<Claim>
             {

@@ -8,6 +8,6 @@ namespace RealEstate.BLL.Managers
         public Task<TokenPairModel> RegisterAsync(UserRegisterModel model);
         public Task<TokenPairModel> RefreshTokenAsync(string refreshToken);
         public Task<bool> LogoutAsync(string refreshToken);
-        public Task<bool> ValidateTokenAsync(string token);
+        public bool ValidateTokenAsync(string token);
     }
 } 

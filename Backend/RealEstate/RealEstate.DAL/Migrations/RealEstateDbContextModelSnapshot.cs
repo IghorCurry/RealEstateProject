@@ -47,6 +47,22 @@ namespace RealEstate.DAL.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("a282b0b3-fbbf-4b62-829c-7be617214e1e"),
+                            ConcurrencyStamp = "1",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = new Guid("15f3ddd2-4f37-4db3-8d74-a94efc03db20"),
+                            ConcurrencyStamp = "2",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -131,6 +147,23 @@ namespace RealEstate.DAL.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = new Guid("cb37b3b6-88e7-4b4d-a6fc-56e1d1ed3aae"),
+                            RoleId = new Guid("a282b0b3-fbbf-4b62-829c-7be617214e1e")
+                        },
+                        new
+                        {
+                            UserId = new Guid("e2403a4f-0d12-4555-bf66-7338cd13ff3e"),
+                            RoleId = new Guid("15f3ddd2-4f37-4db3-8d74-a94efc03db20")
+                        },
+                        new
+                        {
+                            UserId = new Guid("d7e228e1-4c36-4ead-8bc1-622bb13140d2"),
+                            RoleId = new Guid("15f3ddd2-4f37-4db3-8d74-a94efc03db20")
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
@@ -385,6 +418,65 @@ namespace RealEstate.DAL.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("cb37b3b6-88e7-4b4d-a6fc-56e1d1ed3aae"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "a4edf478-25a3-4b3d-b972-cc1026bca389",
+                            Email = "admin@gmail.com",
+                            EmailConfirmed = true,
+                            FirstName = "",
+                            LastName = "",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@GMAIL.COM",
+                            NormalizedUserName = "REALESTATEADMIN",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGlPQu2Zj8BOoF2xfECoYNVsa26v936Ocprw2PIVC1E6rhC+qHtt8VJgxvNBPZPYig==",
+                            PhoneNumber = "0501234567",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "95d58893-e6ce-419a-99c7-087631de4d5e",
+                            TwoFactorEnabled = false,
+                            UserName = "RealEstateAdmin"
+                        },
+                        new
+                        {
+                            Id = new Guid("e2403a4f-0d12-4555-bf66-7338cd13ff3e"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "47a5b122-ff62-4e93-8dcf-32d299976d9d",
+                            Email = "user1@gmail.com",
+                            EmailConfirmed = true,
+                            FirstName = "",
+                            LastName = "",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "USER1@GMAIL.COM",
+                            NormalizedUserName = "USER1",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHNwIuoyKi+Qr5FYjewXfYZZJGOGz21Hrwj42pyhKXHUYE/pt8Zc1z2x4g0BDUfQGw==",
+                            PhoneNumber = "0114573600",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "c126fa02-a9ba-40a6-bf60-9ffbdf132415",
+                            TwoFactorEnabled = false,
+                            UserName = "user1"
+                        },
+                        new
+                        {
+                            Id = new Guid("d7e228e1-4c36-4ead-8bc1-622bb13140d2"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "00e1437e-c058-4770-a353-0a0e36d06a62",
+                            Email = "user2@gmail.com",
+                            EmailConfirmed = true,
+                            FirstName = "",
+                            LastName = "",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "USER2@GMAIL.COM",
+                            NormalizedUserName = "USER2",
+                            PasswordHash = "AQAAAAIAAYagAAAAEDM2hUCDPGmgC8MpTZraU93elVEAPeOyja0K3dTok5JNXJSjTwdg3L0tfdqhngCy2A==",
+                            PhoneNumber = "0217652388",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "29e18140-5b5d-4081-806e-4a6559084126",
+                            TwoFactorEnabled = false,
+                            UserName = "user2"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
