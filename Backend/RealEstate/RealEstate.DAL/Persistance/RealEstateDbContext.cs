@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using RealEstate.DAL.Entities;
 using RealEstate.DAL.Persistance.Configuration;
 using RealEstate.DAL.Persistance.Settings;
+using RealEstate.DAL.Persistance.Seeds;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,6 +54,9 @@ namespace RealEstate.DAL.Persistance
             {
                 modelBuilder.AddTestableData(defaultAdminSettings);
             }
+
+            // Add additional seed data
+            AllSeeds.SeedAllData(modelBuilder);
         }
     }
 }

@@ -109,11 +109,11 @@ namespace RealEstate.BLL.Managers
             }
         }
 
-        public async Task<bool> LogoutAsync(string refreshToken)
+        public Task<bool> LogoutAsync(string refreshToken)
         {
             // In a real application, you would invalidate the refresh token
             // by storing it in a blacklist or marking it as revoked in the database
-            return true;
+            return Task.FromResult(true);
         }
 
         public bool ValidateTokenAsync(string token)
