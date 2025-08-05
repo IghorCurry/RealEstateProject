@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using RealEstate.BLL.Managers.FavoriteManager;
 using RealEstate.BLL.Models.FavoriteModels;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RealEstate.WebApi.Controllers
 {
@@ -19,12 +20,19 @@ namespace RealEstate.WebApi.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> AddToFavorites(FavoriteCreateModel model)
         {
-            _logger.LogInformation("Adding property {PropertyId} to favorites for user {UserId}", model?.PropertyId, model?.UserId);
+            if (model == null)
+            {
+                _logger.LogWarning("Add to favorites failed: model is null");
+                return BadRequest(ModelState);
+            }
+
+            _logger.LogInformation("Adding property {PropertyId} to favorites for user {UserId}", model.PropertyId, model.UserId);
             
             if (!ModelState.IsValid)
             {
@@ -46,6 +54,7 @@ namespace RealEstate.WebApi.Controllers
         }
 
         [HttpDelete("{userId}/{propertyId}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -75,6 +84,7 @@ namespace RealEstate.WebApi.Controllers
         }
 
         [HttpGet("user/{userId}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -96,6 +106,7 @@ namespace RealEstate.WebApi.Controllers
         }
 
         [HttpGet("check/{userId}/{propertyId}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -117,6 +128,7 @@ namespace RealEstate.WebApi.Controllers
         }
 
         [HttpGet("count/{propertyId}")]
+        [Authorize(Policy = "RequireAdmin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

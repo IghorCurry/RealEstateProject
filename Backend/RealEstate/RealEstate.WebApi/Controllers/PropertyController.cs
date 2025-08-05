@@ -3,6 +3,7 @@ using RealEstate.BLL.Managers;
 using RealEstate.BLL.Models.PropertyModels;
 using RealEstate.DAL.Entities.Enums;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RealEstate.WebApi.Controllers
 {
@@ -20,6 +21,7 @@ namespace RealEstate.WebApi.Controllers
         }
 
         [HttpGet("get-all")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -39,6 +41,7 @@ namespace RealEstate.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -65,6 +68,7 @@ namespace RealEstate.WebApi.Controllers
         }
 
         [HttpGet("search")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -111,6 +115,7 @@ namespace RealEstate.WebApi.Controllers
         }
 
         [HttpGet("by-type/{propertyType}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -130,6 +135,7 @@ namespace RealEstate.WebApi.Controllers
         }
 
         [HttpGet("by-location/{location}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -149,6 +155,7 @@ namespace RealEstate.WebApi.Controllers
         }
 
         [HttpGet("by-status/{status}")]
+        [Authorize(Policy = "RequireAdmin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -168,6 +175,7 @@ namespace RealEstate.WebApi.Controllers
         }
 
         [HttpGet("user/{userId}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -187,6 +195,7 @@ namespace RealEstate.WebApi.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "RequireAdmin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -220,6 +229,7 @@ namespace RealEstate.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Policy = "RequireAdmin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -253,6 +263,7 @@ namespace RealEstate.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Policy = "RequireAdmin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
