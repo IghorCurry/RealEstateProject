@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using RealEstate.BLL.Managers;
 using RealEstate.BLL.Models.PropertyModels;
 using RealEstate.DAL.Entities.Enums;
+using Microsoft.Extensions.Logging;
 
 namespace RealEstate.WebApi.Controllers
 {
@@ -10,10 +11,12 @@ namespace RealEstate.WebApi.Controllers
     public class PropertyController : ControllerBase
     {
         private readonly PropertyManager _manager;
+        private readonly ILogger<PropertyController> _logger;
 
-        public PropertyController(PropertyManager manager)
+        public PropertyController(PropertyManager manager, ILogger<PropertyController> logger)
         {
             _manager = manager;
+            _logger = logger;
         }
 
         [HttpGet("get-all")]
@@ -22,10 +25,16 @@ namespace RealEstate.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAll()
         {
+            _logger.LogInformation("Getting all properties");
+            
             if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Invalid model state when getting all properties");
                 return BadRequest(ModelState);
+            }
 
             var entities = await Task.FromResult(_manager.GetAll());
+            _logger.LogInformation("Retrieved {Count} properties", entities.Count());
             return Ok(entities);
         }
 
@@ -36,13 +45,22 @@ namespace RealEstate.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetById(Guid id)
         {
+            _logger.LogInformation("Getting property by ID: {PropertyId}", id);
+            
             if (!await _manager.IsExists(id))
+            {
+                _logger.LogWarning("Property not found with ID: {PropertyId}", id);
                 return NotFound();
+            }
 
             if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Invalid model state when getting property by ID: {PropertyId}", id);
                 return BadRequest(ModelState);
+            }
 
             var entity = await _manager.GetByIdAsync(id);
+            _logger.LogInformation("Retrieved property: {PropertyId} - {Title}", id, entity.Title);
             return Ok(entity);
         }
 
@@ -66,15 +84,30 @@ namespace RealEstate.WebApi.Controllers
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 10)
         {
+            _logger.LogInformation("Searching properties with filters: Type={PropertyType}, Location={Location}, Status={Status}, Price={MinPrice}-{MaxPrice}, Page={Page}", 
+                propertyType, location, status, minPrice, maxPrice, page);
+            
             if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Invalid model state when searching properties");
                 return BadRequest(ModelState);
+            }
 
-            var entities = await _manager.SearchAsync(
-                propertyType, location, status, minPrice, maxPrice,
-                minBedrooms, maxBedrooms, minBathrooms, maxBathrooms,
-                minSquareMeters, maxSquareMeters, features,
-                page, pageSize);
-            return Ok(entities);
+            try
+            {
+                var entities = await _manager.SearchAsync(
+                    propertyType, location, status, minPrice, maxPrice,
+                    minBedrooms, maxBedrooms, minBathrooms, maxBathrooms,
+                    minSquareMeters, maxSquareMeters, features,
+                    page, pageSize);
+                _logger.LogInformation("Search completed: found {Count} properties", entities.Count());
+                return Ok(entities);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to search properties");
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpGet("by-type/{propertyType}")]
@@ -83,10 +116,16 @@ namespace RealEstate.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetByType(PropertyType propertyType)
         {
+            _logger.LogInformation("Getting properties by type: {PropertyType}", propertyType);
+            
             if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Invalid model state when getting properties by type: {PropertyType}", propertyType);
                 return BadRequest(ModelState);
+            }
 
             var entities = await _manager.GetByTypeAsync(propertyType);
+            _logger.LogInformation("Retrieved {Count} properties of type {PropertyType}", entities.Count(), propertyType);
             return Ok(entities);
         }
 
@@ -96,10 +135,16 @@ namespace RealEstate.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetByLocation(Location location)
         {
+            _logger.LogInformation("Getting properties by location: {Location}", location);
+            
             if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Invalid model state when getting properties by location: {Location}", location);
                 return BadRequest(ModelState);
+            }
 
             var entities = await _manager.GetByLocationAsync(location);
+            _logger.LogInformation("Retrieved {Count} properties in location {Location}", entities.Count(), location);
             return Ok(entities);
         }
 
@@ -109,10 +154,16 @@ namespace RealEstate.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetByStatus(PropertyStatus status)
         {
+            _logger.LogInformation("Getting properties by status: {Status}", status);
+            
             if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Invalid model state when getting properties by status: {Status}", status);
                 return BadRequest(ModelState);
+            }
 
             var entities = await _manager.GetByStatusAsync(status);
+            _logger.LogInformation("Retrieved {Count} properties with status {Status}", entities.Count(), status);
             return Ok(entities);
         }
 
@@ -122,10 +173,16 @@ namespace RealEstate.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetByUser(Guid userId)
         {
+            _logger.LogInformation("Getting properties by user: {UserId}", userId);
+            
             if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Invalid model state when getting properties by user: {UserId}", userId);
                 return BadRequest(ModelState);
+            }
 
             var entities = await _manager.GetByUserAsync(userId);
+            _logger.LogInformation("Retrieved {Count} properties for user {UserId}", entities.Count(), userId);
             return Ok(entities);
         }
 
@@ -135,14 +192,31 @@ namespace RealEstate.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Create(PropertyCreateModel model)
         {
+            _logger.LogInformation("Creating new property: {Title}", model?.Title);
+            
             if (model == null)
+            {
+                _logger.LogWarning("Property creation failed: model is null");
                 return BadRequest(ModelState);
+            }
 
             if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Property creation failed: invalid model state for {Title}", model.Title);
                 return BadRequest(ModelState);
+            }
 
-            var entity = await _manager.CreateAsync(model);
-            return Ok(entity);
+            try
+            {
+                var entity = await _manager.CreateAsync(model);
+                _logger.LogInformation("Property created successfully: {PropertyId} - {Title}", entity.Id, entity.Title);
+                return Ok(entity);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to create property: {Title}", model.Title);
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpPut("{id}")]
@@ -151,14 +225,31 @@ namespace RealEstate.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Update(PropertyUpdateModel model)
         {
+            _logger.LogInformation("Updating property: {PropertyId}", model?.Id);
+            
             if (model == null)
+            {
+                _logger.LogWarning("Property update failed: model is null");
                 return BadRequest(ModelState);
+            }
 
             if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Property update failed: invalid model state for {PropertyId}", model.Id);
                 return BadRequest(ModelState);
+            }
 
-            var entity = await _manager.UpdateAsync(model);
-            return Ok(entity);
+            try
+            {
+                var entity = await _manager.UpdateAsync(model);
+                _logger.LogInformation("Property updated successfully: {PropertyId} - {Title}", entity.Id, entity.Title);
+                return Ok(entity);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to update property: {PropertyId}", model.Id);
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpDelete("{id}")]
@@ -168,11 +259,25 @@ namespace RealEstate.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(Guid id)
         {
+            _logger.LogInformation("Deleting property with ID: {PropertyId}", id);
+            
             if (!await _manager.IsExists(id))
+            {
+                _logger.LogWarning("Property not found for deletion: {PropertyId}", id);
                 return NotFound();
+            }
 
-            var result = await _manager.DeleteAsync(id);
-            return Ok(result);
+            try
+            {
+                var result = await _manager.DeleteAsync(id);
+                _logger.LogInformation("Property deleted successfully: {PropertyId}", id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to delete property: {PropertyId}", id);
+                return StatusCode(500, "Internal server error");
+            }
         }
     }
 } 

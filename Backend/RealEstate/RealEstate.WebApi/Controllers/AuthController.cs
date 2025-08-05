@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RealEstate.BLL.Managers;
 using RealEstate.BLL.Models.AuthModels;
+using Microsoft.Extensions.Logging;
 
 namespace RealEstate.WebApi.Controllers
 {
@@ -9,10 +10,12 @@ namespace RealEstate.WebApi.Controllers
     public class AuthController : ControllerBase
     {
         private readonly AuthManager _manager;
+        private readonly ILogger<AuthController> _logger;
 
-        public AuthController(AuthManager manager)
+        public AuthController(AuthManager manager, ILogger<AuthController> logger)
         {
             _manager = manager;
+            _logger = logger;
         }
 
         [HttpPost("login")]
@@ -22,14 +25,31 @@ namespace RealEstate.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Login(UserLoginModel model)
         {
+            _logger.LogInformation("Login attempt for user: {Email}", model?.Email);
+            
             if (model == null)
+            {
+                _logger.LogWarning("Login failed: model is null");
                 return BadRequest(ModelState);
+            }
 
             if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Login failed: invalid model state for {Email}", model.Email);
                 return BadRequest(ModelState);
+            }
 
-            var result = await _manager.LoginAsync(model);
-            return Ok(result);
+            try
+            {
+                var result = await _manager.LoginAsync(model);
+                _logger.LogInformation("User logged in successfully: {Email}", model.Email);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Login failed for user: {Email}", model.Email);
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpPost("register")]
@@ -38,14 +58,31 @@ namespace RealEstate.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Register(UserRegisterModel model)
         {
+            _logger.LogInformation("Registration attempt for user: {Email}", model?.Email);
+            
             if (model == null)
+            {
+                _logger.LogWarning("Registration failed: model is null");
                 return BadRequest(ModelState);
+            }
 
             if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Registration failed: invalid model state for {Email}", model.Email);
                 return BadRequest(ModelState);
+            }
 
-            var result = await _manager.RegisterAsync(model);
-            return Ok(result);
+            try
+            {
+                var result = await _manager.RegisterAsync(model);
+                _logger.LogInformation("User registered successfully: {Email}", model.Email);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Registration failed for user: {Email}", model.Email);
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpPost("refresh-token")]
@@ -55,14 +92,31 @@ namespace RealEstate.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> RefreshToken([FromBody] string refreshToken)
         {
+            _logger.LogInformation("Token refresh attempt");
+            
             if (string.IsNullOrEmpty(refreshToken))
+            {
+                _logger.LogWarning("Token refresh failed: refresh token is null or empty");
                 return BadRequest(ModelState);
+            }
 
             if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Token refresh failed: invalid model state");
                 return BadRequest(ModelState);
+            }
 
-            var result = await _manager.RefreshTokenAsync(refreshToken);
-            return Ok(result);
+            try
+            {
+                var result = await _manager.RefreshTokenAsync(refreshToken);
+                _logger.LogInformation("Token refreshed successfully");
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Token refresh failed");
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpPost("logout")]
@@ -71,14 +125,31 @@ namespace RealEstate.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Logout([FromBody] string refreshToken)
         {
+            _logger.LogInformation("Logout attempt");
+            
             if (string.IsNullOrEmpty(refreshToken))
+            {
+                _logger.LogWarning("Logout failed: refresh token is null or empty");
                 return BadRequest(ModelState);
+            }
 
             if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Logout failed: invalid model state");
                 return BadRequest(ModelState);
+            }
 
-            var result = await _manager.LogoutAsync(refreshToken);
-            return Ok(result);
+            try
+            {
+                var result = await _manager.LogoutAsync(refreshToken);
+                _logger.LogInformation("User logged out successfully");
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Logout failed");
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpPost("validate-token")]
@@ -88,14 +159,31 @@ namespace RealEstate.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult ValidateToken([FromBody] string token)
         {
+            _logger.LogInformation("Token validation attempt");
+            
             if (string.IsNullOrEmpty(token))
+            {
+                _logger.LogWarning("Token validation failed: token is null or empty");
                 return BadRequest(ModelState);
+            }
 
             if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Token validation failed: invalid model state");
                 return BadRequest(ModelState);
+            }
 
-            var result = _manager.ValidateTokenAsync(token);
-            return Ok(result);
+            try
+            {
+                var result = _manager.ValidateTokenAsync(token);
+                _logger.LogInformation("Token validation completed");
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Token validation failed");
+                return StatusCode(500, "Internal server error");
+            }
         }
     }
 } 
