@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="houseGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1976d2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1565c0;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- House outline -->
+  <path d="M256 32L64 192v256h128V320h128v128h128V192L256 32z" fill="url(#houseGradient)" stroke="#0d47a1" stroke-width="8"/>
+  
+  <!-- Door -->
+  <rect x="224" y="320" width="64" height="128" fill="#8d6e63" stroke="#5d4037" stroke-width="4"/>
+  <circle cx="260" cy="400" r="4" fill="#5d4037"/>
+  
+  <!-- Windows -->
+  <rect x="160" y="240" width="48" height="48" fill="#81c784" stroke="#4caf50" stroke-width="3"/>
+  <rect x="304" y="240" width="48" height="48" fill="#81c784" stroke="#4caf50" stroke-width="3"/>
+  <rect x="160" y="320" width="48" height="48" fill="#81c784" stroke="#4caf50" stroke-width="3"/>
+  <rect x="304" y="320" width="48" height="48" fill="#81c784" stroke="#4caf50" stroke-width="3"/>
+  
+  <!-- Window frames -->
+  <line x1="184" y1="240" x2="184" y2="288" stroke="#4caf50" stroke-width="2"/>
+  <line x1="160" y1="264" x2="208" y2="264" stroke="#4caf50" stroke-width="2"/>
+  <line x1="328" y1="240" x2="328" y2="288" stroke="#4caf50" stroke-width="2"/>
+  <line x1="304" y1="264" x2="352" y2="264" stroke="#4caf50" stroke-width="2"/>
+  <line x1="184" y1="320" x2="184" y2="368" stroke="#4caf50" stroke-width="2"/>
+  <line x1="160" y1="344" x2="208" y2="344" stroke="#4caf50" stroke-width="2"/>
+  <line x1="328" y1="320" x2="328" y2="368" stroke="#4caf50" stroke-width="2"/>
+  <line x1="304" y1="344" x2="352" y2="344" stroke="#4caf50" stroke-width="2"/>
+  
+  <!-- Chimney -->
+  <rect x="320" y="160" width="32" height="80" fill="#8d6e63" stroke="#5d4037" stroke-width="3"/>
+  
+  <!-- Roof -->
+  <path d="M256 32L64 192L256 352L448 192L256 32z" fill="none" stroke="#0d47a1" stroke-width="8"/>
+</svg> 

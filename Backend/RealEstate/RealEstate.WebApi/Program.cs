@@ -17,12 +17,12 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Налаштування Serilog
+// Serilog
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .WriteTo.File("logs/app-.log", 
         rollingInterval: RollingInterval.Day,
-        retainedFileCountLimit: 7)  // Зберігати тільки 7 останніх файлів
+        retainedFileCountLimit: 7)  
     .CreateLogger();
 
 builder.Host.UseSerilog();
@@ -30,7 +30,7 @@ builder.Host.UseSerilog();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// Add FluentValidation
+// FluentValidation
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
 builder.Services.AddSwaggerGen(option =>

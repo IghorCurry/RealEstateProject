@@ -36,11 +36,5 @@
 
 
 
-  <ItemGroup>
-    <Folder Include="Persistance\Services\" />
-  </ItemGroup>
-
-
-
 </Project>
 
