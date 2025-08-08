@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -11,7 +11,7 @@ import {
   Avatar,
   useTheme,
   useMediaQuery,
-} from '@mui/material';
+} from "@mui/material";
 import {
   Menu as MenuIcon,
   Home as HomeIcon,
@@ -19,10 +19,10 @@ import {
   Person as PersonIcon,
   AdminPanelSettings as AdminIcon,
   Logout as LogoutIcon,
-} from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
-import { ROUTES } from '../../utils/constants';
-import { authService } from '../../services/authService';
+} from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../utils/constants";
+import { authService } from "../../services/authService";
 
 interface HeaderProps {
   onMenuClick?: () => void;
@@ -30,7 +30,7 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -91,10 +91,10 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
 
         <Box
           sx={{
-            display: 'flex',
-            alignItems: 'center',
+            display: "flex",
+            alignItems: "center",
             flexGrow: 1,
-            cursor: 'pointer',
+            cursor: "pointer",
           }}
           onClick={() => navigate(ROUTES.HOME)}
         >
@@ -114,7 +114,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
         </Box>
 
         {!isMobile && (
-          <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+          <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
             <Button
               color="inherit"
               startIcon={<HomeIcon />}
@@ -146,7 +146,9 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                   onClick={handleMenuOpen}
                   sx={{ ml: 1 }}
                 >
-                  <Avatar sx={{ width: 32, height: 32, bgcolor: 'secondary.main' }}>
+                  <Avatar
+                    sx={{ width: 32, height: 32, bgcolor: "secondary.main" }}
+                  >
                     {user?.fullName?.charAt(0) || <PersonIcon />}
                   </Avatar>
                 </IconButton>
@@ -155,12 +157,12 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                   open={Boolean(anchorEl)}
                   onClose={handleMenuClose}
                   anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right',
+                    vertical: "bottom",
+                    horizontal: "right",
                   }}
                   transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
+                    vertical: "top",
+                    horizontal: "right",
                   }}
                 >
                   <MenuItem onClick={handleProfileClick}>
@@ -191,13 +193,37 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
         )}
 
         {isMobile && isAuthenticated && (
-          <IconButton color="inherit" onClick={handleMenuOpen}>
-            <Avatar sx={{ width: 32, height: 32, bgcolor: 'secondary.main' }}>
-              {user?.fullName?.charAt(0) || <PersonIcon />}
-            </Avatar>
-          </IconButton>
+          <>
+            <IconButton color="inherit" onClick={handleMenuOpen}>
+              <Avatar sx={{ width: 32, height: 32, bgcolor: "secondary.main" }}>
+                {user?.fullName?.charAt(0) || <PersonIcon />}
+              </Avatar>
+            </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleMenuClose}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+            >
+              <MenuItem onClick={handleProfileClick}>
+                <PersonIcon sx={{ mr: 1 }} />
+                Profile
+              </MenuItem>
+              <MenuItem onClick={handleLogout}>
+                <LogoutIcon sx={{ mr: 1 }} />
+                Logout
+              </MenuItem>
+            </Menu>
+          </>
         )}
       </Toolbar>
     </AppBar>
   );
-}; 
+};
