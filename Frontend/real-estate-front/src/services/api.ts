@@ -38,6 +38,25 @@ class ApiClient {
         return response;
       },
       async (error: AxiosError) => {
+        // Обработка кодов перенаправления
+        if (
+          error.response?.status &&
+          error.response.status >= 300 &&
+          error.response.status < 400
+        ) {
+          console.log(
+            `Redirect detected: ${error.response.status} - ${error.response.statusText}`
+          );
+          console.log("Location header:", error.response.headers.location);
+
+          // Можно обработать перенаправление вручную
+          if (error.response.headers.location) {
+            // Выполнить запрос по новому URL
+            const redirectUrl = error.response.headers.location;
+            console.log("Redirecting to:", redirectUrl);
+          }
+        }
+
         if (error.response?.status === 401) {
           // Token expired or invalid
           localStorage.removeItem("accessToken");
