@@ -215,5 +215,22 @@ namespace RealEstate.BLL.Managers
             
             return await GetByIdAsync(existingProperty.Id);
         }
+
+        public async Task<bool> CanUserModifyPropertyAsync(Guid propertyId, Guid userId, bool isAdmin)
+        {
+            // Admin can modify any property
+            if (isAdmin)
+                return true;
+
+            // Check if the property belongs to the user
+            var property = await _dataContext.Properties
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.Id == propertyId);
+
+            if (property == null)
+                return false;
+
+            return property.UserId == userId;
+        }
     }
 } 

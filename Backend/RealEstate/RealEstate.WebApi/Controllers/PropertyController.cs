@@ -4,6 +4,7 @@ using RealEstate.BLL.Models.PropertyModels;
 using RealEstate.DAL.Entities.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace RealEstate.WebApi.Controllers
 {
@@ -195,7 +196,7 @@ namespace RealEstate.WebApi.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "RequireAdmin")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -217,6 +218,10 @@ namespace RealEstate.WebApi.Controllers
 
             try
             {
+                // Set the current user's ID as the property owner
+                var currentUserId = GetCurrentUserId();
+                model = model with { UserId = currentUserId };
+
                 var entity = await _manager.CreateAsync(model);
                 _logger.LogInformation("Property created successfully: {PropertyId} - {Title}", entity.Id, entity.Title);
                 return Ok(entity);
@@ -229,13 +234,15 @@ namespace RealEstate.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Policy = "RequireAdmin")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Update(PropertyUpdateModel model)
+        public async Task<IActionResult> Update(Guid id, PropertyUpdateModel model)
         {
-            _logger.LogInformation("Updating property: {PropertyId}", model?.Id);
+            _logger.LogInformation("Updating property: {PropertyId}", id);
             
             if (model == null)
             {
@@ -245,27 +252,48 @@ namespace RealEstate.WebApi.Controllers
 
             if (!ModelState.IsValid)
             {
-                _logger.LogWarning("Property update failed: invalid model state for {PropertyId}", model.Id);
+                _logger.LogWarning("Property update failed: invalid model state for {PropertyId}", id);
                 return BadRequest(ModelState);
             }
 
             try
             {
+                // Check if property exists
+                if (!await _manager.IsExists(id))
+                {
+                    _logger.LogWarning("Property not found for update: {PropertyId}", id);
+                    return NotFound();
+                }
+
+                // Check if user has permission to update this property
+                var currentUserId = GetCurrentUserId();
+                var isAdmin = User.IsInRole("Admin");
+                
+                if (!await _manager.CanUserModifyPropertyAsync(id, currentUserId, isAdmin))
+                {
+                    _logger.LogWarning("User {UserId} attempted to update property {PropertyId} without permission", currentUserId, id);
+                    return Forbid();
+                }
+
+                // Set the ID from the route parameter
+                model = model with { Id = id };
+
                 var entity = await _manager.UpdateAsync(model);
                 _logger.LogInformation("Property updated successfully: {PropertyId} - {Title}", entity.Id, entity.Title);
                 return Ok(entity);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to update property: {PropertyId}", model.Id);
+                _logger.LogError(ex, "Failed to update property: {PropertyId}", id);
                 return StatusCode(500, "Internal server error");
             }
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Policy = "RequireAdmin")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(Guid id)
@@ -280,6 +308,16 @@ namespace RealEstate.WebApi.Controllers
 
             try
             {
+                // Check if user has permission to delete this property
+                var currentUserId = GetCurrentUserId();
+                var isAdmin = User.IsInRole("Admin");
+                
+                if (!await _manager.CanUserModifyPropertyAsync(id, currentUserId, isAdmin))
+                {
+                    _logger.LogWarning("User {UserId} attempted to delete property {PropertyId} without permission", currentUserId, id);
+                    return Forbid();
+                }
+
                 var result = await _manager.DeleteAsync(id);
                 _logger.LogInformation("Property deleted successfully: {PropertyId}", id);
                 return Ok(result);
@@ -289,6 +327,16 @@ namespace RealEstate.WebApi.Controllers
                 _logger.LogError(ex, "Failed to delete property: {PropertyId}", id);
                 return StatusCode(500, "Internal server error");
             }
+        }
+
+        private Guid GetCurrentUserId()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out var userId))
+            {
+                throw new UnauthorizedAccessException("User ID not found in token");
+            }
+            return userId;
         }
     }
 } 

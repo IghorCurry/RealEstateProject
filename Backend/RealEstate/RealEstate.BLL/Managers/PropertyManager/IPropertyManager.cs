@@ -32,5 +32,6 @@ namespace RealEstate.BLL.Managers
         public Task<bool> IsExists(string title);
         public Task<PropertyDetailedViewModel> UpdateAsync(PropertyUpdateModel model);
         public Task<bool> DeleteAsync(Guid id);
+        public Task<bool> CanUserModifyPropertyAsync(Guid propertyId, Guid userId, bool isAdmin);
     }
 } 
