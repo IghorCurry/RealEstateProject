@@ -6,12 +6,15 @@ export interface Inquiry {
   status: string;
   createdAt: string;
   updatedAt: string;
-  property?: Property;
-  user?: User;
+  property?: any; // Property type will be imported when needed
+  user?: any; // User type will be imported when needed
 }
 
 export interface InquiryCreate {
   propertyId: string;
+  name: string;
+  email: string;
+  phone?: string;
   message: string;
 }
 

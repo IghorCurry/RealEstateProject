@@ -61,7 +61,6 @@ export interface PropertyCreate {
   bedrooms: number;
   bathrooms: number;
   area: number;
-  yearBuilt: number;
 }
 
 export interface PropertyUpdate extends Partial<PropertyCreate> {

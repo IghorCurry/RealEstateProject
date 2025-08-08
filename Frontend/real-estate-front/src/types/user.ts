@@ -9,10 +9,11 @@ export interface User {
 }
 
 export interface UserCreate {
+  firstName: string;
+  lastName: string;
   email: string;
+  phone: string;
   password: string;
-  fullName: string;
-  phoneNumber: string;
 }
 
 export interface UserUpdate {
@@ -27,9 +28,7 @@ export interface UserLogin {
   password: string;
 }
 
-export interface UserRegister extends UserCreate {
-  confirmPassword: string;
-}
+export type UserRegister = UserCreate;
 
 export interface AuthResponse {
   accessToken: string;
@@ -39,8 +38,8 @@ export interface AuthResponse {
 
 export interface UserProfile {
   user: User;
-  properties: Property[];
-  sentInquiries: Inquiry[];
-  receivedInquiries: Inquiry[];
-  favoriteProperties: Property[];
-} 
+  properties: any[]; // Property type will be imported when needed
+  sentInquiries: any[]; // Inquiry type will be imported when needed
+  receivedInquiries: any[]; // Inquiry type will be imported when needed
+  favoriteProperties: any[]; // Property type will be imported when needed
+}
