@@ -24,6 +24,18 @@
     <PackageReference Include="SendGrid" Version="9.29.3" />
     <PackageReference Include="SendGrid.Extensions.DependencyInjection" Version="1.0.1" />
     <PackageReference Include="StackExchange.Redis" Version="2.8.58" />
+    
+    <!-- Тестовые пакеты -->
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="NUnit" Version="4.0.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+    <PackageReference Include="Moq" Version="4.20.70" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RealEstate.BLL\RealEstate.BLL.csproj" />
+    <ProjectReference Include="..\RealEstate.DAL\RealEstate.DAL.csproj" />
   </ItemGroup>
 
 </Project>
