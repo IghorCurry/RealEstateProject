@@ -32,8 +32,34 @@ Thumbs.db
 
 # Project specific
 DEVELOPMENT_PLAN.md
+deployment-checklist.md
+deployment-guide.md
 appsettings.Development.json
+appsettings.Production.json
 Properties/launchSettings.json
+
+# Deployment files
+*.zip
+publish/
+Backend/**/publish/
+
+# Logs
+logs/
+*.log
+
+# User-specific files
+*.csproj.user
+*.user
+
+# HTTP files (may contain secrets)
+*.http
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-*
 
 # Logs
 *.log

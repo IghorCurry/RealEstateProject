@@ -1,0 +1,24 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "REDatabase": "Host=your-azure-postgres-server.postgres.database.azure.com;Database=real_estate;Username=postgres@your-azure-postgres-server;Password=your-azure-password;SSL Mode=Require;Trust Server Certificate=true;"
+  },
+  "DefaultAdminSettings": {
+    "Username": "RealEstateAdmin",
+    "Email": "admin@realestate.com",
+    "PhoneNumber": "0501234567",
+    "Password": "your-admin-password"
+  },
+  "AccessTokenSettings": {
+    "Issuer": "RealEstateAPI",
+    "Audience": "RealEstateClient",
+    "SigningKey": "your-signing-key",
+    "SecretKey": "your-secret-key"
+  },
+  "AllowedHosts": "*"
+}
