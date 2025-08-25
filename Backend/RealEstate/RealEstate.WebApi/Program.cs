@@ -38,9 +38,10 @@ builder.Services.AddCors(options =>
     {
         policy.SetIsOriginAllowed(origin =>
         {
-            // Дозволяємо тільки localhost для розробки
-            return origin.StartsWith("http://localhost:") ||
-                   origin.StartsWith("http://127.0.0.1:");
+                    // Дозволяємо localhost для розробки та Azure Static Web App
+        return origin.StartsWith("http://localhost:") ||
+               origin.StartsWith("http://127.0.0.1:") ||
+               origin.StartsWith("https://real-estate-front-");
         })
         .AllowAnyHeader()
         .AllowAnyMethod()
