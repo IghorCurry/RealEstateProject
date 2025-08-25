@@ -1,0 +1,621 @@
+export const translations = {
+  en: {
+    // Navigation
+    "nav.home": "Home",
+    "nav.properties": "Properties",
+    "nav.about": "About",
+    "nav.faq": "FAQ",
+    "nav.developer": "Developer",
+    "nav.login": "Login",
+    "nav.register": "Register",
+    "nav.profile": "Profile",
+    "nav.admin": "Admin",
+    "nav.logout": "Logout",
+    "nav.favorites": "Favorites",
+    "nav.inquiries": "Inquiries",
+
+    // Home Page
+    "home.hero.title": "Find Your Dream Home",
+    "home.hero.subtitle":
+      "Discover the perfect property that matches your lifestyle and budget",
+    "home.hero.search": "Search Properties",
+    "home.hero.browse": "Browse All Properties",
+    "home.hero.list": "List Property",
+    "home.hero.login": "Sign In to List",
+    "home.stats.properties": "Properties",
+    "home.stats.clients": "Happy Clients",
+    "home.stats.cities": "Cities",
+    "home.stats.experience": "Years Experience",
+    "home.features.title": "Why Choose Us",
+    "home.features.subtitle": "Discover what makes us different",
+    "home.features.search.title": "Advanced Search",
+    "home.features.search.desc":
+      "Find properties with our powerful search filters",
+    "home.features.security.title": "Secure Platform",
+    "home.features.security.desc":
+      "Your data is protected with industry-standard security",
+    "home.features.support.title": "24/7 Support",
+    "home.features.support.desc":
+      "Get help whenever you need it with our dedicated support team",
+    "home.features.insights.title": "Market Insights",
+    "home.features.insights.desc":
+      "Access real-time market data and property analytics",
+    "home.cta.title": "Ready to Find Your Dream Home?",
+    "home.cta.subtitle":
+      "Join thousands of satisfied customers who found their perfect property",
+    "home.cta.button": "Start Searching",
+
+    // Properties
+    "properties.title": "Properties",
+    "properties.subtitle": "Find your perfect home",
+    "properties.search.placeholder": "Search properties...",
+    "properties.filter.title": "Filters",
+    "properties.filter.type": "Property Type",
+    "properties.filter.status": "Status",
+    "properties.filter.location": "Location",
+    "properties.filter.price": "Price Range",
+    "properties.filter.bedrooms": "Bedrooms",
+    "properties.filter.bathrooms": "Bathrooms",
+    "properties.filter.area": "Area Range",
+    "properties.filter.allTypes": "All Types",
+    "properties.filter.allStatuses": "All Statuses",
+    "properties.filter.allLocations": "All Locations",
+    "properties.filter.any": "Any",
+    "properties.filter.apply": "Apply Filters",
+    "properties.filter.clear": "Clear Filters",
+    "properties.sort.title": "Sort by",
+    "properties.sort.price.low": "Price: Low to High",
+    "properties.sort.price.high": "Price: High to Low",
+    "properties.sort.date.new": "Date: Newest First",
+    "properties.sort.date.old": "Date: Oldest First",
+    "properties.empty.title": "No properties found",
+    "properties.empty.description":
+      "Try adjusting your search criteria or browse all properties",
+    "properties.empty.browse": "Browse All Properties",
+    "properties.count.singular": "property",
+    "properties.count.plural": "properties",
+    "properties.count.found": "found",
+    "properties.load.error": "Failed to load properties. Please try again.",
+    "property.delete.success": "Property deleted successfully!",
+    "property.delete.error": "Failed to delete property. Please try again.",
+    "property.create.add": "Add Property",
+    "common.show": "Show",
+    "common.hide": "Hide",
+
+    // Property Details
+    "property.details.title": "Property Details",
+    "property.details.price": "Price",
+    "property.details.type": "Type",
+    "property.details.status": "Status",
+    "property.details.location": "Location",
+    "property.details.bedrooms": "Bedrooms",
+    "property.details.bathrooms": "Bathrooms",
+    "property.details.area": "Area",
+    "property.details.description": "Description",
+    "property.details.amenities": "Amenities",
+    "property.details.contact": "Contact Owner",
+    "property.details.favorite": "Add to Favorites",
+    "property.details.unfavorite": "Remove from Favorites",
+    "property.details.edit": "Edit Property",
+    "property.details.delete": "Delete Property",
+    "property.details.images": "Images",
+    "property.details.related": "Related Properties",
+    "property.edit.title": "Edit Property",
+    "property.edit.description":
+      "Update the property details below. All fields are required.",
+    "property.edit.submit": "Update Property",
+    "property.edit.update": "Update Property",
+    "property.edit.updating": "Updating...",
+    "property.edit.success": "Property updated successfully!",
+    "property.edit.error": "Failed to update property. Please try again.",
+
+    // Property Form
+    "property.form.title": "Property Title",
+    "property.form.description": "Description",
+    "property.form.price": "Price ($)",
+    "property.form.address": "Address",
+    "property.form.location": "Location",
+    "property.form.propertyType": "Property Type",
+    "property.form.status": "Status",
+    "property.form.bedrooms": "Bedrooms",
+    "property.form.bathrooms": "Bathrooms",
+    "property.form.squareMeters": "Square Meters",
+    "property.form.features": "Features",
+    "property.form.addFeature": "Add a feature (e.g., Pool, Garage)",
+
+    // Property Types
+    "property.type.apartment": "Apartment",
+    "property.type.house": "House",
+    "property.type.condo": "Condo",
+    "property.type.townhouse": "Townhouse",
+    "property.type.villa": "Villa",
+    "property.type.land": "Land",
+
+    // Property Status
+    "property.status.for.sale": "For Sale",
+    "property.status.for.rent": "For Rent",
+    "property.status.sold": "Sold",
+    "property.status.rented": "Rented",
+
+    // Locations
+    "location.kyiv": "Kyiv",
+    "location.lviv": "Lviv",
+    "location.kharkiv": "Kharkiv",
+    "location.odesa": "Odesa",
+    "location.dnipro": "Dnipro",
+
+    // Auth
+    "auth.login.title": "Login",
+    "auth.login.subtitle": "Welcome back! Please sign in to your account",
+    "auth.login.email": "Email",
+    "auth.login.password": "Password",
+    "auth.login.submit": "Sign In",
+    "auth.login.forgot": "Forgot password?",
+    "auth.login.no.account": "Don't have an account?",
+    "auth.login.register": "Register",
+    "auth.register.title": "Register",
+    "auth.register.subtitle": "Create your account to get started",
+    "auth.register.firstName": "First Name",
+    "auth.register.lastName": "Last Name",
+    "auth.register.email": "Email",
+    "auth.register.phone": "Phone",
+    "auth.register.password": "Password",
+    "auth.register.confirmPassword": "Confirm Password",
+    "auth.register.submit": "Create Account",
+    "auth.register.have.account": "Already have an account?",
+    "auth.register.login": "Login",
+
+    // Profile
+    "profile.title": "Profile",
+    "profile.subtitle": "Manage your account and preferences",
+    "profile.personal.info": "Personal Information",
+    "profile.account.stats": "Account Statistics",
+    "profile.my.properties": "My Properties",
+    "profile.my.inquiries": "My Inquiries",
+    "profile.edit": "Edit Profile",
+    "profile.save": "Save Changes",
+    "profile.cancel": "Cancel",
+    "profile.delete.account": "Delete Account",
+    "profile.delete.confirm": "Are you sure you want to delete your account?",
+    "profile.delete.warning": "This action cannot be undone.",
+
+    // Admin
+    "admin.title": "Admin Dashboard",
+    "admin.subtitle": "Manage your real estate platform",
+    "admin.users.title": "User Management",
+    "admin.users.subtitle": "View and manage user accounts",
+    "admin.properties.title": "Property Management",
+    "admin.properties.subtitle": "Manage all properties in the system",
+    "admin.inquiries.title": "Inquiry Management",
+    "admin.inquiries.subtitle": "View and respond to property inquiries",
+
+    // About
+    "about.title": "About Us",
+    "about.subtitle": "Learn more about our real estate platform",
+    "about.description":
+      "We are dedicated to helping you find the perfect property. Our platform connects buyers, sellers, and renters in a seamless and secure environment.",
+    "about.what.title": "What We Do",
+    "about.what.desc":
+      "We provide a comprehensive real estate platform that connects buyers, sellers, and renters in a secure and efficient environment.",
+    "about.purpose.title": "Our Purpose",
+    "about.purpose.desc":
+      "To simplify the real estate process and make property transactions accessible, transparent, and enjoyable for everyone.",
+    "about.benefits.title": "Why Choose Us",
+    "about.benefits.desc":
+      "Advanced search tools, secure transactions, professional support, and a user-friendly experience that puts you first.",
+    "about.tech.title": "Modern Technology",
+    "about.tech.desc":
+      "Built with cutting-edge technology to ensure fast, reliable, and secure property management and transactions.",
+    "about.mission.title": "Our Mission",
+    "about.mission.description":
+      "To provide a seamless, secure, and user-friendly platform that connects people with their perfect properties, making real estate transactions simple, transparent, and enjoyable for everyone involved.",
+
+    // FAQ
+    "faq.title": "Frequently Asked Questions",
+    "faq.subtitle": "Find answers to common questions",
+    "faq.search.title": "How do I search for properties?",
+    "faq.search.answer":
+      "Use our search bar to find properties by location, type, price range, and other criteria. You can also use filters to narrow down your results.",
+    "faq.favorites.title": "How do I save properties to favorites?",
+    "faq.favorites.answer":
+      "Click the heart icon on any property card or property details page to add it to your favorites. You can view all your favorites in the Favorites section.",
+    "faq.contact.title": "How do I contact property owners?",
+    "faq.contact.answer":
+      "Use the inquiry form on property detail pages to send a message to property owners. They will receive your inquiry and can respond directly.",
+    "faq.payment.title": "What payment methods do you accept?",
+    "faq.payment.answer":
+      "We accept all major credit cards, PayPal, and bank transfers. All transactions are secured and encrypted for your safety.",
+    "faq.account.title": "How do I create an account?",
+    "faq.account.answer":
+      "Click the 'Register' button in the top navigation and fill out the registration form with your details. You'll receive a confirmation email to verify your account.",
+    "faq.list.title": "How do I list my property?",
+    "faq.list.answer":
+      "After logging in, click 'Add Property' in your profile or use the 'List Property' button. Fill out the property details form and upload photos to complete your listing.",
+    "faq.contact.support.title": "Still Have Questions?",
+    "faq.contact.support.description":
+      "Our support team is here to help you 24/7. Don't hesitate to reach out if you need assistance.",
+    "faq.contact.support.email": "support@realestate.com",
+
+    // Developer Page
+    "developer.title": "Developer",
+    "developer.subtitle": "Full-Stack Developer",
+    "developer.name": "Ihor Yushkov",
+    "developer.description":
+      "Passionate full-stack developer with expertise in modern web technologies. Specializes in creating reliable, scalable applications with excellent user experience.",
+    "developer.skills.title": "Technical Skills",
+    "developer.frontend.title": "Frontend",
+    "developer.backend.title": "Backend",
+    "developer.database.title": "Database",
+    "developer.tools.title": "Tools & DevOps",
+    "developer.soft.title": "Soft Skills",
+    "developer.linkedin": "Connect on LinkedIn",
+
+    // Common
+    "common.loading": "Loading...",
+    "common.error": "An error occurred",
+    "common.back": "Back",
+    "common.save": "Save",
+    "common.cancel": "Cancel",
+    "common.delete": "Delete",
+    "common.edit": "Edit",
+    "common.view": "View",
+    "common.search": "Search",
+    "common.filter": "Filter",
+    "common.clear": "Clear",
+    "common.submit": "Submit",
+    "common.close": "Close",
+    "common.confirm": "Confirm",
+    "common.yes": "Yes",
+    "common.no": "No",
+    "common.updating": "Updating...",
+
+    // Favorites
+    "favorites.title": "My Favorites",
+    "favorites.subtitle": "Your saved properties",
+    "favorites.empty.title": "No favorites yet",
+    "favorites.empty.description":
+      "Start browsing properties and add them to your favorites to see them here.",
+    "favorites.empty.browse": "Browse Properties",
+    "favorites.count": "You have {count} favorite properties",
+    "favorites.load.error": "Failed to load favorites. Please try again.",
+    "favorites.auth.required": "Please sign in to view your favorites.",
+    "favorites.remove.success": "Removed from favorites",
+    "favorites.remove.error": "Failed to remove from favorites",
+    "favorites.add.success": "Added to favorites",
+    "favorites.add.error": "Failed to add to favorites",
+
+    // Inquiries
+    "inquiries.title": "My Inquiries",
+    "inquiries.subtitle": "Track your property inquiries",
+    "inquiries.empty.title": "No inquiries sent yet",
+    "inquiries.empty.description":
+      "Start browsing properties and sending inquiries to see them here.",
+    "inquiries.empty.browse": "Browse Properties",
+    "inquiries.count": "You have {count} inquiries",
+    "inquiries.reply": "Reply",
+    "inquiries.delete": "Delete",
+    "inquiries.send": "Send Inquiry",
+    "inquiries.sent": "Inquiry sent successfully!",
+    "inquiries.reply_sent": "Reply sent successfully!",
+
+    // Footer
+    "footer.language": "Language",
+    "footer.about": "About",
+    "footer.faq": "FAQ",
+    "footer.developer": "Developer",
+    "footer.paymentMethods": "Payment Methods",
+  },
+  uk: {
+    // Navigation
+    "nav.home": "Головна",
+    "nav.properties": "Нерухомість",
+    "nav.about": "Про нас",
+    "nav.faq": "FAQ",
+    "nav.developer": "Розробник",
+    "nav.login": "Увійти",
+    "nav.register": "Реєстрація",
+    "nav.profile": "Профіль",
+    "nav.admin": "Адмін",
+    "nav.logout": "Вийти",
+    "nav.favorites": "Улюблені",
+    "nav.inquiries": "Запити",
+
+    // Home Page
+    "home.hero.title": "Знайдіть свою мрію",
+    "home.hero.subtitle":
+      "Відкрийте ідеальну нерухомість, яка відповідає вашому стилю життя та бюджету",
+    "home.hero.search": "Пошук нерухомості",
+    "home.hero.browse": "Переглянути всю нерухомість",
+    "home.hero.list": "Додати нерухомість",
+    "home.hero.login": "Увійти для додавання",
+    "home.stats.properties": "Об'єктів",
+    "home.stats.clients": "Задоволених клієнтів",
+    "home.stats.cities": "Міст",
+    "home.stats.experience": "Років досвіду",
+    "home.features.title": "Чому обирають нас",
+    "home.features.subtitle": "Дізнайтеся, що робить нас особливими",
+    "home.features.search.title": "Розширений пошук",
+    "home.features.search.desc":
+      "Знаходите нерухомість за допомогою наших потужних фільтрів",
+    "home.features.security.title": "Безпечна платформа",
+    "home.features.security.desc": "Ваші дані захищені стандартами індустрії",
+    "home.features.support.title": "Підтримка 24/7",
+    "home.features.support.desc":
+      "Отримуйте допомогу коли потрібно з нашою командою підтримки",
+    "home.features.insights.title": "Аналітика ринку",
+    "home.features.insights.desc":
+      "Отримуйте дані ринку в реальному часі та аналітику нерухомості",
+    "home.cta.title": "Готові знайти свою мрію?",
+    "home.cta.subtitle":
+      "Приєднуйтесь до тисяч задоволених клієнтів, які знайшли свою ідеальну нерухомість",
+    "home.cta.button": "Почати пошук",
+
+    // Properties
+    "properties.title": "Нерухомість",
+    "properties.subtitle": "Знайдіть свій ідеальний дім",
+    "properties.search.placeholder": "Пошук нерухомості...",
+    "properties.filter.title": "Фільтри",
+    "properties.filter.type": "Тип нерухомості",
+    "properties.filter.status": "Статус",
+    "properties.filter.location": "Розташування",
+    "properties.filter.price": "Діапазон цін",
+    "properties.filter.bedrooms": "Спальні",
+    "properties.filter.bathrooms": "Ванні кімнати",
+    "properties.filter.area": "Діапазон площі",
+    "properties.filter.allTypes": "Всі типи",
+    "properties.filter.allStatuses": "Всі статуси",
+    "properties.filter.allLocations": "Всі локації",
+    "properties.filter.any": "Будь-яка",
+    "properties.filter.apply": "Застосувати фільтри",
+    "properties.filter.clear": "Очистити фільтри",
+    "properties.sort.title": "Сортувати за",
+    "properties.sort.price.low": "Ціна: від низької до високої",
+    "properties.sort.price.high": "Ціна: від високої до низької",
+    "properties.sort.date.new": "Дата: спочатку нові",
+    "properties.sort.date.old": "Дата: спочатку старі",
+    "properties.empty.title": "Нерухомість не знайдена",
+    "properties.empty.description":
+      "Спробуйте змінити критерії пошуку або переглянути всю нерухомість",
+    "properties.empty.browse": "Переглянути всю нерухомість",
+    "properties.count.singular": "нерухомість",
+    "properties.count.plural": "нерухомості",
+    "properties.count.found": "знайдено",
+    "properties.load.error":
+      "Не вдалося завантажити нерухомість. Спробуйте ще раз.",
+    "property.delete.success": "Нерухомість успішно видалена!",
+    "property.delete.error":
+      "Не вдалося видалити нерухомість. Спробуйте ще раз.",
+    "property.create.add": "Додати нерухомість",
+    "common.show": "Показати",
+    "common.hide": "Сховати",
+
+    // Property Details
+    "property.details.title": "Деталі нерухомості",
+    "property.details.price": "Ціна",
+    "property.details.type": "Тип",
+    "property.details.status": "Статус",
+    "property.details.location": "Розташування",
+    "property.details.bedrooms": "Спальні",
+    "property.details.bathrooms": "Ванні кімнати",
+    "property.details.area": "Площа",
+    "property.details.description": "Опис",
+    "property.details.amenities": "Зручності",
+    "property.details.contact": "Зв'язатися з власником",
+    "property.details.favorite": "Додати до улюблених",
+    "property.details.unfavorite": "Видалити з улюблених",
+    "property.details.edit": "Редагувати нерухомість",
+    "property.details.delete": "Видалити нерухомість",
+    "property.details.images": "Зображення",
+    "property.details.related": "Схожа нерухомість",
+    "property.edit.title": "Редагувати нерухомість",
+    "property.edit.description":
+      "Оновіть деталі нерухомості нижче. Всі поля обов'язкові.",
+    "property.edit.submit": "Оновити нерухомість",
+    "property.edit.update": "Оновити нерухомість",
+    "property.edit.updating": "Оновлення...",
+    "property.edit.success": "Нерухомість успішно оновлена!",
+    "property.edit.error": "Не вдалося оновити нерухомість. Спробуйте ще раз.",
+
+    // Property Form
+    "property.form.title": "Назва нерухомості",
+    "property.form.description": "Опис",
+    "property.form.price": "Ціна ($)",
+    "property.form.address": "Адреса",
+    "property.form.location": "Розташування",
+    "property.form.propertyType": "Тип нерухомості",
+    "property.form.status": "Статус",
+    "property.form.bedrooms": "Спальні",
+    "property.form.bathrooms": "Ванні кімнати",
+    "property.form.squareMeters": "Квадратні метри",
+    "property.form.features": "Зручності",
+    "property.form.addFeature": "Додати зручність (наприклад, Басейн, Гараж)",
+
+    // Property Types
+    "property.type.apartment": "Квартира",
+    "property.type.house": "Будинок",
+    "property.type.condo": "Кондо",
+    "property.type.townhouse": "Таунхаус",
+    "property.type.villa": "Вілла",
+    "property.type.land": "Земельна ділянка",
+
+    // Property Status
+    "property.status.for.sale": "На продаж",
+    "property.status.for.rent": "На оренду",
+    "property.status.sold": "Продано",
+    "property.status.rented": "Орендовано",
+
+    // Locations
+    "location.kyiv": "Київ",
+    "location.lviv": "Львів",
+    "location.kharkiv": "Харків",
+    "location.odesa": "Одеса",
+    "location.dnipro": "Дніпро",
+
+    // Auth
+    "auth.login.title": "Увійти",
+    "auth.login.subtitle":
+      "Ласкаво просимо! Будь ласка, увійдіть до свого облікового запису",
+    "auth.login.email": "Email",
+    "auth.login.password": "Пароль",
+    "auth.login.submit": "Увійти",
+    "auth.login.forgot": "Забули пароль?",
+    "auth.login.no.account": "Немає облікового запису?",
+    "auth.login.register": "Зареєструватися",
+    "auth.register.title": "Реєстрація",
+    "auth.register.subtitle": "Створіть свій обліковий запис, щоб почати",
+    "auth.register.firstName": "Ім'я",
+    "auth.register.lastName": "Прізвище",
+    "auth.register.email": "Email",
+    "auth.register.phone": "Телефон",
+    "auth.register.password": "Пароль",
+    "auth.register.confirmPassword": "Підтвердіть пароль",
+    "auth.register.submit": "Створити обліковий запис",
+    "auth.register.have.account": "Вже є обліковий запис?",
+    "auth.register.login": "Увійти",
+
+    // Profile
+    "profile.title": "Профіль",
+    "profile.subtitle": "Керуйте своїм обліковим записом та налаштуваннями",
+    "profile.personal.info": "Особиста інформація",
+    "profile.account.stats": "Статистика облікового запису",
+    "profile.my.properties": "Моя нерухомість",
+    "profile.my.inquiries": "Мої запити",
+    "profile.edit": "Редагувати профіль",
+    "profile.save": "Зберегти зміни",
+    "profile.cancel": "Скасувати",
+    "profile.delete.account": "Видалити обліковий запис",
+    "profile.delete.confirm":
+      "Ви впевнені, що хочете видалити свій обліковий запис?",
+    "profile.delete.warning": "Цю дію неможливо скасувати.",
+
+    // Admin
+    "admin.title": "Адмін панель",
+    "admin.subtitle": "Керуйте вашою платформою нерухомості",
+    "admin.users.title": "Управління користувачами",
+    "admin.users.subtitle":
+      "Переглядайте та керуйте обліковими записами користувачів",
+    "admin.properties.title": "Управління нерухомістю",
+    "admin.properties.subtitle": "Керуйте всією нерухомістю в системі",
+    "admin.inquiries.title": "Управління запитами",
+    "admin.inquiries.subtitle":
+      "Переглядайте та відповідайте на запити про нерухомість",
+
+    // About
+    "about.title": "Про нас",
+    "about.subtitle": "Дізнайтеся більше про нашу платформу нерухомості",
+    "about.description":
+      "Ми присвячені допомозі вам знайти ідеальну нерухомість. Наша платформа з'єднує покупців, продавців та орендарів у безпечному та зручному середовищі.",
+    "about.what.title": "Що ми робимо",
+    "about.what.desc":
+      "Ми надаємо комплексну платформу нерухомості, яка з'єднує покупців, продавців та орендарів у безпечному та ефективному середовищі.",
+    "about.purpose.title": "Наша мета",
+    "about.purpose.desc":
+      "Спростити процес нерухомості та зробити транзакції з нерухомістю доступними, прозорими та приємними для всіх.",
+    "about.benefits.title": "Чому обирають нас",
+    "about.benefits.desc":
+      "Розширені інструменти пошуку, безпечні транзакції, професійна підтримка та зручний досвід, який ставить вас на перше місце.",
+    "about.tech.title": "Сучасні технології",
+    "about.tech.desc":
+      "Побудовано з використанням передових технологій для забезпечення швидкого, надійного та безпечного управління та транзакцій з нерухомістю.",
+    "about.mission.title": "Наша місія",
+    "about.mission.description":
+      "Надавати безшовну, безпечну та зручну платформу, яка з'єднує людей з їх ідеальною нерухомістю, роблячи транзакції з нерухомістю простими, прозорими та приємними для всіх учасників.",
+
+    // FAQ
+    "faq.title": "Часті запитання",
+    "faq.subtitle": "Знайдіть відповіді на поширені запитання",
+    "faq.search.title": "Як шукати нерухомість?",
+    "faq.search.answer":
+      "Використовуйте нашу панель пошуку, щоб знайти нерухомість за розташуванням, типом, діапазоном цін та іншими критеріями. Ви також можете використовувати фільтри для уточнення результатів.",
+    "faq.favorites.title": "Як зберегти нерухомість у улюблені?",
+    "faq.favorites.answer":
+      "Натисніть іконку серця на будь-якій картці нерухомості або сторінці деталей, щоб додати її до улюблених. Ви можете переглянути всі свої улюблені в розділі Улюблені.",
+    "faq.contact.title": "Як зв'язатися з власниками нерухомості?",
+    "faq.contact.answer":
+      "Використовуйте форму запиту на сторінках деталей нерухомості, щоб надіслати повідомлення власникам. Вони отримають ваш запит і зможуть відповісти безпосередньо.",
+    "faq.payment.title": "Які способи оплати ви приймаєте?",
+    "faq.payment.answer":
+      "Ми приймаємо всі основні кредитні картки, PayPal та банківські перекази. Всі транзакції захищені та зашифровані для вашої безпеки.",
+    "faq.account.title": "Як створити обліковий запис?",
+    "faq.account.answer":
+      "Натисніть кнопку 'Реєстрація' у верхній навігації та заповніть форму реєстрації своїми даними. Ви отримаєте підтверджувальний email для верифікації облікового запису.",
+    "faq.list.title": "Як додати свою нерухомість?",
+    "faq.list.answer":
+      "Після входу в систему натисніть 'Додати нерухомість' у вашому профілі або використовуйте кнопку 'Додати нерухомість'. Заповніть форму деталей нерухомості та завантажте фотографії для завершення розміщення.",
+    "faq.contact.support.title": "Ще є питання?",
+    "faq.contact.support.description":
+      "Наша команда підтримки готова допомогти вам 24/7. Не соромтеся звертатися, якщо вам потрібна допомога.",
+    "faq.contact.support.email": "support@realestate.com",
+
+    // Developer Page
+    "developer.title": "Розробник",
+    "developer.subtitle": "Full-Stack розробник",
+    "developer.name": "Ігор Юшков",
+    "developer.description":
+      "Захоплений full-stack розробник з експертизою в сучасних веб-технологіях. Спеціалізується на створенні надійних, масштабованих додатків з відмінним користувацьким досвідом.",
+    "developer.skills.title": "Технічні навички",
+    "developer.frontend.title": "Frontend",
+    "developer.backend.title": "Backend",
+    "developer.database.title": "База даних",
+    "developer.tools.title": "Інструменти та DevOps",
+    "developer.soft.title": "Soft Skills",
+    "developer.linkedin": "З'єднатися в LinkedIn",
+
+    // Common
+    "common.loading": "Завантаження...",
+    "common.error": "Сталася помилка",
+    "common.back": "Назад",
+    "common.save": "Зберегти",
+    "common.cancel": "Скасувати",
+    "common.delete": "Видалити",
+    "common.edit": "Редагувати",
+    "common.view": "Переглянути",
+    "common.search": "Пошук",
+    "common.filter": "Фільтр",
+    "common.clear": "Очистити",
+    "common.submit": "Відправити",
+    "common.close": "Закрити",
+    "common.confirm": "Підтвердити",
+    "common.yes": "Так",
+    "common.no": "Ні",
+    "common.updating": "Оновлення...",
+
+    // Favorites
+    "favorites.title": "Мої улюблені",
+    "favorites.subtitle": "Ваші збережені об'єкти",
+    "favorites.empty.title": "Поки що немає улюблених",
+    "favorites.empty.description":
+      "Почніть переглядати нерухомість та додавайте її до улюблених, щоб бачити тут.",
+    "favorites.empty.browse": "Переглянути нерухомість",
+    "favorites.count": "У вас {count} улюблених об'єктів",
+    "favorites.load.error":
+      "Не вдалося завантажити улюблені. Спробуйте ще раз.",
+    "favorites.auth.required":
+      "Будь ласка, увійдіть в систему, щоб переглянути свої улюблені.",
+    "favorites.remove.success": "Видалено з улюблених",
+    "favorites.remove.error": "Не вдалося видалити з улюблених",
+    "favorites.add.success": "Додано до улюблених",
+    "favorites.add.error": "Не вдалося додати до улюблених",
+
+    // Inquiries
+    "inquiries.title": "Мої запити",
+    "inquiries.subtitle": "Відстежуйте ваші запити про нерухомість",
+    "inquiries.empty.title": "Поки що немає відправлених запитів",
+    "inquiries.empty.description":
+      "Почніть переглядати нерухомість та надсилати запити, щоб бачити їх тут.",
+    "inquiries.empty.browse": "Переглянути нерухомість",
+    "inquiries.count": "У вас {count} запитів",
+    "inquiries.reply": "Відповісти",
+    "inquiries.delete": "Видалити",
+    "inquiries.send": "Надіслати запит",
+    "inquiries.sent": "Запит успішно надіслано!",
+    "inquiries.reply_sent": "Відповідь успішно надіслано!",
+
+    // Footer
+    "footer.language": "Мова",
+    "footer.about": "Про нас",
+    "footer.faq": "Часті запитання",
+    "footer.developer": "Розробник",
+    "footer.paymentMethods": "Способи оплати",
+  },
+};
