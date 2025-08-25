@@ -1,53 +1,79 @@
-export enum PropertyType {
-  House = 1,
-  Apartment = 2,
-  Condo = 3,
-  Townhouse = 4,
-  Villa = 5,
-  Land = 6,
-  Commercial = 7
-}
+export const PropertyType = {
+  House: 1,
+  Apartment: 2,
+  Condo: 3,
+  Townhouse: 4,
+  Villa: 5,
+  Land: 6,
+  Commercial: 7,
+} as const;
 
-export enum PropertyStatus {
-  Available = 1,
-  UnderContract = 2,
-  Sold = 3,
-  Rented = 4
-}
+// Updated PropertyStatus to match backend API documentation
+export const PropertyStatus = {
+  Available: 1,
+  Sold: 2, // Changed from UnderContract
+  Rented: 3, // Changed from Sold
+  UnderContract: 4, // Changed from Rented
+} as const;
 
-export enum Location {
-  Kyiv = 1,
-  Lviv = 2,
-  Kharkiv = 3,
-  Odesa = 4,
-  Dnipro = 5
-}
+export const Location = {
+  Downtown: 1,
+  Suburban: 2,
+  Rural: 3,
+  Beachfront: 4,
+  Mountain: 5,
+  Urban: 6,
+} as const;
+
+export type PropertyType = (typeof PropertyType)[keyof typeof PropertyType];
+export type PropertyStatus =
+  (typeof PropertyStatus)[keyof typeof PropertyStatus];
+export type Location = (typeof Location)[keyof typeof Location];
 
 export interface PropertyImage {
   id: string;
   imageUrl: string;
-  propertyId: string;
+  order: number; // Added order field to match backend API
 }
 
+// Базовий тип для списку властивостей (PropertyViewModel)
 export interface Property {
   id: string;
   title: string;
   description: string;
   price: number;
   address: string;
-  city: Location;
+  location: Location;
   propertyType: PropertyType;
-  propertyStatus: PropertyStatus;
+  status: PropertyStatus;
   bedrooms: number;
   bathrooms: number;
-  area: number;
-  yearBuilt: number;
+  squareMeters: number;
+  features: string[];
   createdAt: string;
-  updatedAt: string;
-  userId: string;
+  userId: string; // Обов'язкове - виправлено в бекенді
   userName: string;
-  imageUrls: string[];
+  images?: PropertyImage[]; // Додаємо зображення для списку
+}
+
+// Детальний тип для повної інформації (PropertyDetailedViewModel)
+export interface PropertyDetailed extends Property {
+  images: PropertyImage[]; // Всі зображення для деталей
+  inquiries?: Inquiry[]; // Запити (якщо потрібно)
   isFavoritedByCurrentUser?: boolean;
+  updatedAt?: string; // Дата останнього оновлення
+}
+
+// Тип для запитів
+export interface Inquiry {
+  id: string;
+  message: string;
+  propertyId: string;
+  userId?: string;
+  name?: string;
+  email?: string;
+  phone?: string;
+  createdAt: string;
 }
 
 export interface PropertyCreate {
@@ -55,27 +81,48 @@ export interface PropertyCreate {
   description: string;
   price: number;
   address: string;
-  city: Location;
+  location: Location;
   propertyType: PropertyType;
-  propertyStatus: PropertyStatus;
+  status: PropertyStatus;
   bedrooms: number;
   bathrooms: number;
-  area: number;
+  squareMeters: number;
+  features: string[];
+  images?: File[]; // For file uploads
+  imageUrls?: string[]; // For existing URLs
 }
 
-export interface PropertyUpdate extends Partial<PropertyCreate> {
+export interface PropertyUpdate {
   id: string;
+  userId?: string; // Додано для сумісності з бекендом
+  title?: string;
+  description?: string;
+  price?: number;
+  address?: string;
+  location?: Location;
+  propertyType?: PropertyType;
+  status?: PropertyStatus;
+  bedrooms?: number;
+  bathrooms?: number;
+  squareMeters?: number;
+  features?: string[];
+  // Додано назад для сумісності з бекендом (може бути null)
+  images?: File[] | null;
+  imageUrls?: string[] | null;
+  imagesToDelete?: string[] | null;
 }
 
 export interface PropertyFilter {
-  city?: Location;
+  location?: Location;
   propertyType?: PropertyType;
-  propertyStatus?: PropertyStatus;
+  status?: PropertyStatus;
   minPrice?: number;
   maxPrice?: number;
   minBedrooms?: number;
   maxBedrooms?: number;
-  minArea?: number;
-  maxArea?: number;
+  minSquareMeters?: number;
+  maxSquareMeters?: number;
   search?: string;
-} 
+  page?: number;
+  pageSize?: number;
+}

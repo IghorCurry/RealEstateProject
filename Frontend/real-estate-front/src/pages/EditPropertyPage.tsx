@@ -1,21 +1,23 @@
-Дай import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Alert, CircularProgress } from "@mui/material";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { EditPropertyForm } from "../components/property/EditPropertyForm";
-import { authService } from "../services/authService";
+import { useAuth } from "../contexts/AuthContext"; // Замінюємо authService на useAuth
 import { propertyService } from "../services/propertyService";
+import { Breadcrumbs, useBreadcrumbs } from "../components/common/Breadcrumbs";
 import { ROUTES } from "../utils/constants";
 import { toast } from "react-hot-toast";
 import type { Property } from "../types/property";
 
 export const EditPropertyPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const breadcrumbItems = useBreadcrumbs();
 
-  const isAuthenticated = authService.isAuthenticated();
+  const { user: currentUser } = useAuth();
+  const isAdmin = currentUser?.role === "Admin";
 
   useEffect(() => {
     const loadProperty = async () => {
@@ -29,10 +31,7 @@ export const EditPropertyPage: React.FC = () => {
         const propertyData = await propertyService.getById(id);
         setProperty(propertyData);
 
-        // Check if user has permission to edit this property
-        const currentUser = authService.getStoredUser();
         const isOwner = currentUser?.id === propertyData.userId;
-        const isAdmin = authService.isAdmin();
 
         if (!isOwner && !isAdmin) {
           setError("You don't have permission to edit this property");
@@ -47,28 +46,8 @@ export const EditPropertyPage: React.FC = () => {
       }
     };
 
-    if (isAuthenticated) {
-      loadProperty();
-    } else {
-      setLoading(false);
-    }
-  }, [id, isAuthenticated]);
-
-  if (!isAuthenticated) {
-    return (
-      <Box sx={{ maxWidth: 800, mx: "auto", p: 3 }}>
-        <Alert severity="warning">
-          You must be logged in to edit a property.{" "}
-          <a
-            href={ROUTES.LOGIN}
-            style={{ color: "inherit", textDecoration: "underline" }}
-          >
-            Click here to login
-          </a>
-        </Alert>
-      </Box>
-    );
-  }
+    loadProperty();
+  }, [id, currentUser, isAdmin]);
 
   if (loading) {
     return (
@@ -88,6 +67,7 @@ export const EditPropertyPage: React.FC = () => {
   if (error) {
     return (
       <Box sx={{ maxWidth: 800, mx: "auto", p: 3 }}>
+        <Breadcrumbs items={breadcrumbItems} />
         <Alert severity="error">
           {error}
           <br />
@@ -105,6 +85,7 @@ export const EditPropertyPage: React.FC = () => {
   if (!property) {
     return (
       <Box sx={{ maxWidth: 800, mx: "auto", p: 3 }}>
+        <Breadcrumbs items={breadcrumbItems} />
         <Alert severity="error">
           Property not found.
           <br />
@@ -119,5 +100,10 @@ export const EditPropertyPage: React.FC = () => {
     );
   }
 
-  return <EditPropertyForm property={property} />;
+  return (
+    <Box sx={{ maxWidth: 800, mx: "auto", p: 3 }}>
+      <Breadcrumbs items={breadcrumbItems} />
+      <EditPropertyForm property={property} />
+    </Box>
+  );
 };

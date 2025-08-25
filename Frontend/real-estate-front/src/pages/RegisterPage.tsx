@@ -23,8 +23,9 @@ import * as yup from "yup";
 
 import { authService } from "../services/authService";
 import { ROUTES } from "../utils/constants";
-import { isValidEmail, isValidPhone } from "../utils/helpers";
+import { isValidEmail, isValidPhone, getUserFullName } from "../utils/helpers";
 import { FormField, PageContainer } from "../components";
+import { useAuth } from "../contexts/AuthContext";
 
 // Validation schema
 const registerSchema = yup.object({
@@ -67,6 +68,7 @@ type RegisterFormData = yup.InferType<typeof registerSchema>;
 
 export const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
+  const { setUser } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -86,19 +88,25 @@ export const RegisterPage: React.FC = () => {
         firstName: data.firstName,
         lastName: data.lastName,
         email: data.email,
-        phone: data.phone,
+        phoneNumber: data.phone,
         password: data.password,
-      } as any), // Added as any to resolve type error
+      }),
     onSuccess: (response) => {
-      // Save auth data to localStorage
+      // Використовуємо дані з API відповіді для встановлення користувача
       authService.setAuthData(response);
-      toast.success("Registration successful! Welcome to Real Estate!");
+      // Оновлюємо контекст аутентифікації
+      setUser(response.user);
+      toast.success(
+        `Registration successful! Welcome to Real Estate, ${getUserFullName(
+          response.user
+        )}!`
+      );
       navigate(ROUTES.HOME);
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       const message =
-        error?.response?.data?.message ||
-        "Registration failed. Please try again later.";
+        (error as { response?: { data?: { message?: string } } })?.response
+          ?.data?.message || "Registration failed. Please try again later.";
       toast.error(message);
     },
   });

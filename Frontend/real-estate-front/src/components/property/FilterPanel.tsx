@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Box,
   Typography,
@@ -10,19 +10,16 @@ import {
   Button,
   Grid,
   Divider,
-} from '@mui/material';
-import { Clear as ClearIcon } from '@mui/icons-material';
-import type { PropertyFilter } from '../../types/property';
-import {
-  PROPERTY_TYPES,
-  PROPERTY_STATUSES,
-  LOCATIONS,
-} from '../../utils/constants';
+} from "@mui/material";
+import { Clear as ClearIcon } from "@mui/icons-material";
+import { useLanguage } from "../../contexts/LanguageContext";
+import type { PropertyFilter } from "../../types/property";
+import { PropertyType, PropertyStatus, Location } from "../../types/property";
 import {
   getPropertyTypeLabel,
   getPropertyStatusLabel,
   getLocationLabel,
-} from '../../utils/helpers';
+} from "../../utils/helpers";
 
 interface FilterPanelProps {
   filters: PropertyFilter;
@@ -39,28 +36,92 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   onPriceRangeChange,
   onAreaRangeChange,
 }) => {
-  const priceRange = [
-    filters.minPrice || 0,
-    filters.maxPrice || 1000000,
-  ];
+  const { t } = useLanguage();
+  const priceRange = [filters.minPrice || 0, filters.maxPrice || 1000000];
 
   const areaRange = [
-    filters.minArea || 0,
-    filters.maxArea || 500,
+    filters.minSquareMeters || 0,
+    filters.maxSquareMeters || 500,
+  ];
+
+  // Створюємо масиви для опцій
+  const propertyTypeOptions = [
+    {
+      value: PropertyType.House,
+      label: getPropertyTypeLabel(PropertyType.House),
+    },
+    {
+      value: PropertyType.Apartment,
+      label: getPropertyTypeLabel(PropertyType.Apartment),
+    },
+    {
+      value: PropertyType.Condo,
+      label: getPropertyTypeLabel(PropertyType.Condo),
+    },
+    {
+      value: PropertyType.Townhouse,
+      label: getPropertyTypeLabel(PropertyType.Townhouse),
+    },
+    {
+      value: PropertyType.Villa,
+      label: getPropertyTypeLabel(PropertyType.Villa),
+    },
+    {
+      value: PropertyType.Land,
+      label: getPropertyTypeLabel(PropertyType.Land),
+    },
+    {
+      value: PropertyType.Commercial,
+      label: getPropertyTypeLabel(PropertyType.Commercial),
+    },
+  ];
+
+  const propertyStatusOptions = [
+    {
+      value: PropertyStatus.Available,
+      label: getPropertyStatusLabel(PropertyStatus.Available),
+    },
+    {
+      value: PropertyStatus.UnderContract,
+      label: getPropertyStatusLabel(PropertyStatus.UnderContract),
+    },
+    {
+      value: PropertyStatus.Sold,
+      label: getPropertyStatusLabel(PropertyStatus.Sold),
+    },
+    {
+      value: PropertyStatus.Rented,
+      label: getPropertyStatusLabel(PropertyStatus.Rented),
+    },
+  ];
+
+  const locationOptions = [
+    { value: Location.Downtown, label: getLocationLabel(Location.Downtown) },
+    { value: Location.Suburban, label: getLocationLabel(Location.Suburban) },
+    { value: Location.Rural, label: getLocationLabel(Location.Rural) },
+    {
+      value: Location.Beachfront,
+      label: getLocationLabel(Location.Beachfront),
+    },
+    { value: Location.Mountain, label: getLocationLabel(Location.Mountain) },
+    { value: Location.Urban, label: getLocationLabel(Location.Urban) },
   ];
 
   return (
     <Box sx={{ p: 3 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 3,
+        }}
+      >
         <Typography variant="h6" sx={{ fontWeight: 600 }}>
-          Filters
+          {t("properties.filter.title")}
         </Typography>
-        <Button
-          startIcon={<ClearIcon />}
-          onClick={onClearFilters}
-          size="small"
-        >
-          Clear All
+        <Button startIcon={<ClearIcon />} onClick={onClearFilters} size="small">
+          {t("properties.filter.clear")}
         </Button>
       </Box>
 
@@ -68,16 +129,16 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
         {/* Property Type */}
         <Grid item xs={12} sm={6}>
           <FormControl fullWidth size="small">
-            <InputLabel>Property Type</InputLabel>
+            <InputLabel>{t("properties.filter.type")}</InputLabel>
             <Select
-              value={filters.propertyType || ''}
-              label="Property Type"
-              onChange={(e) => onFilterChange('propertyType', e.target.value)}
+              value={filters.propertyType || ""}
+              label={t("properties.filter.type")}
+              onChange={(e) => onFilterChange("propertyType", e.target.value)}
             >
-              <MenuItem value="">All Types</MenuItem>
-              {Object.entries(PROPERTY_TYPES).map(([key, value]) => (
-                <MenuItem key={key} value={key}>
-                  {getPropertyTypeLabel(value)}
+              <MenuItem value="">{t("properties.filter.allTypes")}</MenuItem>
+              {propertyTypeOptions.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
                 </MenuItem>
               ))}
             </Select>
@@ -87,16 +148,16 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
         {/* Property Status */}
         <Grid item xs={12} sm={6}>
           <FormControl fullWidth size="small">
-            <InputLabel>Status</InputLabel>
+            <InputLabel>{t("properties.filter.status")}</InputLabel>
             <Select
-              value={filters.status || ''}
-              label="Status"
-              onChange={(e) => onFilterChange('status', e.target.value)}
+              value={filters.status || ""}
+              label={t("properties.filter.status")}
+              onChange={(e) => onFilterChange("status", e.target.value)}
             >
-              <MenuItem value="">All Statuses</MenuItem>
-              {Object.entries(PROPERTY_STATUSES).map(([key, value]) => (
-                <MenuItem key={key} value={key}>
-                  {getPropertyStatusLabel(value)}
+              <MenuItem value="">{t("properties.filter.allStatuses")}</MenuItem>
+              {propertyStatusOptions.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
                 </MenuItem>
               ))}
             </Select>
@@ -106,16 +167,18 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
         {/* Location */}
         <Grid item xs={12} sm={6}>
           <FormControl fullWidth size="small">
-            <InputLabel>Location</InputLabel>
+            <InputLabel>{t("properties.filter.location")}</InputLabel>
             <Select
-              value={filters.location || ''}
-              label="Location"
-              onChange={(e) => onFilterChange('location', e.target.value)}
+              value={filters.location || ""}
+              label={t("properties.filter.location")}
+              onChange={(e) => onFilterChange("location", e.target.value)}
             >
-              <MenuItem value="">All Locations</MenuItem>
-              {Object.entries(LOCATIONS).map(([key, value]) => (
-                <MenuItem key={key} value={key}>
-                  {getLocationLabel(value)}
+              <MenuItem value="">
+                {t("properties.filter.allLocations")}
+              </MenuItem>
+              {locationOptions.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
                 </MenuItem>
               ))}
             </Select>
@@ -125,16 +188,16 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
         {/* Bedrooms */}
         <Grid item xs={12} sm={6}>
           <FormControl fullWidth size="small">
-            <InputLabel>Bedrooms</InputLabel>
+            <InputLabel>{t("properties.filter.bedrooms")}</InputLabel>
             <Select
-              value={filters.bedrooms || ''}
-              label="Bedrooms"
-              onChange={(e) => onFilterChange('bedrooms', e.target.value)}
+              value={filters.minBedrooms || ""}
+              label={t("properties.filter.bedrooms")}
+              onChange={(e) => onFilterChange("minBedrooms", e.target.value)}
             >
-              <MenuItem value="">Any</MenuItem>
+              <MenuItem value="">{t("properties.filter.any")}</MenuItem>
               {[1, 2, 3, 4, 5, 6].map((num) => (
                 <MenuItem key={num} value={num}>
-                  {num}+ Bedrooms
+                  {num}+ {t("properties.filter.bedrooms")}
                 </MenuItem>
               ))}
             </Select>
@@ -148,7 +211,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
         {/* Price Range */}
         <Grid item xs={12}>
           <Typography variant="subtitle2" sx={{ mb: 2 }}>
-            Price Range (USD)
+            {t("properties.filter.price")} (USD)
           </Typography>
           <Slider
             value={priceRange}
@@ -159,7 +222,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             step={10000}
             valueLabelFormat={(value) => `$${value.toLocaleString()}`}
           />
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1 }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 1 }}>
             <Typography variant="caption" color="text.secondary">
               ${priceRange[0].toLocaleString()}
             </Typography>
@@ -172,7 +235,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
         {/* Area Range */}
         <Grid item xs={12}>
           <Typography variant="subtitle2" sx={{ mb: 2 }}>
-            Area Range (m²)
+            {t("properties.filter.area")} (m²)
           </Typography>
           <Slider
             value={areaRange}
@@ -183,7 +246,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             step={10}
             valueLabelFormat={(value) => `${value}m²`}
           />
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1 }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 1 }}>
             <Typography variant="caption" color="text.secondary">
               {areaRange[0]}m²
             </Typography>
@@ -195,4 +258,4 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
       </Grid>
     </Box>
   );
-}; 
+};

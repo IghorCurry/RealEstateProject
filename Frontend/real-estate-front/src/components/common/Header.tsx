@@ -4,50 +4,62 @@ import {
   Toolbar,
   Typography,
   Button,
+  Box,
   IconButton,
   Menu,
   MenuItem,
-  Box,
   Avatar,
+  Chip,
   useTheme,
   useMediaQuery,
+  Fade,
 } from "@mui/material";
 import {
   Menu as MenuIcon,
+  AccountCircle,
+  Logout,
+  Dashboard,
   Home as HomeIcon,
   Search as SearchIcon,
+  Business as BusinessIcon,
   Person as PersonIcon,
-  AdminPanelSettings as AdminIcon,
-  Logout as LogoutIcon,
+  Favorite as FavoriteIcon,
+  Message as MessageIcon,
 } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import { useLanguage } from "../../contexts/LanguageContext";
 import { ROUTES } from "../../utils/constants";
-import { authService } from "../../services/authService";
+import { getUserFullName, getInitials } from "../../utils/helpers";
+import { FavoriteCount } from "./FavoriteCount";
 
-interface HeaderProps {
-  onMenuClick?: () => void;
-}
-
-export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
+export const Header = React.memo(() => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();
+  const location = useLocation();
+  const { user, isAuthenticated, logout } = useAuth();
+  const isAdmin = user?.role === "Admin";
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [mobileMenuAnchor, setMobileMenuAnchor] = useState<null | HTMLElement>(
+    null
+  );
 
-  const isAuthenticated = authService.isAuthenticated();
-  const isAdmin = authService.isAdmin();
-  const user = authService.getStoredUser();
-
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
+  };
+
+  const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setMobileMenuAnchor(event.currentTarget);
   };
 
   const handleMenuClose = () => {
     setAnchorEl(null);
+    setMobileMenuAnchor(null);
   };
 
   const handleLogout = () => {
-    authService.logout();
+    logout();
     handleMenuClose();
     navigate(ROUTES.HOME);
   };
@@ -62,6 +74,11 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
     navigate(ROUTES.ADMIN);
   };
 
+  // Navigation functions
+  const handleHomeClick = () => {
+    navigate(ROUTES.HOME);
+  };
+
   const handlePropertiesClick = () => {
     navigate(ROUTES.PROPERTIES);
   };
@@ -70,160 +87,354 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
     navigate(ROUTES.LOGIN);
   };
 
-  const handleRegisterClick = () => {
-    navigate(ROUTES.REGISTER);
+  const isActiveRoute = (route: string) => {
+    return location.pathname === route;
   };
 
+  const { t } = useLanguage();
+
   return (
-    <AppBar position="sticky">
-      <Toolbar>
-        {isMobile && (
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            onClick={onMenuClick}
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-        )}
-
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            flexGrow: 1,
-            cursor: "pointer",
-          }}
-          onClick={() => navigate(ROUTES.HOME)}
-        >
-          <Box
-            component="img"
-            src="/favicon.svg"
-            alt="Real Estate"
+    <AppBar
+      position="sticky"
+      elevation={0}
+      sx={{
+        background: "rgba(255, 255, 255, 0.95)",
+        backdropFilter: "blur(10px)",
+        borderBottom: `1px solid ${theme.palette.divider}`,
+      }}
+    >
+      <Toolbar sx={{ px: { xs: 2, md: 4 }, py: 1 }}>
+        {/* Logo */}
+        <Fade in={true} timeout={600}>
+          <Typography
+            variant="h6"
+            component="div"
             sx={{
-              width: 32,
-              height: 32,
-              mr: 1,
+              flexGrow: 0,
+              fontWeight: 700,
+              color: "primary.main",
+              cursor: "pointer",
+              fontSize: { xs: "1.25rem", md: "1.5rem" },
+              "&:hover": {
+                color: "primary.dark",
+              },
+              transition: "color 0.2s ease",
             }}
-          />
-          <Typography variant="h6" component="div">
-            Real Estate
+            onClick={() => navigate(ROUTES.HOME)}
+          >
+            RealEstate
           </Typography>
-        </Box>
+        </Fade>
 
-        {!isMobile && (
-          <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+        {/* Desktop Navigation */}
+        <Fade in={true} timeout={800}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              ml: 4,
+              flexGrow: 1,
+            }}
+          >
             <Button
               color="inherit"
               startIcon={<HomeIcon />}
-              onClick={() => navigate(ROUTES.HOME)}
+              onClick={handleHomeClick}
+              sx={{
+                color: isActiveRoute(ROUTES.HOME)
+                  ? "primary.main"
+                  : "text.primary",
+                fontWeight: isActiveRoute(ROUTES.HOME) ? 600 : 500,
+                "&:hover": {
+                  backgroundColor: "primary.light",
+                  color: "white",
+                },
+              }}
             >
-              Home
+              {t("nav.home")}
             </Button>
             <Button
               color="inherit"
-              startIcon={<SearchIcon />}
+              startIcon={<BusinessIcon />}
               onClick={handlePropertiesClick}
+              sx={{
+                textTransform: "none",
+                fontWeight: 500,
+                color: isActiveRoute(ROUTES.PROPERTIES)
+                  ? "primary.main"
+                  : "text.primary",
+                transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+                "&:hover": {
+                  backgroundColor: "primary.light",
+                  color: "white",
+                },
+              }}
             >
-              Properties
+              {t("nav.properties")}
             </Button>
+            <Button
+              color="inherit"
+              startIcon={<PersonIcon />}
+              onClick={() => navigate(ROUTES.DEVELOPER)}
+              sx={{
+                textTransform: "none",
+                fontWeight: 500,
+                color: isActiveRoute(ROUTES.DEVELOPER)
+                  ? "primary.main"
+                  : "text.primary",
+                transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+                "&:hover": {
+                  backgroundColor: "primary.light",
+                  color: "white",
+                },
+              }}
+            >
+              {t("nav.developer")}
+            </Button>
+          </Box>
+        </Fade>
 
-            {isAuthenticated ? (
-              <>
-                {isAdmin && (
-                  <Button
-                    color="inherit"
-                    startIcon={<AdminIcon />}
-                    onClick={handleAdminClick}
-                  >
-                    Admin
-                  </Button>
-                )}
+        {/* User Menu */}
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          {isAuthenticated ? (
+            <>
+              {/* Admin Badge */}
+              {isAdmin && (
+                <Chip
+                  label={t("Admin")}
+                  size="small"
+                  color="secondary"
+                  sx={{
+                    fontWeight: 600,
+                    fontSize: "0.75rem",
+                    display: { xs: "none", sm: "flex" },
+                  }}
+                />
+              )}
+
+              {/* Favorite Count */}
+              <FavoriteCount />
+
+              {/* Profile Menu */}
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    fontWeight: 500,
+                    color: "text.primary",
+                    display: { xs: "none", sm: "block" },
+                  }}
+                >
+                  {user && (
+                    <Typography variant="body2" color="text.secondary">
+                      {getUserFullName(user)}
+                    </Typography>
+                  )}
+                </Typography>
+                <IconButton
+                  onClick={handleProfileMenuOpen}
+                  sx={{
+                    p: 0.5,
+                    transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+                    "&:hover": {
+                      transform: "scale(1.03)",
+                    },
+                  }}
+                >
+                  {user && (
+                    <Avatar
+                      sx={{
+                        bgcolor: "primary.main",
+                        color: "white",
+                        fontWeight: 600,
+                        fontSize: "0.875rem",
+                      }}
+                    >
+                      {getInitials(user)}
+                    </Avatar>
+                  )}
+                </IconButton>
+              </Box>
+
+              {/* Mobile Menu Button */}
+              {isMobile && (
                 <IconButton
                   color="inherit"
-                  onClick={handleMenuOpen}
-                  sx={{ ml: 1 }}
+                  onClick={handleMobileMenuOpen}
+                  sx={{
+                    ml: 1,
+                    transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+                    "&:hover": {
+                      backgroundColor: "primary.light",
+                      color: "white",
+                      transform: "scale(1.03)",
+                    },
+                  }}
                 >
-                  <Avatar
-                    sx={{ width: 32, height: 32, bgcolor: "secondary.main" }}
-                  >
-                    {user?.fullName?.charAt(0) || <PersonIcon />}
-                  </Avatar>
+                  <MenuIcon />
                 </IconButton>
-                <Menu
-                  anchorEl={anchorEl}
-                  open={Boolean(anchorEl)}
-                  onClose={handleMenuClose}
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "right",
-                  }}
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
+              )}
+            </>
+          ) : (
+            <Fade in={true} timeout={1000}>
+              <Box sx={{ display: "flex", gap: 1 }}>
+                <Button
+                  variant="outlined"
+                  onClick={handleLoginClick}
+                  sx={{
+                    borderRadius: 2,
+                    px: 3,
+                    transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+                    "&:hover": {
+                      transform: "translateY(-1px)",
+                    },
                   }}
                 >
-                  <MenuItem onClick={handleProfileClick}>
-                    <PersonIcon sx={{ mr: 1 }} />
-                    Profile
-                  </MenuItem>
-                  <MenuItem onClick={handleLogout}>
-                    <LogoutIcon sx={{ mr: 1 }} />
-                    Logout
-                  </MenuItem>
-                </Menu>
-              </>
-            ) : (
-              <>
-                <Button color="inherit" onClick={handleLoginClick}>
-                  Login
+                  {t("Login")}
                 </Button>
                 <Button
                   variant="contained"
-                  color="secondary"
-                  onClick={handleRegisterClick}
+                  onClick={() => navigate(ROUTES.REGISTER)}
+                  sx={{
+                    borderRadius: 2,
+                    px: 3,
+                    transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+                    "&:hover": {
+                      transform: "translateY(-1px)",
+                    },
+                  }}
                 >
-                  Register
+                  {t("Register")}
                 </Button>
-              </>
-            )}
-          </Box>
-        )}
+              </Box>
+            </Fade>
+          )}
+        </Box>
+      </Toolbar>
 
-        {isMobile && isAuthenticated && (
+      {/* Profile Menu */}
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+        PaperProps={{
+          sx: {
+            mt: 1,
+            borderRadius: 2,
+            boxShadow: theme.shadows[8],
+            minWidth: 200,
+          },
+        }}
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+      >
+        <MenuItem onClick={handleProfileClick} sx={{ py: 1.5 }}>
+          <AccountCircle sx={{ mr: 2, color: "text.secondary" }} />
+          {t("Profile")}
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            navigate(ROUTES.FAVORITES);
+            handleMenuClose();
+          }}
+          sx={{ py: 1.5 }}
+        >
+          <FavoriteIcon sx={{ mr: 2, color: "text.secondary" }} />
+          {t("favorites.title")}
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            navigate(ROUTES.INQUIRIES);
+            handleMenuClose();
+          }}
+          sx={{ py: 1.5 }}
+        >
+          <MessageIcon sx={{ mr: 2, color: "text.secondary" }} />
+          {t("inquiries.title")}
+        </MenuItem>
+        {isAdmin && (
+          <MenuItem onClick={handleAdminClick} sx={{ py: 1.5 }}>
+            <Dashboard sx={{ mr: 2, color: "text.secondary" }} />
+            {t("Admin Panel")}
+          </MenuItem>
+        )}
+        <MenuItem onClick={handleLogout} sx={{ py: 1.5, color: "error.main" }}>
+          <Logout sx={{ mr: 2 }} />
+          {t("Logout")}
+        </MenuItem>
+      </Menu>
+
+      {/* Mobile Menu */}
+      <Menu
+        anchorEl={mobileMenuAnchor}
+        open={Boolean(mobileMenuAnchor)}
+        onClose={handleMenuClose}
+        PaperProps={{
+          sx: {
+            mt: 1,
+            borderRadius: 2,
+            boxShadow: theme.shadows[8],
+            minWidth: 200,
+          },
+        }}
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+      >
+        <MenuItem onClick={handleHomeClick}>
+          <HomeIcon sx={{ mr: 2, color: "text.secondary" }} />
+          {t("Home")}
+        </MenuItem>
+        <MenuItem onClick={handlePropertiesClick}>
+          <SearchIcon sx={{ mr: 2, color: "text.secondary" }} />
+          {t("Properties")}
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            navigate(ROUTES.DEVELOPER);
+            handleMenuClose();
+          }}
+        >
+          <SearchIcon sx={{ mr: 2, color: "text.secondary" }} />
+          {t("nav.developer")}
+        </MenuItem>
+        {isAuthenticated && (
           <>
-            <IconButton color="inherit" onClick={handleMenuOpen}>
-              <Avatar sx={{ width: 32, height: 32, bgcolor: "secondary.main" }}>
-                {user?.fullName?.charAt(0) || <PersonIcon />}
-              </Avatar>
-            </IconButton>
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
+            <MenuItem onClick={handleProfileClick}>
+              <AccountCircle sx={{ mr: 2, color: "text.secondary" }} />
+              {t("Profile")}
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                navigate(ROUTES.FAVORITES);
+                handleMenuClose();
               }}
             >
-              <MenuItem onClick={handleProfileClick}>
-                <PersonIcon sx={{ mr: 1 }} />
-                Profile
+              <FavoriteIcon sx={{ mr: 2, color: "text.secondary" }} />
+              {t("favorites.title")}
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                navigate(ROUTES.INQUIRIES);
+                handleMenuClose();
+              }}
+            >
+              <MessageIcon sx={{ mr: 2, color: "text.secondary" }} />
+              {t("inquiries.title")}
+            </MenuItem>
+            {isAdmin && (
+              <MenuItem onClick={handleAdminClick}>
+                <Dashboard sx={{ mr: 2, color: "text.secondary" }} />
+                {t("Admin Panel")}
               </MenuItem>
-              <MenuItem onClick={handleLogout}>
-                <LogoutIcon sx={{ mr: 1 }} />
-                Logout
-              </MenuItem>
-            </Menu>
+            )}
+            <MenuItem onClick={handleLogout} sx={{ color: "error.main" }}>
+              <Logout sx={{ mr: 2 }} />
+              {t("Logout")}
+            </MenuItem>
           </>
         )}
-      </Toolbar>
+      </Menu>
     </AppBar>
   );
-};
+});

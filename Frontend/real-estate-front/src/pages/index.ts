@@ -1,8 +1,15 @@
 export { HomePage } from "./HomePage";
+export { LoginPage } from "./LoginPage";
+export { RegisterPage } from "./RegisterPage";
 export { PropertiesPage } from "./PropertiesPage";
 export { PropertyDetailPage } from "./PropertyDetailPage";
 export { CreatePropertyPage } from "./CreatePropertyPage";
 export { EditPropertyPage } from "./EditPropertyPage";
-export { LoginPage } from "./LoginPage";
-export { RegisterPage } from "./RegisterPage";
 export { ProfilePage } from "./ProfilePage";
+export { FavoritesPage } from "./FavoritesPage";
+export { InquiriesPage } from "./InquiriesPage";
+export { AdminPage } from "./AdminPage";
+export { AboutPage } from "./AboutPage";
+export { FAQPage } from "./FAQPage";
+export { DeveloperPage } from "./DeveloperPage";
+export { NotFoundPage } from "./NotFoundPage";

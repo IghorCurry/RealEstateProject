@@ -1,5 +1,5 @@
-import React from 'react';
-import { Box, Container, Typography, Button, Grid } from '@mui/material';
+import React from "react";
+import { Box, Container, Typography, Grid } from "@mui/material";
 
 interface HeroSectionProps {
   title: string;
@@ -16,26 +16,25 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   backgroundImage,
   actions,
   fullHeight = true,
-  overlay = true,
 }) => {
   return (
     <Box
       sx={{
         background: backgroundImage
           ? `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${backgroundImage}')`
-          : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed',
-        color: 'white',
-        minHeight: fullHeight ? '100vh' : '60vh',
-        display: 'flex',
-        alignItems: 'center',
-        position: 'relative',
-        overflow: 'hidden',
+          : "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+        color: "white",
+        minHeight: fullHeight ? "100vh" : "60vh",
+        display: "flex",
+        alignItems: "center",
+        position: "relative",
+        overflow: "hidden",
       }}
     >
-      <Container maxWidth="lg" sx={{ width: '100%' }}>
+      <Container maxWidth="lg" sx={{ width: "100%" }}>
         <Grid container spacing={4} alignItems="center">
           <Grid item xs={12} md={6}>
             <Typography
@@ -62,7 +61,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               </Typography>
             )}
             {actions && (
-              <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+              <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
                 {actions}
               </Box>
             )}
@@ -71,4 +70,4 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       </Container>
     </Box>
   );
-}; 
+};

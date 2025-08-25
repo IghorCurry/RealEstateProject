@@ -1,21 +1,20 @@
 import React, { useState } from "react";
 import {
   Box,
-  Typography,
-  Grid,
   Card,
   CardContent,
+  Typography,
   Avatar,
   Button,
+  Chip,
+  Grid,
   Tabs,
   Tab,
   List,
   ListItem,
-  ListItemText,
   ListItemAvatar,
-  Chip,
+  ListItemText,
   Divider,
-  TextField,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -23,43 +22,45 @@ import {
   IconButton,
   useTheme,
   useMediaQuery,
-  CircularProgress,
   Alert,
+  CircularProgress,
 } from "@mui/material";
 import {
   Person as PersonIcon,
-  Email as EmailIcon,
-  Phone as PhoneIcon,
-  CalendarToday as CalendarIcon,
-  Edit as EditIcon,
-  Save as SaveIcon,
-  Cancel as CancelIcon,
   Home as HomeIcon,
   Message as MessageIcon,
   Favorite as FavoriteIcon,
   Settings as SettingsIcon,
+  Edit as EditIcon,
   Logout as LogoutIcon,
+  Cancel as CancelIcon,
+  Email as EmailIcon,
+  Phone as PhoneIcon,
+  CalendarToday as CalendarIcon,
+  Save as SaveIcon,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import * as yup from "yup";
-
-import { authService } from "../services/authService";
+import { useAuth } from "../contexts/AuthContext";
 import { propertyService } from "../services/propertyService";
 import { inquiryService } from "../services/inquiryService";
-import { PropertyCard } from "../components/property/PropertyCard";
+import { useFavorites } from "../hooks/useFavorites";
 import { ProtectedRoute } from "../components/common/ProtectedRoute";
 import { ROUTES } from "../utils/constants";
-import { formatDate } from "../utils/helpers";
+import { formatDate, getUserFullName } from "../utils/helpers";
 import {
   LoadingState,
   EmptyState,
-  TabPanel,
-  PageContainer,
   FormField,
+  PageContainer,
+  TabPanel,
 } from "../components";
-import type { User, UserUpdate } from "../types/user";
+import { PropertyCard } from "../components/property/PropertyCard";
+
+import type { User } from "../types/user";
+import type { Property } from "../types/property";
 
 // Validation schema for profile update
 const profileUpdateSchema = yup.object({
@@ -67,10 +68,14 @@ const profileUpdateSchema = yup.object({
     .string()
     .required("Email is required")
     .email("Please enter a valid email"),
-  fullName: yup
+  firstName: yup
     .string()
-    .required("Full name is required")
-    .min(2, "Full name must be at least 2 characters"),
+    .required("First name is required")
+    .min(2, "First name must be at least 2 characters"),
+  lastName: yup
+    .string()
+    .required("Last name is required")
+    .min(2, "Last name must be at least 2 characters"),
   phoneNumber: yup.string().required("Phone number is required"),
 });
 
@@ -83,15 +88,21 @@ export const ProfilePage: React.FC = () => {
   const queryClient = useQueryClient();
 
   const [tabValue, setTabValue] = useState(0);
-  const [editMode, setEditMode] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [editForm, setEditForm] = useState<ProfileUpdateData>({
     email: "",
-    fullName: "",
+    firstName: "",
+    lastName: "",
     phoneNumber: "",
   });
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const user = authService.getStoredUser();
+  // Використовуємо useAuth замість authService для централізованого стану авторизації
+  const { user, logout } = useAuth();
+
+  // Використовуємо хук для улюблених
+  const { favorites, isLoadingFavorites, refetchFavorites } = useFavorites();
+  const favoritesList = favorites as Property[];
 
   // Fetch user's properties
   const { data: userProperties = [], isLoading: propertiesLoading } = useQuery({
@@ -104,7 +115,7 @@ export const ProfilePage: React.FC = () => {
   // Fetch user's inquiries
   const { data: userInquiries = [], isLoading: inquiriesLoading } = useQuery({
     queryKey: ["user-inquiries", user?.id],
-    queryFn: () => inquiryService.getInquiries(),
+    queryFn: () => inquiryService.getUserInquiries(),
     enabled: !!user,
   });
 
@@ -117,7 +128,8 @@ export const ProfilePage: React.FC = () => {
           const updatedUser: User = {
             ...user!,
             email: data.email,
-            fullName: data.fullName,
+            firstName: data.firstName,
+            lastName: data.lastName,
             phoneNumber: data.phoneNumber,
             updatedAt: new Date().toISOString(),
           };
@@ -131,7 +143,6 @@ export const ProfilePage: React.FC = () => {
       queryClient.invalidateQueries({ queryKey: ["user-properties"] });
       queryClient.invalidateQueries({ queryKey: ["user-inquiries"] });
 
-      setEditMode(false);
       setEditDialogOpen(false);
       toast.success("Profile updated successfully!");
     },
@@ -150,7 +161,8 @@ export const ProfilePage: React.FC = () => {
     if (user) {
       setEditForm({
         email: user.email,
-        fullName: user.fullName,
+        firstName: user.firstName,
+        lastName: user.lastName,
         phoneNumber: user.phoneNumber,
       });
       setEditDialogOpen(true);
@@ -162,26 +174,37 @@ export const ProfilePage: React.FC = () => {
     e.preventDefault();
 
     try {
+      // Validate form data
       await profileUpdateSchema.validate(editForm, { abortEarly: false });
+
+      // Clear any existing errors
+      setErrors({});
+
+      // Submit profile update
       updateProfileMutation.mutate(editForm);
     } catch (validationError) {
       if (validationError instanceof yup.ValidationError) {
-        toast.error(validationError.errors[0]);
+        const newErrors: Record<string, string> = {};
+        validationError.inner.forEach((error) => {
+          if (error.path) {
+            newErrors[error.path] = error.message;
+          }
+        });
+        setErrors(newErrors);
       }
     }
   };
 
   // Handle logout
   const handleLogout = () => {
-    authService.logout();
-    toast.success("Logged out successfully");
+    logout();
     navigate(ROUTES.HOME);
   };
 
   if (!user) {
     return (
       <PageContainer>
-        <Alert severity="error">User not found. Please log in again.</Alert>
+        <Alert severity="error">User not found</Alert>
       </PageContainer>
     );
   }
@@ -190,7 +213,7 @@ export const ProfilePage: React.FC = () => {
     <ProtectedRoute>
       <PageContainer>
         {/* Profile Header */}
-        <Card sx={{ mb: 4 }}>
+        <Card sx={{ mb: 3 }}>
           <CardContent>
             <Grid container spacing={3} alignItems="center">
               <Grid item>
@@ -202,7 +225,7 @@ export const ProfilePage: React.FC = () => {
                     fontSize: "2rem",
                   }}
                 >
-                  {user.fullName.charAt(0).toUpperCase()}
+                  {getUserFullName(user).charAt(0).toUpperCase()}
                 </Avatar>
               </Grid>
               <Grid item xs>
@@ -211,7 +234,7 @@ export const ProfilePage: React.FC = () => {
                   component="h1"
                   sx={{ fontWeight: 600, mb: 1 }}
                 >
-                  {user.fullName}
+                  {getUserFullName(user)}
                 </Typography>
                 <Typography
                   variant="body1"
@@ -307,113 +330,90 @@ export const ProfilePage: React.FC = () => {
 
           {/* Overview Tab */}
           <TabPanel value={tabValue} index={0}>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={6}>
-                <Card variant="outlined">
-                  <CardContent>
-                    <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
-                      Personal Information
-                    </Typography>
-                    <List>
-                      <ListItem>
-                        <ListItemAvatar>
-                          <Avatar sx={{ bgcolor: "primary.main" }}>
-                            <EmailIcon />
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText primary="Email" secondary={user.email} />
-                      </ListItem>
-                      <Divider />
-                      <ListItem>
-                        <ListItemAvatar>
-                          <Avatar sx={{ bgcolor: "primary.main" }}>
-                            <PhoneIcon />
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary="Phone"
-                          secondary={user.phoneNumber}
-                        />
-                      </ListItem>
-                      <Divider />
-                      <ListItem>
-                        <ListItemAvatar>
-                          <Avatar sx={{ bgcolor: "primary.main" }}>
-                            <CalendarIcon />
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary="Member Since"
-                          secondary={formatDate(user.createdAt)}
-                        />
-                      </ListItem>
-                    </List>
-                  </CardContent>
-                </Card>
+            <Box sx={{ p: 3 }}>
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <Card variant="outlined">
+                    <CardContent>
+                      <Typography variant="h6" gutterBottom>
+                        Personal Information
+                      </Typography>
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", mb: 2 }}
+                      >
+                        <EmailIcon sx={{ mr: 1, color: "text.secondary" }} />
+                        <Typography variant="body2">{user.email}</Typography>
+                      </Box>
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", mb: 2 }}
+                      >
+                        <PhoneIcon sx={{ mr: 1, color: "text.secondary" }} />
+                        <Typography variant="body2">
+                          {user.phoneNumber}
+                        </Typography>
+                      </Box>
+                      <Box sx={{ display: "flex", alignItems: "center" }}>
+                        <CalendarIcon sx={{ mr: 1, color: "text.secondary" }} />
+                        <Typography variant="body2">
+                          Joined {formatDate(user.createdAt)}
+                        </Typography>
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Card variant="outlined">
+                    <CardContent>
+                      <Typography variant="h6" gutterBottom>
+                        Account Statistics
+                      </Typography>
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", mb: 2 }}
+                      >
+                        <HomeIcon sx={{ mr: 1, color: "text.secondary" }} />
+                        <Typography variant="body2">
+                          {userProperties.length} Properties Listed
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", mb: 2 }}
+                      >
+                        <MessageIcon sx={{ mr: 1, color: "text.secondary" }} />
+                        <Typography variant="body2">
+                          {userInquiries.length} Inquiries Sent
+                        </Typography>
+                      </Box>
+                      <Box sx={{ display: "flex", alignItems: "center" }}>
+                        <PersonIcon sx={{ mr: 1, color: "text.secondary" }} />
+                        <Typography variant="body2">
+                          Role: {user.role}
+                        </Typography>
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </Grid>
               </Grid>
-              <Grid item xs={12} md={6}>
-                <Card variant="outlined">
-                  <CardContent>
-                    <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
-                      Account Statistics
-                    </Typography>
-                    <Grid container spacing={2}>
-                      <Grid item xs={6}>
-                        <Box sx={{ textAlign: "center", p: 2 }}>
-                          <Typography
-                            variant="h4"
-                            color="primary"
-                            sx={{ fontWeight: 700 }}
-                          >
-                            {userProperties.length}
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            Properties Listed
-                          </Typography>
-                        </Box>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <Box sx={{ textAlign: "center", p: 2 }}>
-                          <Typography
-                            variant="h4"
-                            color="primary"
-                            sx={{ fontWeight: 700 }}
-                          >
-                            {userInquiries.length}
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            Inquiries Sent
-                          </Typography>
-                        </Box>
-                      </Grid>
-                    </Grid>
-                  </CardContent>
-                </Card>
-              </Grid>
-            </Grid>
+            </Box>
           </TabPanel>
 
           {/* My Properties Tab */}
           <TabPanel value={tabValue} index={1}>
             {propertiesLoading ? (
-              <LoadingState message="Loading properties..." />
+              <LoadingState type="properties" count={4} />
             ) : userProperties.length > 0 ? (
-              <Grid container spacing={3}>
+              <Grid container spacing={3} sx={{ p: 3 }}>
                 {userProperties.map((property) => (
                   <Grid item xs={12} sm={6} md={4} key={property.id}>
-                    <PropertyCard
-                      property={property}
-                      onFavoriteToggle={() => {}}
-                    />
+                    <PropertyCard property={property} showOwnerActions={true} />
                   </Grid>
                 ))}
               </Grid>
             ) : (
               <EmptyState
                 title="No properties listed yet"
-                description="Start by browsing our properties and listing your own."
-                actionLabel="Browse Properties"
-                onAction={() => navigate(ROUTES.PROPERTIES)}
+                description="Start by creating your first property listing."
+                actionLabel="Add Property"
+                onAction={() => navigate(ROUTES.CREATE_PROPERTY)}
               />
             )}
           </TabPanel>
@@ -421,9 +421,9 @@ export const ProfilePage: React.FC = () => {
           {/* My Inquiries Tab */}
           <TabPanel value={tabValue} index={2}>
             {inquiriesLoading ? (
-              <LoadingState message="Loading inquiries..." />
+              <LoadingState type="properties" count={5} />
             ) : userInquiries.length > 0 ? (
-              <List>
+              <List sx={{ p: 0 }}>
                 {userInquiries.map((inquiry) => (
                   <React.Fragment key={inquiry.id}>
                     <ListItem>
@@ -436,13 +436,7 @@ export const ProfilePage: React.FC = () => {
                         primary={inquiry.message}
                         secondary={`Sent on ${formatDate(inquiry.createdAt)}`}
                       />
-                      <Chip
-                        label={inquiry.status}
-                        color={
-                          inquiry.status === "Pending" ? "warning" : "success"
-                        }
-                        size="small"
-                      />
+                      <Chip label="Sent" color="success" size="small" />
                     </ListItem>
                     <Divider />
                   </React.Fragment>
@@ -460,12 +454,28 @@ export const ProfilePage: React.FC = () => {
 
           {/* Favorites Tab */}
           <TabPanel value={tabValue} index={3}>
-            <EmptyState
-              title="Favorite properties functionality coming soon!"
-              description="You'll be able to save and manage your favorite properties here."
-              actionLabel="Browse Properties"
-              onAction={() => navigate(ROUTES.PROPERTIES)}
-            />
+            {isLoadingFavorites ? (
+              <LoadingState type="properties" count={4} />
+            ) : favoritesList.length > 0 ? (
+              <Grid container spacing={3} sx={{ p: 3 }}>
+                {favoritesList.map((property: Property) => (
+                  <Grid item xs={12} sm={6} md={4} key={property.id}>
+                    <PropertyCard
+                      property={property}
+                      showOwnerActions={false}
+                      onFavoriteToggle={refetchFavorites}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+            ) : (
+              <EmptyState
+                title="No favorites yet"
+                description="Start browsing properties and add them to your favorites to see them here."
+                actionLabel="Browse Properties"
+                onAction={() => navigate(ROUTES.PROPERTIES)}
+              />
+            )}
           </TabPanel>
 
           {/* Settings Tab */}
@@ -505,15 +515,32 @@ export const ProfilePage: React.FC = () => {
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <FormField
-                    label="Full Name"
-                    value={editForm.fullName}
+                    label="First Name"
+                    value={editForm.firstName}
                     onChange={(e) =>
                       setEditForm((prev) => ({
                         ...prev,
-                        fullName: e.target.value,
+                        firstName: e.target.value,
                       }))
                     }
                     required
+                    error={!!errors.firstName}
+                    helperText={errors.firstName}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <FormField
+                    label="Last Name"
+                    value={editForm.lastName}
+                    onChange={(e) =>
+                      setEditForm((prev) => ({
+                        ...prev,
+                        lastName: e.target.value,
+                      }))
+                    }
+                    required
+                    error={!!errors.lastName}
+                    helperText={errors.lastName}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -528,6 +555,8 @@ export const ProfilePage: React.FC = () => {
                       }))
                     }
                     required
+                    error={!!errors.email}
+                    helperText={errors.email}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -541,6 +570,8 @@ export const ProfilePage: React.FC = () => {
                       }))
                     }
                     required
+                    error={!!errors.phoneNumber}
+                    helperText={errors.phoneNumber}
                   />
                 </Grid>
               </Grid>
@@ -550,14 +581,14 @@ export const ProfilePage: React.FC = () => {
               <Button
                 type="submit"
                 variant="contained"
-                disabled={updateProfileMutation.isPending}
                 startIcon={
                   updateProfileMutation.isPending ? (
-                    <CircularProgress size={20} />
+                    <CircularProgress size={20} color="inherit" />
                   ) : (
                     <SaveIcon />
                   )
                 }
+                disabled={updateProfileMutation.isPending}
               >
                 {updateProfileMutation.isPending ? "Saving..." : "Save Changes"}
               </Button>

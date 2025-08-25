@@ -1,284 +1,271 @@
 import { apiClient } from "./api";
+import { API_ENDPOINTS } from "../utils/constants";
+import { buildApiUrl, getMultipartHeaders } from "../utils/apiHelpers";
 import type {
   Property,
+  PropertyDetailed,
   PropertyCreate,
   PropertyUpdate,
   PropertyFilter,
+  PropertyImage,
 } from "../types/property";
-import { PropertyType, PropertyStatus, Location } from "../types/property";
-
-// Mock data for testing
-const mockProperties: Property[] = [
-  {
-    id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-    title: "Сучасна квартира в центрі міста",
-    description:
-      "Розкішна 3-кімнатна квартира з ремонтом, меблями та технікою. Ідеальне розташування, поруч метро, магазини, ресторани.",
-    price: 85000,
-    address: "вул. Хрещатик, 15, Київ",
-    city: Location.Kyiv,
-    propertyType: PropertyType.Apartment,
-    propertyStatus: PropertyStatus.Available,
-    bedrooms: 3,
-    bathrooms: 2,
-    area: 85.5,
-    yearBuilt: 2015,
-    createdAt: "2024-01-15T10:00:00Z",
-    updatedAt: "2024-01-15T10:00:00Z",
-    userId: "cb37b3b6-88e7-4b4d-a6fc-56e1d1ed3aae",
-    userName: "Admin User",
-    imageUrls: [
-      "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    ],
-    isFavoritedByCurrentUser: false,
-  },
-  {
-    id: "b2c3d4e5-f6a7-8901-bcde-f23456789012",
-    title: "Затишний будинок з садом",
-    description:
-      "Двоповерховий будинок з великим садом та гаражем. Тиха вулиця, зелена зона, ідеально для сім'ї.",
-    price: 250000,
-    address: "вул. Садова, 42, Буча",
-    city: Location.Kyiv,
-    propertyType: PropertyType.House,
-    propertyStatus: PropertyStatus.Available,
-    bedrooms: 4,
-    bathrooms: 3,
-    area: 180.0,
-    yearBuilt: 2010,
-    createdAt: "2024-01-10T10:00:00Z",
-    updatedAt: "2024-01-10T10:00:00Z",
-    userId: "e2403a4f-0d12-4555-bf66-7338cd13ff3e",
-    userName: "John Doe",
-    imageUrls: [
-      "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    ],
-    isFavoritedByCurrentUser: true,
-  },
-  {
-    id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
-    title: "Студія для молодих",
-    description:
-      "Компактна студія з сучасним ремонтом. Ідеально для молодих людей або студентів. Розумна ціна.",
-    price: 35000,
-    address: "вул. Студентська, 8, Київ",
-    city: Location.Kyiv,
-    propertyType: PropertyType.Apartment,
-    propertyStatus: PropertyStatus.Available,
-    bedrooms: 1,
-    bathrooms: 1,
-    area: 35.0,
-    yearBuilt: 2020,
-    createdAt: "2024-01-05T10:00:00Z",
-    updatedAt: "2024-01-05T10:00:00Z",
-    userId: "d7e228e1-4c36-4ead-8bc1-622bb13140d2",
-    userName: "Jane Smith",
-    imageUrls: [
-      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    ],
-    isFavoritedByCurrentUser: false,
-  },
-  {
-    id: "d4e5f6a7-b8c9-0123-def4-567890123456",
-    title: "Пентхаус з панорамним видом",
-    description:
-      "Розкішний пентхаус на останньому поверсі з панорамним видом на місто. Елітний район, найкраща інфраструктура.",
-    price: 500000,
-    address: "вул. Печерська, 25, Київ",
-    city: Location.Kyiv,
-    propertyType: PropertyType.Apartment,
-    propertyStatus: PropertyStatus.Available,
-    bedrooms: 3,
-    bathrooms: 2,
-    area: 120.0,
-    yearBuilt: 2018,
-    createdAt: "2024-01-01T10:00:00Z",
-    updatedAt: "2024-01-01T10:00:00Z",
-    userId: "cb37b3b6-88e7-4b4d-a6fc-56e1d1ed3aae",
-    userName: "Admin User",
-    imageUrls: [
-      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    ],
-    isFavoritedByCurrentUser: false,
-  },
-  {
-    id: "e5f6a7b8-c9d0-1234-ef56-789012345678",
-    title: "Квартира у Львові",
-    description:
-      "Гарна 2-кімнатна квартира в історичному центрі Львова. Поруч парки, музеї, кафе.",
-    price: 120000,
-    address: "вул. Ринок, 15, Львів",
-    city: Location.Lviv,
-    propertyType: PropertyType.Apartment,
-    propertyStatus: PropertyStatus.Available,
-    bedrooms: 2,
-    bathrooms: 1,
-    area: 65.0,
-    yearBuilt: 2012,
-    createdAt: "2023-12-25T10:00:00Z",
-    updatedAt: "2023-12-25T10:00:00Z",
-    userId: "e2403a4f-0d12-4555-bf66-7338cd13ff3e",
-    userName: "John Doe",
-    imageUrls: [
-      "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    ],
-    isFavoritedByCurrentUser: true,
-  },
-  {
-    id: "f6a7b8c9-d0e1-2345-f678-901234567890",
-    title: "Вілла в Одесі",
-    description:
-      "Розкішна вілла з видом на море. Приватний пляж, басейн, сад. Ідеально для відпочинку.",
-    price: 750000,
-    address: "вул. Морська, 100, Одеса",
-    city: Location.Odesa,
-    propertyType: PropertyType.Villa,
-    propertyStatus: PropertyStatus.Available,
-    bedrooms: 5,
-    bathrooms: 4,
-    area: 300.0,
-    yearBuilt: 2019,
-    createdAt: "2023-12-20T10:00:00Z",
-    updatedAt: "2023-12-20T10:00:00Z",
-    userId: "d7e228e1-4c36-4ead-8bc1-622bb13140d2",
-    userName: "Jane Smith",
-    imageUrls: [
-      "https://images.unsplash.com/photo-1613977257363-707ba9348227?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    ],
-    isFavoritedByCurrentUser: false,
-  },
-];
-
-// Helper function to filter properties
-const filterProperties = (
-  properties: Property[],
-  filters: PropertyFilter
-): Property[] => {
-  return properties.filter((property) => {
-    // Search filter
-    if (filters.search) {
-      const searchLower = filters.search.toLowerCase();
-      const matchesSearch =
-        property.title.toLowerCase().includes(searchLower) ||
-        property.description.toLowerCase().includes(searchLower) ||
-        property.address.toLowerCase().includes(searchLower);
-      if (!matchesSearch) return false;
-    }
-
-    // Property type filter
-    if (
-      filters.propertyType &&
-      property.propertyType !== filters.propertyType
-    ) {
-      return false;
-    }
-
-    // City filter
-    if (filters.city && property.city !== filters.city) {
-      return false;
-    }
-
-    // Status filter
-    if (
-      filters.propertyStatus &&
-      property.propertyStatus !== filters.propertyStatus
-    ) {
-      return false;
-    }
-
-    // Price range filter
-    if (filters.minPrice && property.price < filters.minPrice) {
-      return false;
-    }
-    if (filters.maxPrice && property.price > filters.maxPrice) {
-      return false;
-    }
-
-    // Area range filter
-    if (filters.minArea && property.area < filters.minArea) {
-      return false;
-    }
-    if (filters.maxArea && property.area > filters.maxArea) {
-      return false;
-    }
-
-    // Bedrooms filter
-    if (filters.minBedrooms && property.bedrooms < filters.minBedrooms) {
-      return false;
-    }
-
-    return true;
-  });
-};
+import {
+  createPropertyFormData,
+  createImageUploadFormData,
+} from "../utils/formDataUtils";
+import { validateImageFiles } from "../utils/imageValidation";
 
 export const propertyService = {
   async getAll(): Promise<Property[]> {
     try {
-      return await apiClient.get<Property[]>("/property/get-all");
-    } catch (error) {
-      console.warn(
-        "Failed to fetch properties from API, falling back to mock data:",
-        error
+      const response = await apiClient.get<Property[]>(
+        API_ENDPOINTS.PROPERTY.ALL
       );
-      return Promise.resolve(mockProperties);
+      if (import.meta.env.DEV) {
+        console.log("Properties API Response:", response);
+      }
+      return response || [];
+    } catch (error: unknown) {
+      console.error("Failed to fetch properties:", error);
+      throw error;
     }
   },
 
-  async getById(id: string): Promise<Property> {
+  async getById(id: string): Promise<PropertyDetailed> {
     try {
-      return await apiClient.get<Property>(`/property/${id}`);
-    } catch (error) {
-      console.warn(
-        "Failed to fetch property from API, falling back to mock data:",
-        error
-      );
-      const property = mockProperties.find((p) => p.id === id);
-      if (!property) {
-        throw new Error("Property not found");
+      const url = buildApiUrl(API_ENDPOINTS.PROPERTY.BY_ID, { id });
+      if (import.meta.env.DEV) {
+        console.log("PropertyService - Fetching property from URL:", url);
       }
-      return Promise.resolve(property);
+      const property = await apiClient.get<PropertyDetailed>(url);
+      if (import.meta.env.DEV) {
+        console.log("PropertyService - Received property:", property);
+        console.log("PropertyService - Property images:", property.images);
+      }
+      return property;
+    } catch (error: unknown) {
+      console.error("Failed to fetch property:", error);
+      throw error;
     }
   },
 
   async create(property: PropertyCreate): Promise<Property> {
-    return apiClient.post<Property>("/property", property);
+    try {
+      if (property.images && property.images.length > 0) {
+        const formData = createPropertyFormData(property);
+        return await apiClient.post<Property>(
+          API_ENDPOINTS.PROPERTY.CREATE,
+          formData,
+          { headers: getMultipartHeaders() }
+        );
+      } else {
+        return await apiClient.post<Property>(
+          API_ENDPOINTS.PROPERTY.CREATE,
+          property
+        );
+      }
+    } catch (error) {
+      console.error("Failed to create property:", error);
+      throw error;
+    }
   },
 
   async update(id: string, property: PropertyUpdate): Promise<Property> {
-    return apiClient.put<Property>(`/property/${id}`, property);
+    try {
+      const url = API_ENDPOINTS.PROPERTY.UPDATE;
+
+      // Спробуємо спочатку JSON
+      try {
+        return await apiClient.put<Property>(url, property);
+      } catch {
+        // Fallback: використовуємо FormData
+        const formData = new FormData();
+        formData.append("Id", property.id);
+        if (property.userId) formData.append("UserId", property.userId);
+        if (property.title) formData.append("Title", property.title);
+        if (property.description)
+          formData.append("Description", property.description);
+        if (property.price) formData.append("Price", property.price.toString());
+        if (property.address) formData.append("Address", property.address);
+        if (property.location)
+          formData.append("Location", property.location.toString());
+        if (property.propertyType)
+          formData.append("PropertyType", property.propertyType.toString());
+        if (property.status)
+          formData.append("Status", property.status.toString());
+        if (property.bedrooms)
+          formData.append("Bedrooms", property.bedrooms.toString());
+        if (property.bathrooms)
+          formData.append("Bathrooms", property.bathrooms.toString());
+        if (property.squareMeters)
+          formData.append("SquareMeters", property.squareMeters.toString());
+        if (property.features) {
+          property.features.forEach((feature) =>
+            formData.append("Features", feature)
+          );
+        }
+
+        return await apiClient.put<Property>(url, formData, {
+          headers: getMultipartHeaders(),
+        });
+      }
+    } catch (error) {
+      console.error("Failed to update property:", error);
+      throw error;
+    }
   },
 
   async delete(id: string): Promise<void> {
-    return apiClient.delete<void>(`/property/${id}`);
+    try {
+      const url = buildApiUrl(API_ENDPOINTS.PROPERTY.DELETE, { id });
+      return await apiClient.delete<void>(url);
+    } catch (error) {
+      console.error("Failed to delete property:", error);
+      throw error;
+    }
   },
 
   async search(filters: PropertyFilter): Promise<Property[]> {
     try {
-      return await apiClient.get<Property[]>("/property/search", filters);
-    } catch (error) {
-      console.warn(
-        "Failed to search properties from API, falling back to mock data:",
-        error
+      const searchParams = {
+        ...filters,
+        page: filters.page || 1,
+        pageSize: filters.pageSize || 10,
+      };
+
+      const url = buildApiUrl(
+        API_ENDPOINTS.PROPERTY.SEARCH,
+        undefined,
+        searchParams
       );
-      const filteredProperties = filterProperties(mockProperties, filters);
-      return Promise.resolve(filteredProperties);
+      const response = await apiClient.get<Property[]>(url);
+      if (import.meta.env.DEV) {
+        console.log("Search API Response:", response);
+      }
+      return response || [];
+    } catch (error: unknown) {
+      console.error("Failed to search properties:", error);
+      throw error;
     }
   },
 
   async getByUserId(userId: string): Promise<Property[]> {
     try {
-      return await apiClient.get<Property[]>(`/property/user/${userId}`);
+      const url = buildApiUrl(API_ENDPOINTS.PROPERTY.BY_USER, { userId });
+      const response = await apiClient.get<Property[]>(url);
+      if (import.meta.env.DEV) {
+        console.log("User Properties API Response:", response);
+      }
+      return response || [];
     } catch (error) {
-      console.warn(
-        "Failed to fetch user properties from API, falling back to mock data:",
-        error
-      );
-      const userProperties = mockProperties.filter((p) => p.userId === userId);
-      return Promise.resolve(userProperties);
+      console.error("Failed to fetch user properties:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * Upload images for a property with validation
+   * @param propertyId - Property ID to upload images for
+   * @param files - Array of image files to upload
+   * @returns Promise with uploaded property images
+   */
+  async uploadImages(
+    propertyId: string,
+    files: File[]
+  ): Promise<PropertyImage[]> {
+    try {
+      if (!files || files.length === 0) {
+        throw new Error("No files provided for upload");
+      }
+
+      const validation = validateImageFiles(files);
+      if (!validation.isValid) {
+        throw new Error(
+          `Image validation failed: ${validation.errors.join(", ")}`
+        );
+      }
+
+      const formData = createImageUploadFormData(validation.validFiles);
+
+      const url = buildApiUrl(API_ENDPOINTS.PROPERTY_IMAGES.UPLOAD, {
+        propertyId,
+      });
+
+      const result = await apiClient.post<PropertyImage[]>(url, formData, {
+        headers: getMultipartHeaders(),
+      });
+
+      return result;
+    } catch (error) {
+      console.error("Failed to upload images:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * Delete a specific image from a property
+   * @param propertyId - Property ID that owns the image
+   * @param imageId - Image ID to delete
+   * @returns Promise with deletion success status
+   */
+  async deleteImage(propertyId: string, imageId: string): Promise<boolean> {
+    try {
+      const url = buildApiUrl(API_ENDPOINTS.PROPERTY_IMAGES.DELETE, {
+        propertyId,
+        imageId,
+      });
+
+      const result = await apiClient.delete<boolean>(url);
+
+      return result;
+    } catch (error) {
+      console.error("Failed to delete image:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * Reorder images for a property
+   * @param propertyId - Property ID to reorder images for
+   * @param imageIds - Array of image IDs in the desired order
+   * @returns Promise with reorder success status
+   */
+  async reorderImages(
+    propertyId: string,
+    imageIds: string[]
+  ): Promise<boolean> {
+    try {
+      if (!imageIds || imageIds.length === 0) {
+        throw new Error("No image IDs provided for reordering");
+      }
+
+      const url = buildApiUrl(API_ENDPOINTS.PROPERTY_IMAGES.REORDER, {
+        propertyId,
+      });
+      return await apiClient.put<boolean>(url, imageIds);
+    } catch (error) {
+      console.error("Failed to reorder images:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get all images for a specific property
+   * @param propertyId - Property ID to get images for
+   * @returns Promise with array of property images
+   */
+  async getPropertyImages(propertyId: string): Promise<PropertyImage[]> {
+    try {
+      const url = buildApiUrl(API_ENDPOINTS.PROPERTY_IMAGES.GET, {
+        propertyId,
+      });
+
+      const images = await apiClient.get<PropertyImage[]>(url);
+
+      return images;
+    } catch (error) {
+      console.error("Failed to get property images:", error);
+      throw error;
     }
   },
 };
