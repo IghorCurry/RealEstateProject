@@ -126,4 +126,8 @@ out/
 
 # Temporary files
 *.tmp
-*.temp 
+*.temp
+
+# User uploaded files (should use Azure Blob Storage in production)
+Backend/RealEstate/RealEstate.WebApi/wwwroot/uploads/
+uploads/ 
