@@ -4,7 +4,7 @@ using RealEstate.DAL.Entities;
 
 namespace RealEstate.DAL.Persistance.Configuration
 {
-    internal class PropertyImageConfiguration : IEntityTypeConfiguration<PropertyImage>
+    public class PropertyImageConfiguration : IEntityTypeConfiguration<PropertyImage>
     {
         public void Configure(EntityTypeBuilder<PropertyImage> builder)
         {
@@ -14,6 +14,11 @@ namespace RealEstate.DAL.Persistance.Configuration
                 .IsRequired()
                 .HasMaxLength(500);
 
+            
+            builder.Property(pi => pi.Order)
+                .IsRequired()
+                .HasDefaultValue(0);
+
             // Relationships
             builder.HasOne(pi => pi.Property)
                 .WithMany(p => p.Images)
@@ -22,6 +27,8 @@ namespace RealEstate.DAL.Persistance.Configuration
 
             // Indexes
             builder.HasIndex(pi => pi.PropertyId);
+            
+            builder.HasIndex(pi => new { pi.PropertyId, pi.Order });
         }
     }
 } 

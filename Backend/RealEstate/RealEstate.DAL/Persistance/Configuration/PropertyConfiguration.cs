@@ -13,11 +13,11 @@ namespace RealEstate.DAL.Persistance.Configuration
 
             builder.Property(p => p.Title)
                 .IsRequired()
-                .HasMaxLength(200);
+                .HasMaxLength(100); 
 
             builder.Property(p => p.Description)
                 .IsRequired()
-                .HasMaxLength(2000);
+                .HasMaxLength(1000); // ВИПРАВЛЕНО: узгоджено з валідатором
 
             builder.Property(p => p.Price)
                 .IsRequired()

@@ -213,56 +213,56 @@ namespace RealEstate.DAL.Migrations
                         new
                         {
                             Id = new Guid("1a1b2c3d-e5f6-7890-abcd-ef1234567890"),
-                            CreatedAt = new DateTime(2025, 7, 25, 13, 52, 57, 501, DateTimeKind.Utc).AddTicks(9761),
+                            CreatedAt = new DateTime(2025, 8, 5, 19, 28, 24, 48, DateTimeKind.Utc).AddTicks(7617),
                             PropertyId = new Guid("a1b2c3d4-e5f6-7890-abcd-ef1234567890"),
                             UserId = new Guid("e2403a4f-0d12-4555-bf66-7338cd13ff3e")
                         },
                         new
                         {
                             Id = new Guid("1a2b3c4d-e6f7-8901-bcde-f23456789012"),
-                            CreatedAt = new DateTime(2025, 7, 27, 13, 52, 57, 501, DateTimeKind.Utc).AddTicks(9777),
+                            CreatedAt = new DateTime(2025, 8, 7, 19, 28, 24, 48, DateTimeKind.Utc).AddTicks(7622),
                             PropertyId = new Guid("c3d4e5f6-a7b8-9012-cdef-345678901234"),
                             UserId = new Guid("e2403a4f-0d12-4555-bf66-7338cd13ff3e")
                         },
                         new
                         {
                             Id = new Guid("1a3c4d5e-f7a8-9012-cdef-345678901234"),
-                            CreatedAt = new DateTime(2025, 7, 30, 13, 52, 57, 501, DateTimeKind.Utc).AddTicks(9779),
+                            CreatedAt = new DateTime(2025, 8, 10, 19, 28, 24, 48, DateTimeKind.Utc).AddTicks(7624),
                             PropertyId = new Guid("d4e5f6a7-b8c9-0123-def4-567890123456"),
                             UserId = new Guid("e2403a4f-0d12-4555-bf66-7338cd13ff3e")
                         },
                         new
                         {
                             Id = new Guid("1a4d5e6f-a8b9-0123-def4-567890123456"),
-                            CreatedAt = new DateTime(2025, 7, 23, 13, 52, 57, 501, DateTimeKind.Utc).AddTicks(9782),
+                            CreatedAt = new DateTime(2025, 8, 3, 19, 28, 24, 48, DateTimeKind.Utc).AddTicks(7627),
                             PropertyId = new Guid("b2c3d4e5-f6a7-8901-bcde-f23456789012"),
                             UserId = new Guid("d7e228e1-4c36-4ead-8bc1-622bb13140d2")
                         },
                         new
                         {
                             Id = new Guid("1a5e6f7a-b9c0-1234-ef56-789012345678"),
-                            CreatedAt = new DateTime(2025, 7, 28, 13, 52, 57, 501, DateTimeKind.Utc).AddTicks(9795),
+                            CreatedAt = new DateTime(2025, 8, 8, 19, 28, 24, 48, DateTimeKind.Utc).AddTicks(7629),
                             PropertyId = new Guid("e5f6a7b8-c9d0-1234-ef56-789012345678"),
                             UserId = new Guid("d7e228e1-4c36-4ead-8bc1-622bb13140d2")
                         },
                         new
                         {
                             Id = new Guid("1a6f7a8b-c0d1-2345-ef67-890123456789"),
-                            CreatedAt = new DateTime(2025, 8, 1, 13, 52, 57, 501, DateTimeKind.Utc).AddTicks(9798),
+                            CreatedAt = new DateTime(2025, 8, 12, 19, 28, 24, 48, DateTimeKind.Utc).AddTicks(7632),
                             PropertyId = new Guid("a1b2c3d4-e5f6-7890-abcd-ef1234567890"),
                             UserId = new Guid("d7e228e1-4c36-4ead-8bc1-622bb13140d2")
                         },
                         new
                         {
                             Id = new Guid("1a7a8b9c-d1e2-3456-ef78-901234567890"),
-                            CreatedAt = new DateTime(2025, 7, 20, 13, 52, 57, 501, DateTimeKind.Utc).AddTicks(9801),
+                            CreatedAt = new DateTime(2025, 7, 31, 19, 28, 24, 48, DateTimeKind.Utc).AddTicks(7635),
                             PropertyId = new Guid("b2c3d4e5-f6a7-8901-bcde-f23456789012"),
                             UserId = new Guid("cb37b3b6-88e7-4b4d-a6fc-56e1d1ed3aae")
                         },
                         new
                         {
                             Id = new Guid("1a8b9c0d-e2f3-4567-ef89-012345678901"),
-                            CreatedAt = new DateTime(2025, 7, 29, 13, 52, 57, 501, DateTimeKind.Utc).AddTicks(9804),
+                            CreatedAt = new DateTime(2025, 8, 9, 19, 28, 24, 48, DateTimeKind.Utc).AddTicks(7638),
                             PropertyId = new Guid("e5f6a7b8-c9d0-1234-ef56-789012345678"),
                             UserId = new Guid("cb37b3b6-88e7-4b4d-a6fc-56e1d1ed3aae")
                         });
@@ -314,7 +314,7 @@ namespace RealEstate.DAL.Migrations
                         new
                         {
                             Id = new Guid("1a2b3c4d-e5f6-7890-abcd-ef1234567890"),
-                            CreatedAt = new DateTime(2025, 7, 30, 13, 52, 57, 501, DateTimeKind.Utc).AddTicks(9575),
+                            CreatedAt = new DateTime(2025, 8, 10, 19, 28, 24, 48, DateTimeKind.Utc).AddTicks(7421),
                             Message = "Доброго дня! Цікавлюся цією квартирою. Чи можна домовитися про перегляд? Який час буде зручно?",
                             PropertyId = new Guid("a1b2c3d4-e5f6-7890-abcd-ef1234567890"),
                             UserId = new Guid("e2403a4f-0d12-4555-bf66-7338cd13ff3e")
@@ -322,7 +322,7 @@ namespace RealEstate.DAL.Migrations
                         new
                         {
                             Id = new Guid("2b3c4d5e-f6a7-8901-bcde-f23456789012"),
-                            CreatedAt = new DateTime(2025, 7, 31, 13, 52, 57, 501, DateTimeKind.Utc).AddTicks(9582),
+                            CreatedAt = new DateTime(2025, 8, 11, 19, 28, 24, 48, DateTimeKind.Utc).AddTicks(7525),
                             Message = "Дуже подобається будинок! Чи можна дізнатися більше про комунальні платежі та податки?",
                             PropertyId = new Guid("b2c3d4e5-f6a7-8901-bcde-f23456789012"),
                             UserId = new Guid("d7e228e1-4c36-4ead-8bc1-622bb13140d2")
@@ -330,7 +330,7 @@ namespace RealEstate.DAL.Migrations
                         new
                         {
                             Id = new Guid("3c4d5e6f-a7b8-9012-cdef-345678901234"),
-                            CreatedAt = new DateTime(2025, 8, 1, 13, 52, 57, 501, DateTimeKind.Utc).AddTicks(9584),
+                            CreatedAt = new DateTime(2025, 8, 12, 19, 28, 24, 48, DateTimeKind.Utc).AddTicks(7528),
                             Message = "Ідеально для студента! Чи можна зняти на довгострок? Який депозит потрібен?",
                             PropertyId = new Guid("c3d4e5f6-a7b8-9012-cdef-345678901234"),
                             UserId = new Guid("e2403a4f-0d12-4555-bf66-7338cd13ff3e")
@@ -338,7 +338,7 @@ namespace RealEstate.DAL.Migrations
                         new
                         {
                             Id = new Guid("4d5e6f7a-b8c9-0123-def4-567890123456"),
-                            CreatedAt = new DateTime(2025, 8, 2, 13, 52, 57, 501, DateTimeKind.Utc).AddTicks(9587),
+                            CreatedAt = new DateTime(2025, 8, 13, 19, 28, 24, 48, DateTimeKind.Utc).AddTicks(7531),
                             Message = "Розкішний пентхаус! Чи можна домовитися про перегляд в суботу?",
                             PropertyId = new Guid("d4e5f6a7-b8c9-0123-def4-567890123456"),
                             UserId = new Guid("d7e228e1-4c36-4ead-8bc1-622bb13140d2")
@@ -346,7 +346,7 @@ namespace RealEstate.DAL.Migrations
                         new
                         {
                             Id = new Guid("5e6f7a8b-c9d0-1234-ef56-789012345678"),
-                            CreatedAt = new DateTime(2025, 8, 3, 13, 52, 57, 501, DateTimeKind.Utc).AddTicks(9591),
+                            CreatedAt = new DateTime(2025, 8, 14, 19, 28, 24, 48, DateTimeKind.Utc).AddTicks(7535),
                             Email = "elena.petrenko@gmail.com",
                             Message = "Доброго дня! Цікавлюся квартирою. Чи можна дізнатися про парковку?",
                             Name = "Олена Петренко",
@@ -356,7 +356,7 @@ namespace RealEstate.DAL.Migrations
                         new
                         {
                             Id = new Guid("6f7a8b9c-d0e1-2345-ef67-890123456789"),
-                            CreatedAt = new DateTime(2025, 8, 4, 1, 52, 57, 501, DateTimeKind.Utc).AddTicks(9595),
+                            CreatedAt = new DateTime(2025, 8, 15, 7, 28, 24, 48, DateTimeKind.Utc).AddTicks(7540),
                             Email = "mikhail.ivanenko@ukr.net",
                             Message = "Дуже подобається будинок! Чи можна дізнатися про школу та садочок поблизу?",
                             Name = "Михайло Іваненко",
@@ -366,7 +366,7 @@ namespace RealEstate.DAL.Migrations
                         new
                         {
                             Id = new Guid("7a8b9c0d-e1f2-3456-ef78-901234567890"),
-                            CreatedAt = new DateTime(2025, 8, 4, 7, 52, 57, 501, DateTimeKind.Utc).AddTicks(9598),
+                            CreatedAt = new DateTime(2025, 8, 15, 13, 28, 24, 48, DateTimeKind.Utc).AddTicks(7551),
                             Email = "anna.kovalenko@yahoo.com",
                             Message = "Студія виглядає чудово! Чи можна зняти на місяць?",
                             Name = "Анна Коваленко",
@@ -376,7 +376,7 @@ namespace RealEstate.DAL.Migrations
                         new
                         {
                             Id = new Guid("8b9c0d1e-f2a3-4567-ef89-012345678901"),
-                            CreatedAt = new DateTime(2025, 8, 4, 11, 52, 57, 501, DateTimeKind.Utc).AddTicks(9601),
+                            CreatedAt = new DateTime(2025, 8, 15, 17, 28, 24, 48, DateTimeKind.Utc).AddTicks(7555),
                             Email = "viktor.sydorenko@gmail.com",
                             Message = "Пентхаус просто неймовірний! Чи можна домовитися про перегляд?",
                             Name = "Віктор Сидоренко",
@@ -407,8 +407,8 @@ namespace RealEstate.DAL.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
 
                     b.Property<string>("Features")
                         .IsRequired()
@@ -433,8 +433,8 @@ namespace RealEstate.DAL.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -462,7 +462,7 @@ namespace RealEstate.DAL.Migrations
                             Address = "вул. Хрещатик, 15, Київ",
                             Bathrooms = 2,
                             Bedrooms = 3,
-                            CreatedAt = new DateTime(2025, 7, 5, 13, 52, 57, 501, DateTimeKind.Utc).AddTicks(9140),
+                            CreatedAt = new DateTime(2025, 7, 16, 19, 28, 24, 48, DateTimeKind.Utc).AddTicks(6573),
                             Description = "Розкішна 3-кімнатна квартира з ремонтом, меблями та технікою. Ідеальне розташування, поруч метро, магазини, ресторани.",
                             Features = "Меблі,Техніка,Кондиціонер,Балкон,Парковка",
                             Location = 6,
@@ -479,7 +479,7 @@ namespace RealEstate.DAL.Migrations
                             Address = "вул. Садова, 42, Буча",
                             Bathrooms = 3,
                             Bedrooms = 4,
-                            CreatedAt = new DateTime(2025, 7, 10, 13, 52, 57, 501, DateTimeKind.Utc).AddTicks(9170),
+                            CreatedAt = new DateTime(2025, 7, 21, 19, 28, 24, 48, DateTimeKind.Utc).AddTicks(6592),
                             Description = "Двоповерховий будинок з великим садом та гаражем. Тиха вулиця, зелена зона, ідеально для сім'ї.",
                             Features = "Сад,Гараж,Камін,Тераса,Підвал",
                             Location = 2,
@@ -496,7 +496,7 @@ namespace RealEstate.DAL.Migrations
                             Address = "вул. Студентська, 8, Київ",
                             Bathrooms = 1,
                             Bedrooms = 1,
-                            CreatedAt = new DateTime(2025, 7, 15, 13, 52, 57, 501, DateTimeKind.Utc).AddTicks(9176),
+                            CreatedAt = new DateTime(2025, 7, 26, 19, 28, 24, 48, DateTimeKind.Utc).AddTicks(6599),
                             Description = "Компактна студія з сучасним ремонтом. Ідеально для молодих людей або студентів. Розумна ціна.",
                             Features = "Меблі,Техніка,Wi-Fi,Безпека",
                             Location = 6,
@@ -513,7 +513,7 @@ namespace RealEstate.DAL.Migrations
                             Address = "вул. Печерська, 25, Київ",
                             Bathrooms = 2,
                             Bedrooms = 3,
-                            CreatedAt = new DateTime(2025, 7, 20, 13, 52, 57, 501, DateTimeKind.Utc).AddTicks(9182),
+                            CreatedAt = new DateTime(2025, 7, 31, 19, 28, 24, 48, DateTimeKind.Utc).AddTicks(6608),
                             Description = "Розкішний пентхаус на останньому поверсі з панорамним видом на місто. Елітний район, найкраща інфраструктура.",
                             Features = "Панорамні вікна,Тераса,Консьєрж,Підземна парковка,Спортзал",
                             Location = 6,
@@ -530,7 +530,7 @@ namespace RealEstate.DAL.Migrations
                             Address = "вул. Торгова, 10, Київ",
                             Bathrooms = 1,
                             Bedrooms = 0,
-                            CreatedAt = new DateTime(2025, 7, 25, 13, 52, 57, 501, DateTimeKind.Utc).AddTicks(9194),
+                            CreatedAt = new DateTime(2025, 8, 5, 19, 28, 24, 48, DateTimeKind.Utc).AddTicks(6905),
                             Description = "Готове комерційне приміщення для бізнесу. Висока прохідність, зручне розташування, можна відкрити магазин або кафе.",
                             Features = "Вхід з вулиці,Вентиляція,Електрика,Водопостачання",
                             Location = 6,
@@ -539,6 +539,57 @@ namespace RealEstate.DAL.Migrations
                             SquareMeters = 150.0,
                             Status = 1,
                             Title = "Комерційне приміщення",
+                            UserId = new Guid("e2403a4f-0d12-4555-bf66-7338cd13ff3e")
+                        },
+                        new
+                        {
+                            Id = new Guid("f6a7b8c9-d0e1-2345-ef67-890123456789"),
+                            Address = "вул. Центральна, 5, Київ",
+                            Bathrooms = 1,
+                            Bedrooms = 2,
+                            CreatedAt = new DateTime(2025, 8, 10, 19, 28, 24, 48, DateTimeKind.Utc).AddTicks(6921),
+                            Description = "Сучасна квартира з ремонтом. Зручне розташування, поруч транспорт та магазини.",
+                            Features = "Меблі,Балкон,Парковка",
+                            Location = 6,
+                            Price = 65000m,
+                            PropertyType = 2,
+                            SquareMeters = 55.0,
+                            Status = 1,
+                            Title = "Сучасна квартира з ремонтом",
+                            UserId = new Guid("d7e228e1-4c36-4ead-8bc1-622bb13140d2")
+                        },
+                        new
+                        {
+                            Id = new Guid("a7b8c9d0-e1f2-3456-ef78-901234567890"),
+                            Address = "вул. Бізнесова, 15, Київ",
+                            Bathrooms = 2,
+                            Bedrooms = 0,
+                            CreatedAt = new DateTime(2025, 8, 12, 19, 28, 24, 48, DateTimeKind.Utc).AddTicks(6927),
+                            Description = "Сучасне офісне приміщення в бізнес-центрі. Ідеально для компаній середнього розміру.",
+                            Features = "Конференц-зал,Кухня,Парковка,Охорона",
+                            Location = 6,
+                            Price = 800000m,
+                            PropertyType = 3,
+                            SquareMeters = 200.0,
+                            Status = 1,
+                            Title = "Офісне приміщення в бізнес-центрі",
+                            UserId = new Guid("cb37b3b6-88e7-4b4d-a6fc-56e1d1ed3aae")
+                        },
+                        new
+                        {
+                            Id = new Guid("b8c9d0e1-f2a3-4567-ef89-012345678901"),
+                            Address = "вул. Елітна, 8, Київ",
+                            Bathrooms = 2,
+                            Bedrooms = 3,
+                            CreatedAt = new DateTime(2025, 8, 13, 19, 28, 24, 48, DateTimeKind.Utc).AddTicks(6934),
+                            Description = "Стильна квартира з дизайнерським ремонтом. Елітний район, найкраща інфраструктура.",
+                            Features = "Дизайнерський ремонт,Меблі,Техніка,Балкон",
+                            Location = 6,
+                            Price = 250000m,
+                            PropertyType = 2,
+                            SquareMeters = 95.0,
+                            Status = 1,
+                            Title = "Стильна квартира в центрі",
                             UserId = new Guid("e2403a4f-0d12-4555-bf66-7338cd13ff3e")
                         });
                 });
@@ -554,6 +605,11 @@ namespace RealEstate.DAL.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
+                    b.Property<int>("Order")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0);
+
                     b.Property<Guid>("PropertyId")
                         .HasColumnType("uuid");
 
@@ -561,80 +617,101 @@ namespace RealEstate.DAL.Migrations
 
                     b.HasIndex("PropertyId");
 
+                    b.HasIndex("PropertyId", "Order");
+
                     b.ToTable("PropertyImages");
 
                     b.HasData(
                         new
                         {
                             Id = new Guid("f1a2b3c4-d5e6-7890-abcd-ef1234567890"),
-                            ImageUrl = "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
+                            ImageUrl = "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&h=600&fit=crop",
+                            Order = 0,
                             PropertyId = new Guid("a1b2c3d4-e5f6-7890-abcd-ef1234567890")
                         },
                         new
                         {
                             Id = new Guid("f2b3c4d5-e6f7-8901-bcde-f23456789012"),
-                            ImageUrl = "https://images.unsplash.com/photo-1560448204-6032e02f11c3?w=800&h=600&fit=crop",
-                            PropertyId = new Guid("a1b2c3d4-e5f6-7890-abcd-ef1234567890")
-                        },
-                        new
-                        {
-                            Id = new Guid("f3c4d5e6-f7a8-9012-cdef-345678901234"),
-                            ImageUrl = "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
+                            ImageUrl = "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&h=600&fit=crop",
+                            Order = 0,
                             PropertyId = new Guid("a1b2c3d4-e5f6-7890-abcd-ef1234567890")
                         },
                         new
                         {
                             Id = new Guid("f4d5e6f7-a8b9-0123-def4-567890123456"),
                             ImageUrl = "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&h=600&fit=crop",
+                            Order = 0,
                             PropertyId = new Guid("b2c3d4e5-f6a7-8901-bcde-f23456789012")
                         },
                         new
                         {
                             Id = new Guid("f5e6f7a8-b9c0-1234-ef56-789012345678"),
                             ImageUrl = "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&h=600&fit=crop",
+                            Order = 0,
                             PropertyId = new Guid("b2c3d4e5-f6a7-8901-bcde-f23456789012")
                         },
                         new
                         {
                             Id = new Guid("f6f7a8b9-c0d1-2345-ef67-890123456789"),
-                            ImageUrl = "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
+                            ImageUrl = "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&h=600&fit=crop",
+                            Order = 0,
                             PropertyId = new Guid("c3d4e5f6-a7b8-9012-cdef-345678901234")
                         },
                         new
                         {
                             Id = new Guid("f7a8b9c0-d1e2-3456-ef78-901234567890"),
-                            ImageUrl = "https://images.unsplash.com/photo-1560448204-6032e02f11c3?w=800&h=600&fit=crop",
+                            ImageUrl = "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&h=600&fit=crop",
+                            Order = 0,
                             PropertyId = new Guid("c3d4e5f6-a7b8-9012-cdef-345678901234")
                         },
                         new
                         {
                             Id = new Guid("f8b9c0d1-e2f3-4567-ef89-012345678901"),
-                            ImageUrl = "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
+                            ImageUrl = "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=600&fit=crop",
+                            Order = 0,
                             PropertyId = new Guid("d4e5f6a7-b8c9-0123-def4-567890123456")
                         },
                         new
                         {
                             Id = new Guid("f9c0d1e2-f3a4-5678-ef90-123456789012"),
-                            ImageUrl = "https://images.unsplash.com/photo-1560448204-6032e02f11c3?w=800&h=600&fit=crop",
-                            PropertyId = new Guid("d4e5f6a7-b8c9-0123-def4-567890123456")
-                        },
-                        new
-                        {
-                            Id = new Guid("f0d1e2f3-a4b5-6789-ef01-234567890123"),
-                            ImageUrl = "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
+                            ImageUrl = "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&h=600&fit=crop",
+                            Order = 0,
                             PropertyId = new Guid("d4e5f6a7-b8c9-0123-def4-567890123456")
                         },
                         new
                         {
                             Id = new Guid("f1e2f3a4-b5c6-7890-ef12-345678901234"),
-                            ImageUrl = "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
+                            ImageUrl = "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=600&fit=crop",
+                            Order = 0,
                             PropertyId = new Guid("e5f6a7b8-c9d0-1234-ef56-789012345678")
                         },
                         new
                         {
                             Id = new Guid("f2f3a4b5-c6d7-8901-ef23-456789012345"),
-                            ImageUrl = "https://images.unsplash.com/photo-1560448204-6032e02f11c3?w=800&h=600&fit=crop",
+                            ImageUrl = "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&h=600&fit=crop",
+                            Order = 0,
                             PropertyId = new Guid("e5f6a7b8-c9d0-1234-ef56-789012345678")
+                        },
+                        new
+                        {
+                            Id = new Guid("f3a4b5c6-d7e8-9012-ef34-567890123456"),
+                            ImageUrl = "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&h=600&fit=crop",
+                            Order = 0,
+                            PropertyId = new Guid("f6a7b8c9-d0e1-2345-ef67-890123456789")
+                        },
+                        new
+                        {
+                            Id = new Guid("f4b5c6d7-e8f9-0123-ef45-678901234567"),
+                            ImageUrl = "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=600&fit=crop",
+                            Order = 0,
+                            PropertyId = new Guid("a7b8c9d0-e1f2-3456-ef78-901234567890")
+                        },
+                        new
+                        {
+                            Id = new Guid("f5c6d7e8-f9a0-1234-ef56-789012345678"),
+                            ImageUrl = "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=600&fit=crop",
+                            Order = 0,
+                            PropertyId = new Guid("b8c9d0e1-f2a3-4567-ef89-012345678901")
                         });
                 });
 
@@ -650,6 +727,9 @@ namespace RealEstate.DAL.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -717,15 +797,16 @@ namespace RealEstate.DAL.Migrations
                         {
                             Id = new Guid("cb37b3b6-88e7-4b4d-a6fc-56e1d1ed3aae"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "efca61f3-ddde-4e06-b926-e892c4d27fdc",
+                            ConcurrencyStamp = "cb6400e8-a61b-4e5a-8bc4-f43f5f7178c7",
+                            CreatedAt = new DateTime(2025, 8, 15, 19, 28, 23, 860, DateTimeKind.Utc).AddTicks(6656),
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
-                            FirstName = "",
-                            LastName = "",
+                            FirstName = "Admin",
+                            LastName = "User",
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "REALESTATEADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAELyVJ5i49mBmajTpalIPwN4bIR/WHaZ86pDgbYUain8I2alfxovw8pOfJpo4OQV63A==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMCCp9cUzlxdfzhlIi97jhpfIwCrQy35LE/WnW/zEgbvAOWTi6o+L0HSiC8MVa33FA==",
                             PhoneNumber = "0501234567",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "95d58893-e6ce-419a-99c7-087631de4d5e",
@@ -736,15 +817,16 @@ namespace RealEstate.DAL.Migrations
                         {
                             Id = new Guid("e2403a4f-0d12-4555-bf66-7338cd13ff3e"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6c4b73ee-3468-4abb-a329-3da34f9485c3",
+                            ConcurrencyStamp = "8effde16-ce54-44e9-9ef9-9c0e812aa25c",
+                            CreatedAt = new DateTime(2025, 8, 15, 19, 28, 23, 918, DateTimeKind.Utc).AddTicks(8565),
                             Email = "user1@gmail.com",
                             EmailConfirmed = true,
-                            FirstName = "",
-                            LastName = "",
+                            FirstName = "John",
+                            LastName = "Doe",
                             LockoutEnabled = false,
                             NormalizedEmail = "USER1@GMAIL.COM",
                             NormalizedUserName = "USER1",
-                            PasswordHash = "AQAAAAIAAYagAAAAEGzZtccEahQs2Bf8vM62/g2piDlJMUdYOWDI7sVxZMaN57AdUJjyiSGezn9lqCtK8Q==",
+                            PasswordHash = "AQAAAAIAAYagAAAAENwrU67losAzE4pFq0JXrtkYOgJInJiL0ZrJUlwQyCwyJ9BLU9ofP/j53Q08+QpooQ==",
                             PhoneNumber = "0114573600",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "c126fa02-a9ba-40a6-bf60-9ffbdf132415",
@@ -755,15 +837,16 @@ namespace RealEstate.DAL.Migrations
                         {
                             Id = new Guid("d7e228e1-4c36-4ead-8bc1-622bb13140d2"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f297085e-691a-45dd-be6f-7a3d8269227d",
+                            ConcurrencyStamp = "7494cc15-56f3-4659-b510-bce9ea25f40e",
+                            CreatedAt = new DateTime(2025, 8, 15, 19, 28, 23, 979, DateTimeKind.Utc).AddTicks(6998),
                             Email = "user2@gmail.com",
                             EmailConfirmed = true,
-                            FirstName = "",
-                            LastName = "",
+                            FirstName = "Jane",
+                            LastName = "Smith",
                             LockoutEnabled = false,
                             NormalizedEmail = "USER2@GMAIL.COM",
                             NormalizedUserName = "USER2",
-                            PasswordHash = "AQAAAAIAAYagAAAAEPXCmk0VLm4jk2Wy0YKxKPO1EWKchu4Y6SIhF7x6kFzKJ8EMY4ji7je7k1z5fFu0DQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMQ0wGLB9L7ykEux7Md0tMLVkSaDVM9AgcnC5EHINQld6hl/RQWUaIIzAlh587FpNw==",
                             PhoneNumber = "0217652388",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "29e18140-5b5d-4081-806e-4a6559084126",

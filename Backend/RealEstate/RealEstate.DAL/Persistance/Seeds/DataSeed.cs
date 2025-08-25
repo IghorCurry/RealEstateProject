@@ -5,7 +5,7 @@ using RealEstate.DAL.Persistance.Settings;
 
 namespace RealEstate.DAL.Persistance
 {
-    internal static partial class DataSeed
+    public static partial class DataSeed
     {
         private static readonly PasswordHasher<User> _passwordHasher = new();
 
@@ -63,6 +63,9 @@ namespace RealEstate.DAL.Persistance
                 Email = defaultAdminSettings.Email,
                 NormalizedEmail = defaultAdminSettings.Email.ToUpper(),
                 PhoneNumber = defaultAdminSettings.PhoneNumber,
+                FirstName = "Admin",
+                LastName = "User",
+                CreatedAt = DateTime.UtcNow,
                 EmailConfirmed = true,
                 SecurityStamp = admin_securityStamp
             };
@@ -91,6 +94,9 @@ namespace RealEstate.DAL.Persistance
                 Email = "user1@gmail.com",
                 NormalizedEmail = "user1@gmail.com".ToUpper(),
                 PhoneNumber = "0114573600",
+                FirstName = "John",
+                LastName = "Doe",
+                CreatedAt = DateTime.UtcNow,
                 EmailConfirmed = true,
                 SecurityStamp = user1_securityStamp
             };
@@ -104,6 +110,9 @@ namespace RealEstate.DAL.Persistance
                 Email = "user2@gmail.com",
                 NormalizedEmail = "user2@gmail.com".ToUpper(),
                 PhoneNumber = "0217652388",
+                FirstName = "Jane",
+                LastName = "Smith",
+                CreatedAt = DateTime.UtcNow,
                 EmailConfirmed = true,
                 SecurityStamp = user2_securityStamp
             };
@@ -131,7 +140,7 @@ namespace RealEstate.DAL.Persistance
         }
     }
 
-    internal static partial class DataSeed
+    public static partial class DataSeed
     {
         public static void AddTestableData(this ModelBuilder modelBuilder, DefaultAdminSettings defaultAdminSettings)
         {

@@ -98,6 +98,58 @@ namespace RealEstate.DAL.Persistance.Seeds
                     Features = new List<string> { "Вхід з вулиці", "Вентиляція", "Електрика", "Водопостачання" },
                     CreatedAt = DateTime.UtcNow.AddDays(-10),
                     UserId = user1Id
+                },
+                // Нові об'єкти без дублікатів
+                new Property
+                {
+                    Id = new Guid("f6a7b8c9-d0e1-2345-ef67-890123456789"),
+                    Title = "Сучасна квартира з ремонтом",
+                    Description = "Сучасна квартира з ремонтом. Зручне розташування, поруч транспорт та магазини.",
+                    Price = 65000,
+                    Bedrooms = 2,
+                    Bathrooms = 1,
+                    SquareMeters = 55.0,
+                    Address = "вул. Центральна, 5, Київ",
+                    PropertyType = PropertyType.Apartment,
+                    Location = Location.Urban,
+                    Status = PropertyStatus.Available,
+                    Features = new List<string> { "Меблі", "Балкон", "Парковка" },
+                    CreatedAt = DateTime.UtcNow.AddDays(-5),
+                    UserId = user2Id
+                },
+                new Property
+                {
+                    Id = new Guid("a7b8c9d0-e1f2-3456-ef78-901234567890"),
+                    Title = "Офісне приміщення в бізнес-центрі",
+                    Description = "Сучасне офісне приміщення в бізнес-центрі. Ідеально для компаній середнього розміру.",
+                    Price = 800000,
+                    Bedrooms = 0,
+                    Bathrooms = 2,
+                    SquareMeters = 200.0,
+                    Address = "вул. Бізнесова, 15, Київ",
+                    PropertyType = PropertyType.Condo,
+                    Location = Location.Urban,
+                    Status = PropertyStatus.Available,
+                    Features = new List<string> { "Конференц-зал", "Кухня", "Парковка", "Охорона" },
+                    CreatedAt = DateTime.UtcNow.AddDays(-3),
+                    UserId = adminId
+                },
+                new Property
+                {
+                    Id = new Guid("b8c9d0e1-f2a3-4567-ef89-012345678901"),
+                    Title = "Стильна квартира в центрі",
+                    Description = "Стильна квартира з дизайнерським ремонтом. Елітний район, найкраща інфраструктура.",
+                    Price = 250000,
+                    Bedrooms = 3,
+                    Bathrooms = 2,
+                    SquareMeters = 95.0,
+                    Address = "вул. Елітна, 8, Київ",
+                    PropertyType = PropertyType.Apartment,
+                    Location = Location.Urban,
+                    Status = PropertyStatus.Available,
+                    Features = new List<string> { "Дизайнерський ремонт", "Меблі", "Техніка", "Балкон" },
+                    CreatedAt = DateTime.UtcNow.AddDays(-2),
+                    UserId = user1Id
                 }
             };
         }

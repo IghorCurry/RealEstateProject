@@ -40,6 +40,7 @@ namespace RealEstate.DAL.Persistance.Configuration
             // Indexes
             builder.HasIndex(i => i.CreatedAt);
             builder.HasIndex(i => i.UserId);
+            builder.HasIndex(i => i.PropertyId); // ВИПРАВЛЕНО: додано індекс для покращення продуктивності
         }
     }
 } 
