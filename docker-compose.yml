@@ -19,7 +19,7 @@ services:
       dockerfile: RealEstate.WebApi/Dockerfile
     restart: unless-stopped
     ports:
-      - "5000:8080"
+      - "5158:8080"
     depends_on:
       - postgres
     environment:
@@ -36,7 +36,7 @@ services:
     depends_on:
       - api
     environment:
-      - REACT_APP_API_URL=http://localhost:5000
+      - VITE_API_URL=http://localhost:5158
 
 volumes:
   postgres_data:
