@@ -5,6 +5,8 @@ using RealEstate.DAL.Entities.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
+using RealEstate.DAL.Persistance;
 
 namespace RealEstate.WebApi.Controllers
 {
@@ -12,17 +14,19 @@ namespace RealEstate.WebApi.Controllers
     [ApiController]
     public class PropertyController : ControllerBase
     {
-        private readonly PropertyManager _manager;
+        private readonly IPropertyManager _manager;
         private readonly ILogger<PropertyController> _logger;
+        private readonly RealEstateDbContext _dataContext;
 
-        public PropertyController(PropertyManager manager, ILogger<PropertyController> logger)
+        public PropertyController(IPropertyManager manager, ILogger<PropertyController> logger, RealEstateDbContext dataContext)
         {
             _manager = manager;
             _logger = logger;
+            _dataContext = dataContext;
         }
 
-        [HttpGet("get-all")]
-        [Authorize]
+        [HttpGet]
+        [ResponseCache(Duration = 300)] // ВИПРАВЛЕНО: кешування на 5 хвилин
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -42,7 +46,6 @@ namespace RealEstate.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -51,16 +54,16 @@ namespace RealEstate.WebApi.Controllers
         {
             _logger.LogInformation("Getting property by ID: {PropertyId}", id);
             
-            if (!await _manager.IsExists(id))
-            {
-                _logger.LogWarning("Property not found with ID: {PropertyId}", id);
-                return NotFound();
-            }
-
             if (!ModelState.IsValid)
             {
                 _logger.LogWarning("Invalid model state when getting property by ID: {PropertyId}", id);
                 return BadRequest(ModelState);
+            }
+
+            if (!await _manager.IsExists(id))
+            {
+                _logger.LogWarning("Property not found with ID: {PropertyId}", id);
+                return NotFound();
             }
 
             var entity = await _manager.GetByIdAsync(id);
@@ -69,7 +72,6 @@ namespace RealEstate.WebApi.Controllers
         }
 
         [HttpGet("search")]
-        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -116,7 +118,6 @@ namespace RealEstate.WebApi.Controllers
         }
 
         [HttpGet("by-type/{propertyType}")]
-        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -136,7 +137,6 @@ namespace RealEstate.WebApi.Controllers
         }
 
         [HttpGet("by-location/{location}")]
-        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -176,7 +176,6 @@ namespace RealEstate.WebApi.Controllers
         }
 
         [HttpGet("user/{userId}")]
-        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -200,9 +199,11 @@ namespace RealEstate.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Create(PropertyCreateModel model)
+        public async Task<IActionResult> Create([FromForm] PropertyCreateModel model)
         {
             _logger.LogInformation("Creating new property: {Title}", model?.Title);
+            _logger.LogInformation("Model Images count: {ImagesCount}", model?.Images?.Count ?? 0);
+            _logger.LogInformation("Model ImageUrls count: {ImageUrlsCount}", model?.ImageUrls?.Count ?? 0);
             
             if (model == null)
             {
@@ -213,6 +214,7 @@ namespace RealEstate.WebApi.Controllers
             if (!ModelState.IsValid)
             {
                 _logger.LogWarning("Property creation failed: invalid model state for {Title}", model.Title);
+                _logger.LogWarning("ModelState errors: {Errors}", string.Join(", ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)));
                 return BadRequest(ModelState);
             }
 
@@ -233,16 +235,17 @@ namespace RealEstate.WebApi.Controllers
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Update(Guid id, PropertyUpdateModel model)
+        public async Task<IActionResult> Update([FromForm] PropertyUpdateModel model)
         {
-            _logger.LogInformation("Updating property: {PropertyId}", id);
+            _logger.LogInformation("Updating property: {PropertyId}", model?.Id);
             
             if (model == null)
             {
@@ -252,16 +255,16 @@ namespace RealEstate.WebApi.Controllers
 
             if (!ModelState.IsValid)
             {
-                _logger.LogWarning("Property update failed: invalid model state for {PropertyId}", id);
+                _logger.LogWarning("Property update failed: invalid model state for {PropertyId}", model.Id);
                 return BadRequest(ModelState);
             }
 
             try
             {
                 // Check if property exists
-                if (!await _manager.IsExists(id))
+                if (!await _manager.IsExists(model.Id))
                 {
-                    _logger.LogWarning("Property not found for update: {PropertyId}", id);
+                    _logger.LogWarning("Property not found for update: {PropertyId}", model.Id);
                     return NotFound();
                 }
 
@@ -269,14 +272,30 @@ namespace RealEstate.WebApi.Controllers
                 var currentUserId = GetCurrentUserId();
                 var isAdmin = User.IsInRole("Admin");
                 
-                if (!await _manager.CanUserModifyPropertyAsync(id, currentUserId, isAdmin))
+                if (!await _manager.CanUserModifyPropertyAsync(model.Id, currentUserId, isAdmin))
                 {
-                    _logger.LogWarning("User {UserId} attempted to update property {PropertyId} without permission", currentUserId, id);
+                    _logger.LogWarning("User {UserId} attempted to update property {PropertyId} without permission", currentUserId, model.Id);
                     return Forbid();
                 }
 
-                // Set the ID from the route parameter
-                model = model with { Id = id };
+                // Preserve the original UserId from the existing property
+                var existingUserId = await _manager.GetUserIdAsync(model.Id);
+                model = model with { UserId = existingUserId };
+
+                // Check if title is already used by another property
+                try
+                {
+                    var propertyWithSameTitle = await _manager.GetByTitleAsync(model.Title);
+                    if (propertyWithSameTitle.Id != model.Id)
+                    {
+                        _logger.LogWarning("Title {Title} is already used by another property", model.Title);
+                        return Conflict("Title is already in use");
+                    }
+                }
+                catch (Exception)
+                {
+                    // Title doesn't exist, which is good
+                }
 
                 var entity = await _manager.UpdateAsync(model);
                 _logger.LogInformation("Property updated successfully: {PropertyId} - {Title}", entity.Id, entity.Title);
@@ -284,7 +303,7 @@ namespace RealEstate.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to update property: {PropertyId}", id);
+                _logger.LogError(ex, "Failed to update property: {PropertyId}", model.Id);
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -328,6 +347,179 @@ namespace RealEstate.WebApi.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
+        // Image management endpoints
+        [HttpPost("{propertyId}/images")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> UploadImages(Guid propertyId, List<IFormFile> files)
+        {
+            _logger.LogInformation("Uploading images for property: {PropertyId}", propertyId);
+            
+            if (files == null || !files.Any())
+            {
+                _logger.LogWarning("No files provided for upload");
+                return BadRequest("No files provided");
+            }
+
+            try
+            {
+                // Check if property exists
+                if (!await _manager.IsExists(propertyId))
+                {
+                    _logger.LogWarning("Property not found for image upload: {PropertyId}", propertyId);
+                    return NotFound();
+                }
+
+                // Check if user has permission to modify this property
+                var currentUserId = GetCurrentUserId();
+                var isAdmin = User.IsInRole("Admin");
+                
+                if (!await _manager.CanUserModifyPropertyAsync(propertyId, currentUserId, isAdmin))
+                {
+                    _logger.LogWarning("User {UserId} attempted to upload images to property {PropertyId} without permission", currentUserId, propertyId);
+                    return Forbid();
+                }
+
+                var uploadedImages = new List<PropertyImageViewModel>();
+                foreach (var file in files)
+                {
+                    var image = await _manager.AddImageAsync(propertyId, file);
+                    uploadedImages.Add(image);
+                }
+
+                _logger.LogInformation("Successfully uploaded {Count} images for property: {PropertyId}", uploadedImages.Count, propertyId);
+                return Ok(uploadedImages);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to upload images for property: {PropertyId}", propertyId);
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpDelete("{propertyId}/images/{imageId}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeleteImage(Guid propertyId, Guid imageId)
+        {
+            _logger.LogInformation("Deleting image {ImageId} from property: {PropertyId}", imageId, propertyId);
+            
+            try
+            {
+                // Check if property exists
+                if (!await _manager.IsExists(propertyId))
+                {
+                    _logger.LogWarning("Property not found for image deletion: {PropertyId}", propertyId);
+                    return NotFound();
+                }
+
+                // Check if user has permission to modify this property
+                var currentUserId = GetCurrentUserId();
+                var isAdmin = User.IsInRole("Admin");
+                
+                if (!await _manager.CanUserModifyPropertyAsync(propertyId, currentUserId, isAdmin))
+                {
+                    _logger.LogWarning("User {UserId} attempted to delete image from property {PropertyId} without permission", currentUserId, propertyId);
+                    return Forbid();
+                }
+
+                var result = await _manager.DeleteImageAsync(propertyId, imageId);
+                _logger.LogInformation("Successfully deleted image {ImageId} from property: {PropertyId}", imageId, propertyId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to delete image {ImageId} from property: {PropertyId}", imageId, propertyId);
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpPut("{propertyId}/images/reorder")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> ReorderImages(Guid propertyId, [FromBody] List<Guid> imageIds)
+        {
+            _logger.LogInformation("Reordering images for property: {PropertyId}", propertyId);
+            
+            if (imageIds == null || !imageIds.Any())
+            {
+                _logger.LogWarning("No image IDs provided for reordering");
+                return BadRequest("No image IDs provided");
+            }
+
+            try
+            {
+                // Check if property exists
+                if (!await _manager.IsExists(propertyId))
+                {
+                    _logger.LogWarning("Property not found for image reordering: {PropertyId}", propertyId);
+                    return NotFound();
+                }
+
+                // Check if user has permission to modify this property
+                var currentUserId = GetCurrentUserId();
+                var isAdmin = User.IsInRole("Admin");
+                
+                if (!await _manager.CanUserModifyPropertyAsync(propertyId, currentUserId, isAdmin))
+                {
+                    _logger.LogWarning("User {UserId} attempted to reorder images for property {PropertyId} without permission", currentUserId, propertyId);
+                    return Forbid();
+                }
+
+                var result = await _manager.ReorderImagesAsync(propertyId, imageIds);
+                _logger.LogInformation("Successfully reordered images for property: {PropertyId}", propertyId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to reorder images for property: {PropertyId}", propertyId);
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpGet("{propertyId}/images")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetPropertyImages(Guid propertyId)
+        {
+            _logger.LogInformation("Getting images for property: {PropertyId}", propertyId);
+            
+            try
+            {
+                // Check if property exists
+                if (!await _manager.IsExists(propertyId))
+                {
+                    _logger.LogWarning("Property not found for getting images: {PropertyId}", propertyId);
+                    return NotFound();
+                }
+
+                var images = await _manager.GetPropertyImagesAsync(propertyId);
+                _logger.LogInformation("Retrieved {Count} images for property: {PropertyId}", images.Count, propertyId);
+                return Ok(images);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to get images for property: {PropertyId}", propertyId);
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+
 
         private Guid GetCurrentUserId()
         {

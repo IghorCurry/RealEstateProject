@@ -10,16 +10,16 @@ namespace RealEstate.WebApi.Controllers
     [ApiController]
     public class InquiryController : ControllerBase
     {
-        private readonly InquiryManager _manager;
+        private readonly IInquiryManager _manager;
         private readonly ILogger<InquiryController> _logger;
 
-        public InquiryController(InquiryManager manager, ILogger<InquiryController> logger)
+        public InquiryController(IInquiryManager manager, ILogger<InquiryController> logger)
         {
             _manager = manager;
             _logger = logger;
         }
 
-        [HttpGet("get-all")]
+        [HttpGet]
         [Authorize(Policy = "RequireAdmin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -49,16 +49,16 @@ namespace RealEstate.WebApi.Controllers
         {
             _logger.LogInformation("Getting inquiry by ID: {InquiryId}", id);
             
-            if (!await _manager.IsExists(id))
-            {
-                _logger.LogWarning("Inquiry not found with ID: {InquiryId}", id);
-                return NotFound();
-            }
-
             if (!ModelState.IsValid)
             {
                 _logger.LogWarning("Invalid model state when getting inquiry by ID: {InquiryId}", id);
                 return BadRequest(ModelState);
+            }
+
+            if (!await _manager.IsExists(id))
+            {
+                _logger.LogWarning("Inquiry not found with ID: {InquiryId}", id);
+                return NotFound();
             }
 
             var entity = await _manager.GetByIdAsync(id);

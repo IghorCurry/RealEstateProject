@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using RealEstate.DAL.Entities;
 using RealEstate.BLL.Managers;
-using RealEstate.BLL.Managers.FavoriteManager;
 using RealEstate.BLL;
 using Microsoft.OpenApi.Models;
 using RealEstate.DAL.Persistance.Settings;
@@ -13,6 +12,8 @@ using System.Text;
 using FluentValidation;
 using System.Reflection;
 using Serilog;
+using RealEstate.WebApi.Validators.FavoriteValidators;
+using RealEstate.WebApi.Validators.PropertyValidators;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,15 +36,24 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:5173", "http://localhost:5174", "http://localhost:3000")
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
+        policy.SetIsOriginAllowed(origin =>
+        {
+            // Дозволяємо тільки localhost для розробки
+            return origin.StartsWith("http://localhost:") ||
+                   origin.StartsWith("http://127.0.0.1:");
+        })
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials();
     });
 });
 
 // FluentValidation
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
+// ВИПРАВЛЕНО: реєстрація валідаторів з залежностями
+builder.Services.AddScoped<FavoriteCreateValidator>();
+builder.Services.AddScoped<PropertyImageCreateValidator>();
 
 builder.Services.AddSwaggerGen(option =>
 {
@@ -76,7 +86,20 @@ builder.Services.AddSwaggerGen(option =>
 builder.Services.AddDbContext<RealEstateDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("REDatabase")));
 
-builder.Services.AddIdentity<User, IdentityRole<Guid>>()
+builder.Services.AddIdentity<User, IdentityRole<Guid>>(options =>
+{
+    // Налаштування вимог до паролів
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequiredLength = 8;
+    options.Password.RequiredUniqueChars = 1;
+    
+    // Налаштування користувача
+    options.User.RequireUniqueEmail = true;
+    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+})
     .AddEntityFrameworkStores<RealEstateDbContext>()
     .AddTokenProvider("RealEstate", typeof(DataProtectorTokenProvider<User>))
     .AddDefaultTokenProviders();
@@ -86,11 +109,12 @@ builder.Services.Configure<AccessTokenSettings>(builder.Configuration.GetSection
 
 MapsterConfig.RegisterMappings();
 
-builder.Services.AddScoped<PropertyManager, PropertyManager>();
-builder.Services.AddScoped<UserManager, UserManager>();
-builder.Services.AddScoped<InquiryManager, InquiryManager>();
-builder.Services.AddScoped<AuthManager, AuthManager>();
-builder.Services.AddScoped<FavoriteManager, FavoriteManager>();
+// ВИПРАВЛЕНО: реєстрація інтерфейсів замість конкретних класів для правильної архітектури
+builder.Services.AddScoped<IPropertyManager, PropertyManager>();
+builder.Services.AddScoped<IUserManager, UserManager>();
+builder.Services.AddScoped<IInquiryManager, InquiryManager>();
+builder.Services.AddScoped<IAuthManager, AuthManager>();
+builder.Services.AddScoped<IFavoriteManager, FavoriteManager>();
 
 builder.Services.AddAuthorization(option =>
 {
@@ -124,6 +148,10 @@ builder.Services.AddAuthentication(options =>
 });
 builder.Services.AddHttpContextAccessor();
 
+// ВИПРАВЛЕНО: додано кешування для покращення продуктивності
+builder.Services.AddMemoryCache();
+builder.Services.AddResponseCaching();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -134,6 +162,12 @@ if (app.Environment.IsDevelopment())
 
 // Use CORS
 app.UseCors("AllowFrontend");
+
+// ВИПРАВЛЕНО: додано кешування відповідей
+app.UseResponseCaching();
+
+// Add static files support for uploaded images
+app.UseStaticFiles();
 
 app.UseAuthentication();
 app.UseAuthorization();

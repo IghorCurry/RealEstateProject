@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using RealEstate.BLL.Managers.FavoriteManager;
+using RealEstate.BLL.Managers;
 using RealEstate.BLL.Models.FavoriteModels;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
@@ -10,10 +10,10 @@ namespace RealEstate.WebApi.Controllers
     [ApiController]
     public class FavoriteController : ControllerBase
     {
-        private readonly FavoriteManager _manager;
+        private readonly IFavoriteManager _manager;
         private readonly ILogger<FavoriteController> _logger;
 
-        public FavoriteController(FavoriteManager manager, ILogger<FavoriteController> logger)
+        public FavoriteController(IFavoriteManager manager, ILogger<FavoriteController> logger)
         {
             _manager = manager;
             _logger = logger;
@@ -23,6 +23,7 @@ namespace RealEstate.WebApi.Controllers
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> AddToFavorites(FavoriteCreateModel model)
         {
@@ -30,6 +31,14 @@ namespace RealEstate.WebApi.Controllers
             {
                 _logger.LogWarning("Add to favorites failed: model is null");
                 return BadRequest(ModelState);
+            }
+
+            // ВИПРАВЛЕНО: перевірка, чи користувач додає до обраного від свого імені
+            var currentUserId = GetCurrentUserId();
+            if (model.UserId != currentUserId)
+            {
+                _logger.LogWarning("User {CurrentUserId} attempted to add favorites for user {TargetUserId}", currentUserId, model.UserId);
+                return Forbid("Можна додавати тільки свої обране");
             }
 
             _logger.LogInformation("Adding property {PropertyId} to favorites for user {UserId}", model.PropertyId, model.UserId);
@@ -57,10 +66,19 @@ namespace RealEstate.WebApi.Controllers
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> RemoveFromFavorites(Guid userId, Guid propertyId)
         {
+            // ВИПРАВЛЕНО: перевірка, чи користувач видаляє своє обране
+            var currentUserId = GetCurrentUserId();
+            if (userId != currentUserId)
+            {
+                _logger.LogWarning("User {CurrentUserId} attempted to remove favorites for user {TargetUserId}", currentUserId, userId);
+                return Forbid("Можна видаляти тільки свої обране");
+            }
+
             _logger.LogInformation("Removing property {PropertyId} from favorites for user {UserId}", propertyId, userId);
             
             try
@@ -87,9 +105,18 @@ namespace RealEstate.WebApi.Controllers
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetUserFavorites(Guid userId)
         {
+            // ВИПРАВЛЕНО: перевірка, чи користувач переглядає своє обране
+            var currentUserId = GetCurrentUserId();
+            if (userId != currentUserId)
+            {
+                _logger.LogWarning("User {CurrentUserId} attempted to view favorites for user {TargetUserId}", currentUserId, userId);
+                return Forbid("Можна переглядати тільки свої обране");
+            }
+
             _logger.LogInformation("Getting favorites for user: {UserId}", userId);
             
             try
@@ -109,9 +136,18 @@ namespace RealEstate.WebApi.Controllers
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CheckIfFavorite(Guid userId, Guid propertyId)
         {
+            // ВИПРАВЛЕНО: перевірка, чи користувач перевіряє своє обране
+            var currentUserId = GetCurrentUserId();
+            if (userId != currentUserId)
+            {
+                _logger.LogWarning("User {CurrentUserId} attempted to check favorites for user {TargetUserId}", currentUserId, userId);
+                return Forbid("Можна перевіряти тільки свої обране");
+            }
+
             _logger.LogInformation("Checking if property {PropertyId} is favorite for user {UserId}", propertyId, userId);
             
             try
@@ -147,6 +183,17 @@ namespace RealEstate.WebApi.Controllers
                 _logger.LogError(ex, "Failed to get favorite count for property: {PropertyId}", propertyId);
                 return StatusCode(500, "Internal server error");
             }
+        }
+
+        // ВИПРАВЛЕНО: додано метод для отримання ID поточного користувача
+        private Guid GetCurrentUserId()
+        {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+            if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out var userId))
+            {
+                throw new UnauthorizedAccessException("User ID not found in token");
+            }
+            return userId;
         }
     }
 } 

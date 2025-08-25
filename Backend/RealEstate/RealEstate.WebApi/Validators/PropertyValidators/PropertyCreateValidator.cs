@@ -58,6 +58,19 @@ namespace RealEstate.WebApi.Validators.PropertyValidators
 
             RuleFor(x => x.UserId)
                 .NotEmpty().WithMessage("ID користувача є обов'язковим полем");
+
+            
+            RuleFor(x => x.Images)
+                .Must(images => images == null || images.Count <= 10)
+                .WithMessage("Максимальна кількість зображень: 10");
+
+            RuleForEach(x => x.Images)
+                .Must(file => file == null || file.Length <= 10 * 1024 * 1024)
+                .WithMessage("Розмір файлу не може перевищувати 10MB");
+
+            RuleFor(x => x.ImageUrls)
+                .Must(urls => urls == null || urls.Count <= 10)
+                .WithMessage("Максимальна кількість URL зображень: 10");
         }
     }
 } 

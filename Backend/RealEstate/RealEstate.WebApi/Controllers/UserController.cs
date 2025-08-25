@@ -10,16 +10,16 @@ namespace RealEstate.WebApi.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly UserManager _manager;
+        private readonly IUserManager _manager;
         private readonly ILogger<UserController> _logger;
 
-        public UserController(UserManager manager, ILogger<UserController> logger)
+        public UserController(IUserManager manager, ILogger<UserController> logger)
         {
             _manager = manager;
             _logger = logger;
         }
 
-        [HttpGet("get-all")]
+        [HttpGet]
         [Authorize(Policy = "RequireAdmin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -49,16 +49,16 @@ namespace RealEstate.WebApi.Controllers
         {
             _logger.LogInformation("Getting user by ID: {UserId}", id);
             
-            if (!await _manager.IsExists(id))
-            {
-                _logger.LogWarning("User not found with ID: {UserId}", id);
-                return NotFound();
-            }
-
             if (!ModelState.IsValid)
             {
                 _logger.LogWarning("Invalid model state when getting user by ID: {UserId}", id);
                 return BadRequest(ModelState);
+            }
+
+            if (!await _manager.IsExists(id))
+            {
+                _logger.LogWarning("User not found with ID: {UserId}", id);
+                return NotFound();
             }
 
             var entity = await _manager.GetByIdAsync(id);
@@ -76,21 +76,44 @@ namespace RealEstate.WebApi.Controllers
         {
             _logger.LogInformation("Getting user by email: {Email}", email);
             
-            if (!await _manager.IsExists(email))
-            {
-                _logger.LogWarning("User not found with email: {Email}", email);
-                return NotFound();
-            }
-
             if (!ModelState.IsValid)
             {
                 _logger.LogWarning("Invalid model state when getting user by email: {Email}", email);
                 return BadRequest(ModelState);
             }
 
+            if (!await _manager.IsExists(email))
+            {
+                _logger.LogWarning("User not found with email: {Email}", email);
+                return NotFound();
+            }
+
             var entity = await _manager.GetByEmailAsync(email);
             _logger.LogInformation("Retrieved user by email: {Email} - {UserId}", email, entity.Id);
             return Ok(entity);
+        }
+
+        [HttpGet("me")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            _logger.LogInformation("Getting current user");
+            
+            try
+            {
+                var currentUserId = GetCurrentUserId();
+                var entity = await _manager.GetByIdAsync(currentUserId);
+                _logger.LogInformation("Retrieved current user: {UserId} - {Email}", entity.Id, entity.Email);
+                return Ok(entity);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to get current user");
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpGet("by-username/{username}")]
@@ -215,6 +238,16 @@ namespace RealEstate.WebApi.Controllers
                 _logger.LogError(ex, "Failed to delete user: {UserId}", id);
                 return StatusCode(500, "Internal server error");
             }
+        }
+
+        private Guid GetCurrentUserId()
+        {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+            if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out var userId))
+            {
+                throw new UnauthorizedAccessException("User ID not found in token");
+            }
+            return userId;
         }
     }
 } 

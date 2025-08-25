@@ -9,10 +9,10 @@ namespace RealEstate.WebApi.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly AuthManager _manager;
+        private readonly IAuthManager _manager;
         private readonly ILogger<AuthController> _logger;
 
-        public AuthController(AuthManager manager, ILogger<AuthController> logger)
+        public AuthController(IAuthManager manager, ILogger<AuthController> logger)
         {
             _manager = manager;
             _logger = logger;
@@ -90,11 +90,11 @@ namespace RealEstate.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> RefreshToken([FromBody] string refreshToken)
+        public async Task<IActionResult> RefreshToken(RefreshTokenModel model)
         {
             _logger.LogInformation("Token refresh attempt");
             
-            if (string.IsNullOrEmpty(refreshToken))
+            if (model == null || string.IsNullOrEmpty(model.RefreshToken))
             {
                 _logger.LogWarning("Token refresh failed: refresh token is null or empty");
                 return BadRequest(ModelState);
@@ -108,7 +108,7 @@ namespace RealEstate.WebApi.Controllers
 
             try
             {
-                var result = await _manager.RefreshTokenAsync(refreshToken);
+                var result = await _manager.RefreshTokenAsync(model.RefreshToken);
                 _logger.LogInformation("Token refreshed successfully");
                 return Ok(result);
             }
@@ -123,11 +123,11 @@ namespace RealEstate.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Logout([FromBody] string refreshToken)
+        public async Task<IActionResult> Logout(RefreshTokenModel model)
         {
             _logger.LogInformation("Logout attempt");
             
-            if (string.IsNullOrEmpty(refreshToken))
+            if (model == null || string.IsNullOrEmpty(model.RefreshToken))
             {
                 _logger.LogWarning("Logout failed: refresh token is null or empty");
                 return BadRequest(ModelState);
@@ -141,7 +141,7 @@ namespace RealEstate.WebApi.Controllers
 
             try
             {
-                var result = await _manager.LogoutAsync(refreshToken);
+                var result = await _manager.LogoutAsync(model.RefreshToken);
                 _logger.LogInformation("User logged out successfully");
                 return Ok(result);
             }
