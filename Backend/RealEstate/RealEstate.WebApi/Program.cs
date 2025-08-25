@@ -178,4 +178,4 @@ app.Run();
 
 // Закриття логера при завершенні додатку
 Log.CloseAndFlush();
-# Test trigger
+// Test trigger
