@@ -1,3 +1,5 @@
+using RealEstate.BLL.Models.UserModels;
+
 namespace RealEstate.BLL.Models.AuthModels;
 
 public record TokenPairModel
@@ -7,4 +9,5 @@ public record TokenPairModel
     public DateTime AccessTokenExpiresAt { get; init; }
     public DateTime RefreshTokenExpiresAt { get; init; }
     public string TokenType { get; init; } = "Bearer";
+    public UserViewModel User { get; init; } = null!;
 } 

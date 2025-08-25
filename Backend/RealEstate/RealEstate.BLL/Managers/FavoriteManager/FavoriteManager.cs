@@ -5,9 +5,9 @@ using RealEstate.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using Mapster;
 
-namespace RealEstate.BLL.Managers.FavoriteManager;
-
-public class FavoriteManager : IFavoriteManager
+namespace RealEstate.BLL.Managers
+{
+    public class FavoriteManager : IFavoriteManager
 {
     private readonly RealEstateDbContext _context;
 
@@ -73,5 +73,6 @@ public class FavoriteManager : IFavoriteManager
     {
         return await _context.Favorites
             .CountAsync(f => f.PropertyId == propertyId);
+    }
     }
 } 

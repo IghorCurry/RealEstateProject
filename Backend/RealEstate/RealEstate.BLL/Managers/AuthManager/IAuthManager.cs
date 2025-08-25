@@ -2,7 +2,7 @@ using RealEstate.BLL.Models.AuthModels;
 
 namespace RealEstate.BLL.Managers
 {
-    internal interface IAuthManager
+    public interface IAuthManager
     {
         public Task<TokenPairModel> LoginAsync(UserLoginModel model);
         public Task<TokenPairModel> RegisterAsync(UserRegisterModel model);

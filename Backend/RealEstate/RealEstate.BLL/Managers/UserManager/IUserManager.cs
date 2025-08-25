@@ -2,7 +2,7 @@ using RealEstate.BLL.Models.UserModels;
 
 namespace RealEstate.BLL.Managers
 {
-    internal interface IUserManager
+    public interface IUserManager
     {
         public IQueryable<UserViewModel> GetAll();
         public Task<UserDetailedViewModel> GetByIdAsync(Guid id);

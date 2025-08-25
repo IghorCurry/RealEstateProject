@@ -53,7 +53,7 @@ namespace RealEstate.BLL.Managers
             var inquiries = _dataContext.Inquiries
                 .AsNoTracking()
                 .Include(i => i.Property)
-                .Where(i => i.Property.UserId == userId)
+                .Where(i => i.UserId == userId) // ВИПРАВЛЕНО: запити користувача, який зробив запит, а не власника нерухомості
                 .Select(i => i.Adapt<InquiryViewModel>());
             
             return await Task.FromResult(inquiries);

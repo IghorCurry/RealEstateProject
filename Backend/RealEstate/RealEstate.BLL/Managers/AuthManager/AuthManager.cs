@@ -7,6 +7,7 @@ using System.Security.Claims;
 using System.Text;
 using RealEstate.DAL.Entities;
 using RealEstate.BLL.Models.AuthModels;
+using RealEstate.BLL.Models.UserModels;
 using RealEstate.DAL.Persistance.Settings;
 
 namespace RealEstate.BLL.Managers
@@ -51,7 +52,7 @@ namespace RealEstate.BLL.Managers
 
             var user = new User
             {
-                UserName = model.Email, // Use email as username since Username is not in the model
+                UserName = model.Email,
                 Email = model.Email,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
@@ -64,17 +65,16 @@ namespace RealEstate.BLL.Managers
                 throw new Exception($"Failed to create user: {string.Join(", ", result.Errors.Select(e => e.Description))}");
             }
 
+            // Assign default role to new user
+            await _userManager.AddToRoleAsync(user, "User");
+
             return await GenerateTokenPairAsync(user);
         }
 
         public async Task<TokenPairModel> RefreshTokenAsync(string refreshToken)
         {
-            // This is a simplified implementation
-            // In a real application, you would validate the refresh token against a database
-            // and check if it's expired or revoked
-            
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_accessTokenSettings.SecretKey ?? "default-secret-key");
+            var key = Encoding.ASCII.GetBytes(_accessTokenSettings.SigningKey);
             
             try
             {
@@ -82,8 +82,10 @@ namespace RealEstate.BLL.Managers
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidIssuer = _accessTokenSettings.Issuer,
+                    ValidAudience = _accessTokenSettings.Audience,
                     ClockSkew = TimeSpan.Zero
                 };
 
@@ -119,7 +121,7 @@ namespace RealEstate.BLL.Managers
         public bool ValidateTokenAsync(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_accessTokenSettings.SecretKey ?? "default-secret-key");
+            var key = Encoding.ASCII.GetBytes(_accessTokenSettings.SigningKey);
             
             try
             {
@@ -127,8 +129,10 @@ namespace RealEstate.BLL.Managers
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidIssuer = _accessTokenSettings.Issuer,
+                    ValidAudience = _accessTokenSettings.Audience,
                     ClockSkew = TimeSpan.Zero
                 };
 
@@ -145,18 +149,23 @@ namespace RealEstate.BLL.Managers
         {
             var accessToken = await GenerateAccessTokenAsync(user);
             var refreshToken = GenerateRefreshTokenAsync(user);
+            var userViewModel = await MapUserToViewModel(user);
 
             return new TokenPairModel
             {
                 AccessToken = accessToken,
-                RefreshToken = refreshToken
+                RefreshToken = refreshToken,
+                AccessTokenExpiresAt = DateTime.UtcNow.AddHours(1),
+                RefreshTokenExpiresAt = DateTime.UtcNow.AddDays(7),
+                TokenType = "Bearer",
+                User = userViewModel
             };
         }
 
         private async Task<string> GenerateAccessTokenAsync(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_accessTokenSettings.SecretKey ?? "default-secret-key");
+            var key = Encoding.ASCII.GetBytes(_accessTokenSettings.SigningKey);
             
             var claims = new List<Claim>
             {
@@ -174,7 +183,9 @@ namespace RealEstate.BLL.Managers
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddHours(1), // 1 hour
+                Expires = DateTime.UtcNow.AddHours(1),
+                Issuer = _accessTokenSettings.Issuer,
+                Audience = _accessTokenSettings.Audience,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
@@ -185,7 +196,7 @@ namespace RealEstate.BLL.Managers
         private string GenerateRefreshTokenAsync(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_accessTokenSettings.SecretKey ?? "default-secret-key");
+            var key = Encoding.ASCII.GetBytes(_accessTokenSettings.SigningKey);
             
             var claims = new List<Claim>
             {
@@ -196,12 +207,33 @@ namespace RealEstate.BLL.Managers
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddDays(7), // 7 days
+                Expires = DateTime.UtcNow.AddDays(7),
+                Issuer = _accessTokenSettings.Issuer,
+                Audience = _accessTokenSettings.Audience,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        private async Task<UserViewModel> MapUserToViewModel(User user)
+        {
+            var roles = await _userManager.GetRolesAsync(user);
+            var role = roles.FirstOrDefault() ?? "User";
+
+            return new UserViewModel
+            {
+                Id = user.Id,
+                FirstName = user.FirstName ?? "",
+                LastName = user.LastName ?? "",
+                Email = user.Email ?? "",
+                UserName = user.UserName ?? "",
+                PhoneNumber = user.PhoneNumber ?? "",
+                FullName = $"{user.FirstName ?? ""} {user.LastName ?? ""}".Trim(),
+                CreatedAt = user.CreatedAt,
+                Role = role
+            };
         }
     }
 } 

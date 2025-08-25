@@ -4,4 +4,5 @@ public record UserViewModel : UserUpdateModel
 {
     public string FullName { get; init; } = string.Empty;
     public DateTime CreatedAt { get; init; }
+    public string Role { get; init; } = string.Empty;
 } 

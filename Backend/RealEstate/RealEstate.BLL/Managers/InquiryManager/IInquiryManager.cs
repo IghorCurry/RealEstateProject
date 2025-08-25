@@ -2,7 +2,7 @@ using RealEstate.BLL.Models.InquiryModels;
 
 namespace RealEstate.BLL.Managers
 {
-    internal interface IInquiryManager
+    public interface IInquiryManager
     {
         public IQueryable<InquiryViewModel> GetAll();
         public Task<InquiryViewModel> GetByIdAsync(Guid id);
