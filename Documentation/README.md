@@ -1,160 +1,69 @@
-# Шпаргалки для Skill Check
+# React + TypeScript + Vite
 
-Цей репозиторій містить комплексні шпаргалки для підготовки до skill check з JavaScript, React, TypeScript та Web технологій.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## 📚 Зміст
+Currently, two official plugins are available:
 
-### 1. [JavaScript Шпаргалка](./JavaScript_CheatSheet.md)
-**Основні теми:**
-- Undefined vs Null
-- Event Loop та асинхронне програмування
-- Closures та області видимості
-- Prototype та наслідування
-- Arrow functions та контекст `this`
-- Promise та Async/Await
-- Типи даних та перевірка типів
-- Hoisting та Temporal Dead Zone
-- `var`, `const`, `let` - різниця та використання
-- Оператори (арифметичні, порівняння, логічні, присвоєння)
-- Методи масивів (map, filter, reduce, find, some, every, reduceRight)
-- Lexical Scope vs Dynamic Scope
-- JSON (stringify, parse, replacer)
-- Spread та Rest оператори
-- Callbacks та Callback Hell
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-**Додаткові теми:**
-- Map та Set - спеціалізовані колекції
-- Генератори (Generators) - функції з пам'яттю стану
-- Proxy - перехоплення операцій з об'єктами
-- Reflect - утиліти для роботи з об'єктами
-- WeakMap та WeakSet - слабкі колекції
-- Symbol - унікальні ідентифікатори
-- BigInt - робота з великими числами
-- Optional Chaining - безпечний доступ до властивостей
-- Nullish Coalescing - оператор нульового злиття
-- Logical Assignment Operators - логічні оператори присвоєння
-- Template Literals - розширені можливості рядків
-- Modules (ES6) - система модулів
-- Деструктуризація - розпакування даних
-- Rest та Spread оператори - робота з колекціями
-- Ітератори та ітерабельні об'єкти
+## Expanding the ESLint configuration
 
-### 2. [React Шпаргалка](./React_CheatSheet.md)
-**Основні теми:**
-- Життєвий цикл компонентів (Class та Functional)
-- Context API - управління глобальним станом
-- Virtual DOM та React Reconciliation
-- `key` атрибут для списків
-- Children Props та render props
-- Контрольовані та неконтрольовані компоненти
-- Material-UI (MUI) - компоненти та теми
-- PureComponent - оптимізація рендерингу
-- Higher-Order Components (HOC)
-- Custom Hooks - власні хуки
-- Portals - рендеринг за межами DOM дерева
-- useState та альтернативи
-- useEffect - побічні ефекти
-- React Reconciliation - алгоритм порівняння
-- Flux Architecture - архітектура додатків
-- Functional Programming принципи
-- Class vs Functional компоненти
-- React Fiber - нова архітектура
-- Redux - управління станом
-- MUI styled - стилізація компонентів
-- useMemo та useCallback - оптимізація
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-**Додаткові теми:**
-- useReducer - складне управління станом
-- Error Boundaries - обробка помилок
-- React.lazy та Suspense - ліниве завантаження
-- React.forwardRef - передача refs
-- React.memo - мемоізація компонентів
-- useLayoutEffect - синхронні побічні ефекти
-- React Context з useReducer - складне управління глобальним станом
-- React Testing Library - тестування компонентів
+```js
+export default tseslint.config([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
 
-### 3. [TypeScript Шпаргалка](./TypeScript_CheatSheet.md)
-**Основні теми:**
-- Типи даних - фундаментальні типи
-- Інтерфейси - визначення структури об'єктів
-- Типи - альтернатива інтерфейсам
-- Типізація функцій - безпечні функції
-- Класи - об'єктно-орієнтоване програмування
-- Utility Types - корисні типи
-- Conditional Types - умовні типи
-- ES6 Модулі - сучасна система модулів
-- Namespace - простір імен
-- Типізація React компонентів
-- Типізація Redux
-- Типізація тестів
-- Конфігурація та інструменти
+      // Remove tseslint.configs.recommended and replace with this
+      ...tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      ...tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      ...tseslint.configs.stylisticTypeChecked,
 
-### 4. [Web Технології Шпаргалка](./Web_CheatSheet.md)
-**Основні теми:**
-- Webpack - збірник модулів
-- WebSocket - двостороння комунікація
-- Babel - трансформація коду
-- CORS - Cross-Origin Resource Sharing
-- npm, yarn, pnpm - менеджери пакетів
-
-**Додаткові теми:**
-- Rollup - альтернативний збірник модулів
-- Gulp - task runner
-- HTTP/2 та HTTP/3 - сучасні протоколи
-- Service Workers - кешування та офлайн функціональність
-- Progressive Web Apps (PWA) - прогресивні веб-додатки
-- WebAssembly (WASM) - виконання нативного коду в браузері
-- Web Workers - багатопотоковість в браузері
-- WebRTC - пряма комунікація між браузерами
-- Web Audio API - обробка аудіо в браузері
-- WebGL - 3D графіка в браузері
-
-## 🎯 Як використовувати
-
-1. **Виберіть тему** - почніть з основ JavaScript, потім React, TypeScript та Web технологій
-2. **Вивчіть концепції** - кожна тема містить детальне пояснення та практичні приклади
-3. **Практикуйтеся** - використовуйте надані приклади коду для практики
-4. **Перевірте знання** - використовуйте шпаргалки для повторення перед skill check
-
-## 📖 Структура кожної шпаргалки
-
-Кожна шпаргалка містить:
-- **Детальне пояснення** концепції
-- **Практичні приклади** коду
-- **Пояснення використання** в реальних проектах
-- **Важливі нюанси** та best practices
-
-## 🚀 Швидкий старт
-
-```bash
-# Клонування репозиторію
-git clone <repository-url>
-cd RealEstateProject
-
-# Відкриття документації
-open Documentation/JavaScript_CheatSheet.md
-open Documentation/React_CheatSheet.md
-open Documentation/TypeScript_CheatSheet.md
-open Documentation/Web_CheatSheet.md
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
 
-## 📝 Примітки
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-- Всі приклади коду написані з урахуванням сучасних стандартів
-- Пояснення адаптовані для розуміння українською мовою
-- Шпаргалки постійно оновлюються та доповнюються
-- Рекомендується вивчати теми послідовно
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-## 🤝 Внесок
-
-Якщо ви знайшли помилки або маєте пропозиції для покращення:
-1. Створіть issue з описом проблеми
-2. Або зробіть pull request з виправленнями
-
-## 📄 Ліцензія
-
-Цей проект призначений для навчальних цілей та підготовки до skill check.
-
----
-
-**Удачі на skill check! 🎉**
+export default tseslint.config([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
