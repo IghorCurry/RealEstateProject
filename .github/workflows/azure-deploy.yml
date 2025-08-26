@@ -47,6 +47,11 @@ jobs:
           cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
           dotnet publish -c Release -o ./publish
 
+      - name: Run Database Migrations
+        run: |
+          cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          dotnet ef database update --connection "${{ secrets.REDATABASE_CONNECTION_STRING }}"
+
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
