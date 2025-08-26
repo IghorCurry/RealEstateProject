@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RealEstate.DAL.Persistance;
@@ -11,9 +12,11 @@ using RealEstate.DAL.Persistance;
 namespace RealEstate.DAL.Migrations
 {
     [DbContext(typeof(RealEstateDbContext))]
-    partial class RealEstateDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250826132051_FixDuplicateProperties")]
+    partial class FixDuplicateProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -434,8 +437,8 @@ namespace RealEstate.DAL.Migrations
                         {
                             Id = new Guid("cb37b3b6-88e7-4b4d-a6fc-56e1d1ed3aae"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3fd7486e-cc74-4487-b09d-515316925dda",
-                            CreatedAt = new DateTime(2025, 8, 26, 13, 26, 27, 980, DateTimeKind.Utc).AddTicks(4389),
+                            ConcurrencyStamp = "19f3de7c-7f0c-4daf-9c2f-2a60830ddf62",
+                            CreatedAt = new DateTime(2025, 8, 26, 13, 20, 50, 570, DateTimeKind.Utc).AddTicks(6017),
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -443,7 +446,7 @@ namespace RealEstate.DAL.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "REALESTATEADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJXbl14P2tZPgXCXDlhKYsVHyMZ07kVWARAXSyTaBvwyjhTGcXKX6n703CSGhWreaw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEEp+H0VUJBX3X8yEp42IP0ot378rBJDstdxUN1B4czedmo/nMKFYqA5y9Bwb4w29HA==",
                             PhoneNumber = "0501234567",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "95d58893-e6ce-419a-99c7-087631de4d5e",
@@ -454,8 +457,8 @@ namespace RealEstate.DAL.Migrations
                         {
                             Id = new Guid("e2403a4f-0d12-4555-bf66-7338cd13ff3e"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "58b4f5a7-ba1b-4b17-9f98-f75ac2270f8f",
-                            CreatedAt = new DateTime(2025, 8, 26, 13, 26, 28, 33, DateTimeKind.Utc).AddTicks(9582),
+                            ConcurrencyStamp = "b63f3562-c059-4932-8746-412d18f9245f",
+                            CreatedAt = new DateTime(2025, 8, 26, 13, 20, 50, 621, DateTimeKind.Utc).AddTicks(8482),
                             Email = "user1@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "John",
@@ -463,7 +466,7 @@ namespace RealEstate.DAL.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USER1@GMAIL.COM",
                             NormalizedUserName = "USER1",
-                            PasswordHash = "AQAAAAIAAYagAAAAELnpsHvCce7wxJMHvChX6SAUUG2aijgbDOMlRlbsJa4szCiYxoZQSLuMZLSQtqNx4g==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEA4mzDLjJ2C9hKUC5VKcPxCBqFPNAJLLTSE2MbUmaV0ZWV/hsQgOiLj8TV9kVTbcuA==",
                             PhoneNumber = "0114573600",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "c126fa02-a9ba-40a6-bf60-9ffbdf132415",
@@ -474,8 +477,8 @@ namespace RealEstate.DAL.Migrations
                         {
                             Id = new Guid("d7e228e1-4c36-4ead-8bc1-622bb13140d2"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "2b8c2aff-a85b-4d18-afbb-f9d3424b7606",
-                            CreatedAt = new DateTime(2025, 8, 26, 13, 26, 28, 87, DateTimeKind.Utc).AddTicks(9103),
+                            ConcurrencyStamp = "e4572c7b-eecc-4871-bb23-a6987c54a5b5",
+                            CreatedAt = new DateTime(2025, 8, 26, 13, 20, 50, 672, DateTimeKind.Utc).AddTicks(2660),
                             Email = "user2@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Jane",
@@ -483,7 +486,7 @@ namespace RealEstate.DAL.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USER2@GMAIL.COM",
                             NormalizedUserName = "USER2",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMl6gShePa0nd5CDUb6lU2HUXT2Rk83t/9gg7UUJ6UP5e6PmaGEfDLqkN0sjf/sBIw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEL4kxmmQXRJ5jBUpF0Sbix9rZ+9BtgqK1Z8aiinmnSyHnY19qEd6cOUnecqnIqMeNw==",
                             PhoneNumber = "0217652388",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "29e18140-5b5d-4081-806e-4a6559084126",
