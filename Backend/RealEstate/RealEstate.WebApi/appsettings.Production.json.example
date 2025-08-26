@@ -6,7 +6,7 @@
     }
   },
   "ConnectionStrings": {
-    "REDatabase": "Host=your-azure-postgres-server.postgres.database.azure.com;Database=real_estate;Username=postgres@your-azure-postgres-server;Password=your-azure-password;SSL Mode=Require;Trust Server Certificate=true;"
+    "REDatabase": "Host=your-azure-postgres-server.postgres.database.azure.com;Database=real_estate;Username=postgres;Password=your-azure-password;SSL Mode=Require;Trust Server Certificate=true;"
   },
   "DefaultAdminSettings": {
     "Username": "RealEstateAdmin",
