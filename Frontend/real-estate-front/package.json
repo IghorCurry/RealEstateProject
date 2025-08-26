@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "build:analyze": "vite build --mode analyze",
+    "build:azure": "vite build --mode production",
     "lint": "eslint .",
     "preview": "vite preview",
     "clean": "rimraf dist"
