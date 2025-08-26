@@ -98,7 +98,7 @@ jobs:
       - name: Install dependencies
         run: |
           cd Frontend/real-estate-front
-          pnpm install --frozen-lockfile
+          pnpm install
 
       - name: Build
         run: |
