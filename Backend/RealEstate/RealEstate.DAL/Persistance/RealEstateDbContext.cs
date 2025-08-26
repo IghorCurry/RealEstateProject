@@ -55,8 +55,8 @@ namespace RealEstate.DAL.Persistance
                 modelBuilder.AddTestableData(defaultAdminSettings);
             }
 
-            // Add additional seed data
-            AllSeeds.SeedAllData(modelBuilder);
+            // ТИМЧАСОВО ВИМКНУТО: Add additional seed data
+            // AllSeeds.SeedAllData(modelBuilder);
         }
     }
 }

@@ -38,12 +38,12 @@ builder.Services.AddCors(options =>
     {
         policy.SetIsOriginAllowed(origin =>
         {
-                    // Дозволяємо localhost для розробки та Azure Static Web App
-        return origin.StartsWith("http://localhost:") ||
-               origin.StartsWith("http://127.0.0.1:") ||
-               origin.StartsWith("https://real-estate-front-") ||
-               origin.StartsWith("https://white-desert-") ||
-               origin.StartsWith("https://witty-mushroom-"); // New Static Web App
+            // Дозволяємо localhost для розробки та Azure Static Web App
+            return origin.StartsWith("http://localhost:") ||
+                   origin.StartsWith("http://127.0.0.1:") ||
+                   origin.StartsWith("https://real-estate-front-") ||
+                   origin.StartsWith("https://white-desert-") ||
+                   origin.StartsWith("https://witty-mushroom-"); // New Static Web App
         })
         .AllowAnyHeader()
         .AllowAnyMethod()
@@ -54,7 +54,6 @@ builder.Services.AddCors(options =>
 // FluentValidation
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
-// ВИПРАВЛЕНО: реєстрація валідаторів з залежностями
 builder.Services.AddScoped<FavoriteCreateValidator>();
 builder.Services.AddScoped<PropertyImageCreateValidator>();
 
@@ -112,7 +111,7 @@ builder.Services.Configure<AccessTokenSettings>(builder.Configuration.GetSection
 
 MapsterConfig.RegisterMappings();
 
-// ВИПРАВЛЕНО: реєстрація інтерфейсів замість конкретних класів для правильної архітектури
+
 builder.Services.AddScoped<IPropertyManager, PropertyManager>();
 builder.Services.AddScoped<IUserManager, UserManager>();
 builder.Services.AddScoped<IInquiryManager, InquiryManager>();
@@ -151,7 +150,7 @@ builder.Services.AddAuthentication(options =>
 });
 builder.Services.AddHttpContextAccessor();
 
-// ВИПРАВЛЕНО: додано кешування для покращення продуктивності
+
 builder.Services.AddMemoryCache();
 builder.Services.AddResponseCaching();
 
@@ -166,10 +165,10 @@ if (app.Environment.IsDevelopment())
 // Use CORS
 app.UseCors("AllowFrontend");
 
-// ВИПРАВЛЕНО: додано кешування відповідей
+
 app.UseResponseCaching();
 
-// Add static files support for uploaded images
+
 app.UseStaticFiles();
 
 app.UseAuthentication();
@@ -179,6 +178,6 @@ app.MapControllers();
 
 app.Run();
 
-// Закриття логера при завершенні додатку
+
 Log.CloseAndFlush();
 // Test trigger
