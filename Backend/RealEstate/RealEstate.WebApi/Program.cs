@@ -42,7 +42,8 @@ builder.Services.AddCors(options =>
         return origin.StartsWith("http://localhost:") ||
                origin.StartsWith("http://127.0.0.1:") ||
                origin.StartsWith("https://real-estate-front-") ||
-               origin.StartsWith("https://white-desert-"); // Trigger deployment
+               origin.StartsWith("https://white-desert-") ||
+               origin.StartsWith("https://witty-mushroom-"); // New Static Web App
         })
         .AllowAnyHeader()
         .AllowAnyMethod()

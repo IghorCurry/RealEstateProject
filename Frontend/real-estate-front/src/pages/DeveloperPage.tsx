@@ -11,6 +11,7 @@ import {
   useTheme,
   Fade,
 } from "@mui/material";
+import developerPhoto from "../assets/developer-photo.jpg";
 import {
   LinkedIn as LinkedInIcon,
   Code as CodeIcon,
@@ -139,7 +140,7 @@ export const DeveloperPage: React.FC = () => {
                 }}
               >
                 <Avatar
-                  src="/developer-photo.jpg"
+                  src={developerPhoto}
                   alt={t("developer.name")}
                   sx={{
                     width: 200,

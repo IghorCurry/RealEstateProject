@@ -19,6 +19,11 @@ class ApiClient {
     this.client = axios.create({
       baseURL: API_BASE_URL,
       timeout: API_CONFIG.TIMEOUT, // Using constant from config
+      headers: {
+        "Cache-Control": "no-cache, no-store, must-revalidate",
+        Pragma: "no-cache",
+        Expires: "0",
+      },
     });
 
     this.setupInterceptors();

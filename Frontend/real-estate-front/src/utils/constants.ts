@@ -1,7 +1,7 @@
 export const API_BASE_URL =
   import.meta.env.VITE_API_URL ||
   "https://real-estate-api-ig25-eahbg3dwgwemfjej.northeurope-01.azurewebsites.net/api";
-//  import.meta.env.VITE_API_URL || "http://localhost:5158/api";
+//import.meta.env.VITE_API_URL || "http://localhost:5158/api";
 
 // API endpoints with correct capitalization matching backend
 export const API_ENDPOINTS = {
