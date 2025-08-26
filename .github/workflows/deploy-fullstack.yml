@@ -68,7 +68,7 @@ jobs:
     name: Build and Deploy Frontend
     needs: backend
 
-      steps:
+    steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
