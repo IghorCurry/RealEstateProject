@@ -1,4 +1,4 @@
-name: Deploy Full Stack App
+name: Deploy Full Stack App - Token Test
 
 on:
   push:
