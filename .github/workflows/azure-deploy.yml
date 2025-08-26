@@ -27,6 +27,9 @@ jobs:
         with:
           dotnet-version: "8.0.x"
 
+      - name: Install Entity Framework Tools
+        run: dotnet tool install --global dotnet-ef
+
       - name: Restore dependencies
         run: |
           cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
@@ -50,7 +53,7 @@ jobs:
       - name: Run Database Migrations
         run: |
           cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-          dotnet ef database update --connection "${{ secrets.REDATABASE_CONNECTION_STRING }}"
+          dotnet ef database update --connection "${{ secrets.REDATABASE_CONNECTION_STRING }}" --verbose
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
