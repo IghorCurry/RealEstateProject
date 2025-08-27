@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using RealEstate.DAL.Entities;
 using RealEstate.BLL.Managers;
+using RealEstate.BLL.Managers.BlobStorageManager;
 using RealEstate.BLL;
 using Microsoft.OpenApi.Models;
 using RealEstate.DAL.Persistance.Settings;
@@ -17,6 +18,10 @@ using RealEstate.WebApi.Validators.PropertyValidators;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Визначаємо середовище
+var environment = builder.Configuration["Environment"] ?? "Development";
+Console.WriteLine($"🚀 Starting application in {environment} environment");
 
 // Serilog
 Log.Logger = new LoggerConfiguration()
@@ -85,8 +90,15 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
+// Database connection
+var dbConnectionString = builder.Configuration.GetConnectionString("REDatabase");
+var azureStorageConnectionString = builder.Configuration.GetConnectionString("AzureStorage");
+
+Console.WriteLine($"📊 Database: {(environment == "Production" ? "Azure PostgreSQL" : "Local PostgreSQL")}");
+Console.WriteLine($"☁️ Storage: Azure Blob Storage");
+
 builder.Services.AddDbContext<RealEstateDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("REDatabase")));
+    options.UseNpgsql(dbConnectionString));
 
 builder.Services.AddIdentity<User, IdentityRole<Guid>>(options =>
 {
@@ -117,6 +129,7 @@ builder.Services.AddScoped<IUserManager, UserManager>();
 builder.Services.AddScoped<IInquiryManager, InquiryManager>();
 builder.Services.AddScoped<IAuthManager, AuthManager>();
 builder.Services.AddScoped<IFavoriteManager, FavoriteManager>();
+builder.Services.AddScoped<IBlobStorageManager, BlobStorageManager>();
 
 builder.Services.AddAuthorization(option =>
 {

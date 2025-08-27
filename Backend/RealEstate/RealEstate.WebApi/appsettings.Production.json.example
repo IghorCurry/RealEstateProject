@@ -6,7 +6,8 @@
     }
   },
   "ConnectionStrings": {
-    "REDatabase": "Host=your-azure-postgres-server.postgres.database.azure.com;Database=real_estate;Username=postgres;Password=your-azure-password;SSL Mode=Require;Trust Server Certificate=true;"
+    "REDatabase": "Host=your-azure-postgres-server.postgres.database.azure.com;Database=real_estate;Username=postgres;Password=your-azure-password;SSL Mode=Require;Trust Server Certificate=true;",
+    "AzureStorage": "DefaultEndpointsProtocol=https;AccountName=realestateimages2025;AccountKey=353EwLeWpQnkjs7NucLexhDHN79wdEd98ZnF63czJyBUOLBIwUCiUtPnGZ89niybDEp52OZ4lJ9B+ASt/i49hA==;EndpointSuffix=core.windows.net"
   },
   "DefaultAdminSettings": {
     "Username": "RealEstateAdmin",
@@ -20,5 +21,6 @@
     "SigningKey": "your-signing-key",
     "SecretKey": "your-secret-key"
   },
-  "AllowedHosts": "*"
+  "AllowedHosts": "*",
+  "Environment": "Production"
 }

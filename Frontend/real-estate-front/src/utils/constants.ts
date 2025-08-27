@@ -1,7 +1,25 @@
-export const API_BASE_URL =
-  import.meta.env.VITE_API_URL ||
-  "https://real-estate-api-ig25-eahbg3dwgwemfjej.northeurope-01.azurewebsites.net/api";
-//import.meta.env.VITE_API_URL || "http://localhost:5158/api";
+// Автоматичне визначення API URL залежно від середовища
+const getApiUrl = () => {
+  // Якщо є змінна середовища - використовуємо її
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+
+  // Якщо розробка - локальний сервер
+  if (import.meta.env.DEV) {
+    return "http://localhost:5158/api";
+  }
+
+  // Якщо production - Azure
+  return "https://real-estate-api-ig25-eahbg3dwgwemfjej.northeurope-01.azurewebsites.net/api";
+};
+
+export const API_BASE_URL = getApiUrl();
+
+// Логування для відстеження
+console.log(`🚀 Frontend connecting to: ${API_BASE_URL}`);
+console.log(`🌍 Environment: ${import.meta.env.MODE}`);
+console.log(`🔧 Development mode: ${import.meta.env.DEV}`);
 
 // API endpoints with correct capitalization matching backend
 export const API_ENDPOINTS = {

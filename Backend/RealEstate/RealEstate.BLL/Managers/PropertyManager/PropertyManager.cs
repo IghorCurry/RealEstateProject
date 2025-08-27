@@ -7,17 +7,21 @@ using RealEstate.BLL.Models.PropertyModels;
 using RealEstate.BLL.Models.InquiryModels;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using RealEstate.BLL.Managers.BlobStorageManager;
 
 namespace RealEstate.BLL.Managers
 {
     public class PropertyManager : IPropertyManager
     {
         protected RealEstateDbContext _dataContext;
+        private readonly IBlobStorageManager _blobStorageManager;
         private readonly string _uploadPath = "wwwroot/uploads/properties";
+        private const string ContainerName = "property-images";
 
-        public PropertyManager(RealEstateDbContext dataContext)
+        public PropertyManager(RealEstateDbContext dataContext, IBlobStorageManager blobStorageManager)
         {
             _dataContext = dataContext;
+            _blobStorageManager = blobStorageManager;
             // Ensure upload directory exists
             Directory.CreateDirectory(_uploadPath);
         }
@@ -378,31 +382,10 @@ namespace RealEstate.BLL.Managers
                 Console.WriteLine($"File validation passed: {file.FileName}, ContentType: {file.ContentType}");
             }
 
-            // ВИПРАВЛЕНО: створення папки для конкретного property
-            var propertyUploadPath = Path.Combine(_uploadPath, propertyId.ToString());
-            Directory.CreateDirectory(propertyUploadPath);
-
-            // Generate unique filename
-            var fileName = $"{Guid.NewGuid()}{fileExtension}";
-            var filePath = Path.Combine(propertyUploadPath, fileName);
-
-            // Save file
-            Console.WriteLine($"Saving file to: {filePath}");
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
-            
-            // Перевіряємо, чи файл дійсно збережений
-            if (!File.Exists(filePath))
-            {
-                Console.WriteLine($"ERROR: File was not saved: {filePath}");
-                throw new Exception($"Failed to save file: {filePath}");
-            }
-            else
-            {
-                Console.WriteLine($"SUCCESS: File saved successfully: {filePath}");
-            }
+            // Завантажуємо файл в Azure Blob Storage
+            Console.WriteLine($"Uploading file to Azure Blob Storage: {file.FileName}");
+            var imageUrl = await _blobStorageManager.UploadImageAsync(file, ContainerName);
+            Console.WriteLine($"SUCCESS: File uploaded to Azure: {imageUrl}");
 
             // ВИПРАВЛЕНО: правильна логіка Order - починаємо з 0
             var maxOrder = await _dataContext.PropertyImages
@@ -414,7 +397,7 @@ namespace RealEstate.BLL.Managers
             {
                 Id = Guid.NewGuid(),
                 PropertyId = propertyId,
-                ImageUrl = $"/uploads/properties/{propertyId}/{fileName}", // ВИПРАВЛЕНО: правильний URL з propertyId
+                ImageUrl = imageUrl, // Використовуємо URL з Azure Blob Storage
                 Order = maxOrder + 1 // ВИПРАВЛЕНО: встановлюємо порядковий номер
             };
 
@@ -435,15 +418,19 @@ namespace RealEstate.BLL.Managers
                 .FirstOrDefaultAsync(pi => pi.Id == imageId && pi.PropertyId == propertyId)
                 ?? throw new Exception("Image not found");
 
-            // ВИПРАВЛЕНО: правильний шлях до файлу з урахуванням propertyId
-            var propertyUploadPath = Path.Combine(_uploadPath, propertyId.ToString());
-            var fileName = Path.GetFileName(image.ImageUrl);
-            var filePath = Path.Combine(propertyUploadPath, fileName);
-            
-            // Delete physical file
-            if (File.Exists(filePath))
+            // Видаляємо файл з Azure Blob Storage
+            if (!string.IsNullOrEmpty(image.ImageUrl))
             {
-                File.Delete(filePath);
+                try
+                {
+                    await _blobStorageManager.DeleteImageAsync(image.ImageUrl, ContainerName);
+                    Console.WriteLine($"Image deleted from Azure: {image.ImageUrl}");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Warning: Failed to delete image from Azure: {ex.Message}");
+                    // Продовжуємо видалення з бази даних навіть якщо не вдалося видалити з Azure
+                }
             }
 
             // Delete database record
