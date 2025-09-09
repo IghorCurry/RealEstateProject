@@ -181,10 +181,8 @@ VITE_API_URL="https://real-estate-api-ig25.azurewebsites.net/api"
 
 ## 📚 Документація
 
-- [API Documentation](./Documentation/API_DOCUMENTATION.md)
-- [Developer Guide](./Documentation/DEVELOPER_GUIDE.md)
-- [Deployment Guide](./Documentation/deployment-instructions.md)
-- [Azure Storage Setup](./Documentation/azure-storage-setup.md)
+- [Backend API Documentation](./Backend/RealEstate/README.md)
+- [Project Documentation](./Documentation/README.md)
 
 ## 🔐 Безпека
 
@@ -222,7 +220,7 @@ VITE_API_URL="https://real-estate-api-ig25.azurewebsites.net/api"
 ---
 
 **Версія**: 1.0  
-**Останнє оновлення**: 15.08.2025  
+**Останнє оновлення**: 09.01.2025  
 **Автор**: IghorCurry
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FIghorCurry%2FRealEstateProject%2Fmain%2Fazure-deploy.json)

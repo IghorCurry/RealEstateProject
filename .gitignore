@@ -47,6 +47,8 @@ docs/
 *_CLEANUP.md
 *_VERIFICATION.md
 API_FIXES_LOG.md
+AZURE_DEPLOYMENT_GUIDE.md
+Education/
 
 # PowerShell files
 *.ps1

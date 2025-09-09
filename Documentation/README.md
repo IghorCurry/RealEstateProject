@@ -1,69 +1,86 @@
-# React + TypeScript + Vite
+# 🏠 Real Estate Platform - Документація
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 📋 Зміст
 
-Currently, two official plugins are available:
+### 🚀 **Основна документація**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [**Backend API Documentation**](../Backend/RealEstate/README.md) - Документація Backend API
+- [**Main Project README**](../README.md) - Головна документація проекту
 
-## Expanding the ESLint configuration
+### 📚 **Локальна документація** (не включена в Git)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Ця папка містить детальну технічну документацію, яка зберігається локально для розробників:
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **API_DOCUMENTATION.md** - Повна документація API
+- **DEVELOPER_GUIDE.md** - Гід для розробників
+- **PROJECT_OVERVIEW_PLAN.md** - Загальний огляд проекту
+- **AZURE_DEPLOYMENT_GUIDE.md** - Детальний гід деплою на Azure
+- **deployment-\*.md** - Інструкції та чек-листи деплою
+- **FAVORITES_FEATURE.md** - Система улюблених
+- **IMAGES_DOCUMENTATION.md** - Управління зображеннями
+- **AUTH_MIGRATION.md** - Система аутентифікації
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 🎯 **Що це за проект?**
+
+**RealEstate Platform** - це повноцінна веб-платформа для управління нерухомістю, розроблена з використанням сучасних технологій:
+
+- **Frontend:** React 18 + TypeScript + Material-UI
+- **Backend:** ASP.NET Core 8 + Entity Framework Core
+- **База даних:** PostgreSQL
+- **Хмара:** Azure (App Service, Static Web Apps, PostgreSQL)
+
+---
+
+## 🚀 **Швидкий старт**
+
+### Запуск проекту локально:
+
+```bash
+# Backend
+cd Backend/RealEstate
+dotnet restore
+dotnet ef database update
+dotnet run --project RealEstate.WebApi
+
+# Frontend
+cd Frontend/real-estate-front
+pnpm install
+pnpm dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Деплой на Azure:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+# Використовуйте скрипт деплою
+./import-to-azure.ps1
 ```
+
+---
+
+## 📖 **Як користуватися документацією?**
+
+1. **Почати з** `PROJECT_OVERVIEW_PLAN.md` для загального розуміння
+2. **Використовувати** `DEVELOPER_GUIDE.md` для розробки
+3. **Звертатися до** `API_DOCUMENTATION.md` для роботи з API
+4. **Консультуватися** з `API_FIXES_LOG.md` для виправлень
+
+---
+
+## 🔄 **Останні оновлення**
+
+- ✅ Видалено застарілу документацію
+- ✅ Оновлено структуру файлів
+- ✅ Додано актуальну інформацію про проект
+- ✅ Створено зручну навігацію по документації
+
+---
+
+## 📞 **Підтримка**
+
+Якщо у вас є питання або потрібна допомога:
+
+1. Перевірте відповідну документацію
+2. Зверніться до `API_FIXES_LOG.md` для поточних проблем
+3. Використовуйте `CHANGES_SUMMARY.md` для розуміння змін
