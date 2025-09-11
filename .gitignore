@@ -10,6 +10,7 @@ obj/
 *.exe
 *.deps.json
 *.runtimeconfig.json
+Properties/launchSettings.json
 
 # Node.js
 node_modules/
@@ -19,116 +20,37 @@ dist/
 .env.development.local
 .env.test.local
 .env.production.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.yarn-integrity
 
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
+*.sublime-*
 
 # OS
 .DS_Store
 Thumbs.db
 
-# Project specific
-DEVELOPMENT_PLAN.md
-deployment-checklist.md
-deployment-guide.md
-appsettings.Development.json
-appsettings.Production.json
-Properties/launchSettings.json
-
-# Documentation
-Documentation/
-docs/
-*_DOCUMENTATION.md
-*_MIGRATION.md
-*_FEATURE.md
-*_CLEANUP.md
-*_VERIFICATION.md
-API_FIXES_LOG.md
-AZURE_DEPLOYMENT_GUIDE.md
-Education/
-
-# PowerShell files
-*.ps1
-*.psm1
-*.psd1
-how origin
-ionTable.PSVersion
-
-# Logs and temporary files
-*.log
-logs/
-*.tmp
-*.temp
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Deployment files
-*.zip
-publish/
-Backend/**/publish/
-
-# Logs
-logs/
-*.log
-
-# User-specific files
-*.csproj.user
-*.user
-
-# HTTP files (may contain secrets)
-*.http
-
-# IDE and editor files
-.vscode/
-.idea/
-*.swp
-*.swo
-*.sublime-*
-
 # Logs
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
-
-# Coverage directory used by tools like istanbul
-coverage/
-
-# Dependency directories
-jspm_packages/
-
-# Optional npm cache directory
-.npm
-
-# Optional REPL history
-.node_repl_history
-
-# Output of 'npm pack'
-*.tgz
-
-# Yarn Integrity file
-.yarn-integrity
-
-# dotenv environment variables file
-.env
-
-# Build outputs
-build/
-out/
+logs/
 
 # Temporary files
 *.tmp
 *.temp
+
+# Build outputs
+build/
+out/
+publish/
+Backend/**/publish/
+*.zip
 
 # User uploaded files (should use Azure Blob Storage in production)
 Backend/RealEstate/RealEstate.WebApi/wwwroot/uploads/
@@ -136,4 +58,16 @@ uploads/
 
 # Backup files with sensitive data
 azure-backup-*/
-backup-*/ 
+backup-*/
+
+# HTTP files (may contain secrets)
+*.http
+
+# Coverage
+coverage/
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock 
