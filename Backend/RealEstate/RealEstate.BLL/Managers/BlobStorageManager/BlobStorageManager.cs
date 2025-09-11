@@ -1,5 +1,3 @@
-using Supabase.Storage;
-using Supabase;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
@@ -7,15 +5,19 @@ namespace RealEstate.BLL.Managers.BlobStorageManager
 {
     public class BlobStorageManager : IBlobStorageManager
     {
-        private readonly SupabaseClient _supabaseClient;
+        private readonly HttpClient _httpClient;
+        private readonly string _supabaseUrl;
+        private readonly string _supabaseKey;
         private readonly string _bucketName = "real-estate-images";
 
-        public BlobStorageManager(IConfiguration configuration)
+        public BlobStorageManager(IConfiguration configuration, HttpClient httpClient)
         {
-            var supabaseUrl = configuration["Supabase:Url"];
-            var supabaseKey = configuration["Supabase:AnonKey"];
+            _httpClient = httpClient;
+            _supabaseUrl = configuration["Supabase:Url"] ?? throw new ArgumentNullException("Supabase:Url");
+            _supabaseKey = configuration["Supabase:AnonKey"] ?? throw new ArgumentNullException("Supabase:AnonKey");
             
-            _supabaseClient = new SupabaseClient(supabaseUrl, supabaseKey);
+            _httpClient.DefaultRequestHeaders.Add("apikey", _supabaseKey);
+            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_supabaseKey}");
         }
 
         public async Task<string> UploadImageAsync(IFormFile file, string containerName)
@@ -30,13 +32,17 @@ namespace RealEstate.BLL.Managers.BlobStorageManager
                 await file.CopyToAsync(memoryStream);
                 var fileBytes = memoryStream.ToArray();
 
-                // Завантажуємо в Supabase Storage
-                var result = await _supabaseClient.Storage
-                    .From(_bucketName)
-                    .Upload(fileBytes, fileName);
+                // Завантажуємо в Supabase Storage через HTTP API
+                var uploadUrl = $"{_supabaseUrl}/storage/v1/object/{_bucketName}/{fileName}";
+                
+                using var content = new ByteArrayContent(fileBytes);
+                content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType);
+                
+                var response = await _httpClient.PostAsync(uploadUrl, content);
+                response.EnsureSuccessStatusCode();
 
                 // Повертаємо публічний URL
-                return _supabaseClient.Storage.From(_bucketName).GetPublicUrl(fileName);
+                return $"{_supabaseUrl}/storage/v1/object/public/{_bucketName}/{fileName}";
             }
             catch (Exception ex)
             {
@@ -52,12 +58,11 @@ namespace RealEstate.BLL.Managers.BlobStorageManager
                 var uri = new Uri(imageUrl);
                 var fileName = Path.GetFileName(uri.LocalPath);
 
-                // Видаляємо з Supabase Storage
-                var result = await _supabaseClient.Storage
-                    .From(_bucketName)
-                    .Remove(new[] { fileName });
-
-                return result.Count > 0;
+                // Видаляємо з Supabase Storage через HTTP API
+                var deleteUrl = $"{_supabaseUrl}/storage/v1/object/{_bucketName}/{fileName}";
+                
+                var response = await _httpClient.DeleteAsync(deleteUrl);
+                return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
             {
@@ -65,12 +70,13 @@ namespace RealEstate.BLL.Managers.BlobStorageManager
             }
         }
 
-        public async Task<string> GetImageUrlAsync(string imageName, string containerName)
+        public Task<string> GetImageUrlAsync(string imageName, string containerName)
         {
             try
             {
                 // Отримуємо публічний URL з Supabase Storage
-                return _supabaseClient.Storage.From(_bucketName).GetPublicUrl(imageName);
+                var url = $"{_supabaseUrl}/storage/v1/object/public/{_bucketName}/{imageName}";
+                return Task.FromResult(url);
             }
             catch (Exception ex)
             {

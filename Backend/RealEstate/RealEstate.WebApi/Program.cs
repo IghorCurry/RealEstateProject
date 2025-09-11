@@ -163,6 +163,8 @@ builder.Services.AddAuthentication(options =>
 });
 builder.Services.AddHttpContextAccessor();
 
+// Add HttpClient for Supabase Storage
+builder.Services.AddHttpClient();
 
 builder.Services.AddMemoryCache();
 builder.Services.AddResponseCaching();
