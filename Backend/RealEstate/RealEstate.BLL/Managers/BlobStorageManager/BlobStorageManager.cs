@@ -17,10 +17,20 @@ namespace RealEstate.BLL.Managers.BlobStorageManager
             _supabaseUrl = configuration["Supabase:Url"];
             _supabaseKey = configuration["Supabase:AnonKey"];
             
+            // Логування для діагностики
+            Console.WriteLine($"BlobStorageManager initialized:");
+            Console.WriteLine($"Supabase URL: {_supabaseUrl ?? "NULL"}");
+            Console.WriteLine($"Supabase Key: {(_supabaseKey?.Length > 0 ? "SET" : "NULL")}");
+            
             if (!string.IsNullOrEmpty(_supabaseUrl) && !string.IsNullOrEmpty(_supabaseKey))
             {
                 _httpClient.DefaultRequestHeaders.Add("apikey", _supabaseKey);
                 _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_supabaseKey}");
+                Console.WriteLine("Supabase headers configured successfully");
+            }
+            else
+            {
+                Console.WriteLine("Supabase configuration missing - using placeholder mode");
             }
         }
 
@@ -28,8 +38,13 @@ namespace RealEstate.BLL.Managers.BlobStorageManager
         {
             try
             {
+                Console.WriteLine($"UploadImageAsync called: File={file?.FileName}, Size={file?.Length}");
+                Console.WriteLine($"Supabase URL: {_supabaseUrl ?? "NULL"}");
+                Console.WriteLine($"Supabase Key: {(_supabaseKey?.Length > 0 ? "SET" : "NULL")}");
+                
                 if (string.IsNullOrEmpty(_supabaseUrl) || string.IsNullOrEmpty(_supabaseKey))
                 {
+                    Console.WriteLine("Using placeholder mode - Supabase config missing");
                     // В Development режимі повертаємо placeholder URL
                     return $"https://via.placeholder.com/400x300?text=Development+Mode";
                 }

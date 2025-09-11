@@ -166,14 +166,14 @@ namespace RealEstate.BLL.Managers
                 }
             }
 
-            // ВИПРАВЛЕНО: валідація пагінації
+           
             if (page < 1) page = 1;
             if (pageSize < 1) pageSize = 10;
-            if (pageSize > 100) pageSize = 100; // Максимум 100 елементів на сторінку
+            if (pageSize > 100) pageSize = 100; 
 
             var properties = query
                 .Include(p => p.User)
-                .Include(p => p.Images) // Включаємо зображення для списку
+                .Include(p => p.Images) 
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .Select(p => CreatePropertyViewModel(p));
@@ -186,7 +186,7 @@ namespace RealEstate.BLL.Managers
             var properties = _dataContext.Properties
                 .AsNoTracking()
                 .Include(p => p.User)
-                .Include(p => p.Images) // Включаємо зображення для списку
+                .Include(p => p.Images) 
                 .Where(p => p.UserId == userId)
                 .Select(p => CreatePropertyViewModel(p));
             
@@ -204,13 +204,11 @@ namespace RealEstate.BLL.Managers
             _dataContext.Properties.Add(property);
             await _dataContext.SaveChangesAsync();
             
-            // Handle images if provided (пріоритет файлам)
             if (model.Images != null && model.Images.Any())
             {
                 Console.WriteLine($"Processing {model.Images.Count} image files for property {property.Id}");
                 await ProcessPropertyImagesAsync(property.Id, model.Images);
             }
-            // Handle image URLs if provided (тільки якщо немає файлів)
             else if (model.ImageUrls != null && model.ImageUrls.Any())
             {
                 Console.WriteLine($"Processing {model.ImageUrls.Count} image URLs for property {property.Id}");
@@ -251,17 +249,15 @@ namespace RealEstate.BLL.Managers
             var property = await _dataContext.Properties
                 .AsNoTracking()
                 .Include(p => p.User)
-                .Include(p => p.Images) // Включаємо зображення
+                .Include(p => p.Images)
                 .Where(p => p.Title == title)
                 .FirstOrDefaultAsync()
                 ?? throw new Exception("The property with such title doesn't exist");
 
             var result = property.Adapt<PropertyDetailedViewModel>();
             
-            // Отримуємо запити окремо
             var inquiries = await GetPropertyInquiriesAsync(property.Id);
             
-            // Створюємо новий об'єкт з усіма даними
             return result with 
             {
                 Inquiries = inquiries
@@ -288,7 +284,6 @@ namespace RealEstate.BLL.Managers
                 .FirstOrDefaultAsync(p => p.Id == model.Id)
                 ?? throw new Exception("The property with such id doesn't exist");
 
-            // Update basic properties
             existingProperty.Title = model.Title;
             existingProperty.Description = model.Description;
             existingProperty.Price = model.Price;
@@ -301,19 +296,16 @@ namespace RealEstate.BLL.Managers
             existingProperty.Address = model.Address;
             existingProperty.Features = model.Features;
 
-            // Handle image deletions
             if (model.ImagesToDelete != null && model.ImagesToDelete.Any())
             {
                 await DeleteImagesAsync(model.Id, model.ImagesToDelete);
             }
 
-            // Handle new images
             if (model.Images != null && model.Images.Any())
             {
                 await ProcessPropertyImagesAsync(model.Id, model.Images);
             }
             
-            // Handle new image URLs
             if (model.ImageUrls != null && model.ImageUrls.Any())
             {
                 await ProcessImageUrlsAsync(model.Id, model.ImageUrls);
@@ -326,11 +318,9 @@ namespace RealEstate.BLL.Managers
 
         public async Task<bool> CanUserModifyPropertyAsync(Guid propertyId, Guid userId, bool isAdmin)
         {
-            // Admin can modify any property
             if (isAdmin)
                 return true;
 
-            // Check if the property belongs to the user
             var property = await _dataContext.Properties
                 .AsNoTracking()
                 .FirstOrDefaultAsync(p => p.Id == propertyId);
@@ -341,15 +331,12 @@ namespace RealEstate.BLL.Managers
             return property.UserId == userId;
         }
 
-        // Image management methods
         public async Task<PropertyImageViewModel> AddImageAsync(Guid propertyId, IFormFile file)
         {
-            // Validate property exists
             var property = await _dataContext.Properties
                 .FirstOrDefaultAsync(p => p.Id == propertyId)
                 ?? throw new Exception("Property not found");
 
-            // ВИПРАВЛЕНО: перевірка кількості зображень (максимум 20)
             var currentImageCount = await _dataContext.PropertyImages
                 .Where(pi => pi.PropertyId == propertyId)
                 .CountAsync();
@@ -357,7 +344,6 @@ namespace RealEstate.BLL.Managers
             if (currentImageCount >= 20)
                 throw new Exception("Maximum number of images (20) reached for this property");
 
-            // Validate file
             if (file == null || file.Length == 0)
                 throw new Exception("No file provided");
 
@@ -371,7 +357,6 @@ namespace RealEstate.BLL.Managers
             if (!allowedExtensions.Contains(fileExtension))
                 throw new Exception("Invalid file type. Allowed types: jpg, jpeg, png, gif, webp");
 
-            // ВИПРАВЛЕНО: додаткова валідація MIME типу файлу
             if (!IsValidImageFile(file))
             {
                 Console.WriteLine($"File validation failed: {file.FileName}, ContentType: {file.ContentType}");
@@ -382,23 +367,20 @@ namespace RealEstate.BLL.Managers
                 Console.WriteLine($"File validation passed: {file.FileName}, ContentType: {file.ContentType}");
             }
 
-            // Завантажуємо файл в Azure Blob Storage
             Console.WriteLine($"Uploading file to Azure Blob Storage: {file.FileName}");
             var imageUrl = await _blobStorageManager.UploadImageAsync(file, ContainerName);
             Console.WriteLine($"SUCCESS: File uploaded to Azure: {imageUrl}");
 
-            // ВИПРАВЛЕНО: правильна логіка Order - починаємо з 0
             var maxOrder = await _dataContext.PropertyImages
                 .Where(pi => pi.PropertyId == propertyId)
-                .MaxAsync(pi => (int?)pi.Order) ?? -1; // Починаємо з -1, щоб перше зображення було з order 0
+                .MaxAsync(pi => (int?)pi.Order) ?? -1; 
 
-            // Create database record
             var propertyImage = new PropertyImage
             {
                 Id = Guid.NewGuid(),
                 PropertyId = propertyId,
-                ImageUrl = imageUrl, // Використовуємо URL з Azure Blob Storage
-                Order = maxOrder + 1 // ВИПРАВЛЕНО: встановлюємо порядковий номер
+                ImageUrl = imageUrl, 
+                Order = maxOrder + 1 
             };
 
             Console.WriteLine($"About to save image: PropertyId={propertyId}, ImageUrl={propertyImage.ImageUrl}, Order={propertyImage.Order}");
@@ -406,7 +388,6 @@ namespace RealEstate.BLL.Managers
             _dataContext.PropertyImages.Add(propertyImage);
             await _dataContext.SaveChangesAsync();
             
-            // Логування для відстеження
             Console.WriteLine($"Image saved successfully: PropertyId={propertyId}, ImageUrl={propertyImage.ImageUrl}, Order={propertyImage.Order}");
 
             return propertyImage.Adapt<PropertyImageViewModel>();
@@ -418,7 +399,6 @@ namespace RealEstate.BLL.Managers
                 .FirstOrDefaultAsync(pi => pi.Id == imageId && pi.PropertyId == propertyId)
                 ?? throw new Exception("Image not found");
 
-            // Видаляємо файл з Azure Blob Storage
             if (!string.IsNullOrEmpty(image.ImageUrl))
             {
                 try
@@ -429,11 +409,9 @@ namespace RealEstate.BLL.Managers
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Warning: Failed to delete image from Azure: {ex.Message}");
-                    // Продовжуємо видалення з бази даних навіть якщо не вдалося видалити з Azure
                 }
             }
 
-            // Delete database record
             _dataContext.PropertyImages.Remove(image);
             await _dataContext.SaveChangesAsync();
 
@@ -442,12 +420,10 @@ namespace RealEstate.BLL.Managers
 
         public async Task<bool> ReorderImagesAsync(Guid propertyId, List<Guid> imageIds)
         {
-            // Validate property exists
             var property = await _dataContext.Properties
                 .FirstOrDefaultAsync(p => p.Id == propertyId)
                 ?? throw new Exception("Property not found");
 
-            // Validate all images belong to this property
             var existingImages = await _dataContext.PropertyImages
                 .Where(pi => pi.PropertyId == propertyId)
                 .ToListAsync();
@@ -514,12 +490,10 @@ namespace RealEstate.BLL.Managers
                 .ToListAsync();
         }
 
-        // Helper methods
         private async Task ProcessPropertyImagesAsync(Guid propertyId, List<IFormFile> images)
         {
             Console.WriteLine($"Processing {images.Count} images for property {propertyId}");
             
-            // ВИПРАВЛЕНО: перевірка кількості зображень перед додаванням
             var currentImageCount = await _dataContext.PropertyImages
                 .Where(pi => pi.PropertyId == propertyId)
                 .CountAsync();
@@ -538,10 +512,9 @@ namespace RealEstate.BLL.Managers
         {
             Console.WriteLine($"Processing {imageUrls.Count} image URLs for property {propertyId}");
             
-            // ВИПРАВЛЕНО: правильна логіка Order - починаємо з 0
             var maxOrder = await _dataContext.PropertyImages
                 .Where(pi => pi.PropertyId == propertyId)
-                .MaxAsync(pi => (int?)pi.Order) ?? -1; // Починаємо з -1, щоб перше зображення було з order 0
+                .MaxAsync(pi => (int?)pi.Order) ?? -1;
 
             foreach (var imageUrl in imageUrls)
             {
@@ -550,7 +523,7 @@ namespace RealEstate.BLL.Managers
                 {
                     Id = Guid.NewGuid(),
                     PropertyId = propertyId,
-                    ImageUrl = imageUrl, // Залишаємо як є, якщо це зовнішні URL
+                    ImageUrl = imageUrl,
                     Order = maxOrder 
                 };
 
@@ -568,12 +541,10 @@ namespace RealEstate.BLL.Managers
             }
         }
 
-        // ВИПРАВЛЕНО: покращено метод валідації файлів зображень
         private bool IsValidImageFile(IFormFile file)
         {
             if (file == null || file.Length == 0) return false;
             
-            // ВИПРАВЛЕНО: додаткова перевірка розміру файлу
             if (file.Length > 10 * 1024 * 1024) return false; // 10MB
             
             var allowedMimeTypes = new[] 
