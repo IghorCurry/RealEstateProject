@@ -17,7 +17,7 @@ public record PropertyViewModel
     public string Address { get; init; } = string.Empty;
     public List<string> Features { get; init; } = new();
     public DateTime CreatedAt { get; init; }
-    public Guid UserId { get; init; } // Додано для перевірки власника
+    public Guid UserId { get; init; } 
     public string UserName { get; init; } = string.Empty;
-    public List<PropertyImageViewModel> Images { get; init; } = new(); // Додаємо зображення для списку
+    public List<PropertyImageViewModel> Images { get; init; } = new(); 
 } 

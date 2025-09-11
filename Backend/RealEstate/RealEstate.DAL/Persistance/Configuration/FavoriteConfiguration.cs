@@ -23,7 +23,6 @@ namespace RealEstate.DAL.Persistance.Configuration
                 .HasForeignKey(f => f.PropertyId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Унікальний індекс для запобігання дублікатів
             builder.HasIndex(f => new { f.UserId, f.PropertyId })
                 .IsUnique();
         }

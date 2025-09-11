@@ -92,7 +92,6 @@ namespace RealEstate.BLL.Managers
                 .FirstOrDefaultAsync(i => i.Id == model.Id)
                 ?? throw new Exception("The inquiry with such id doesn't exist");
 
-            // Update basic properties
             model.Adapt(existingInquiry);
 
             _dataContext.Entry(existingInquiry).State = EntityState.Modified;

@@ -21,7 +21,6 @@ public record PropertyDetailedViewModel
     public DateTime CreatedAt { get; init; }
     public string UserName { get; init; } = string.Empty;
     
-    // Детальна інформація
     public UserViewModel User { get; init; } = new();
     public List<InquiryViewModel> Inquiries { get; init; } = new();
     public List<PropertyImageViewModel> Images { get; init; } = new();

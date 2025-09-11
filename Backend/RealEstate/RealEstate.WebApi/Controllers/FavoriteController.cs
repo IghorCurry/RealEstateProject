@@ -33,7 +33,6 @@ namespace RealEstate.WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            // ВИПРАВЛЕНО: перевірка, чи користувач додає до обраного від свого імені
             var currentUserId = GetCurrentUserId();
             if (model.UserId != currentUserId)
             {
@@ -71,7 +70,6 @@ namespace RealEstate.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> RemoveFromFavorites(Guid userId, Guid propertyId)
         {
-            // ВИПРАВЛЕНО: перевірка, чи користувач видаляє своє обране
             var currentUserId = GetCurrentUserId();
             if (userId != currentUserId)
             {
@@ -109,7 +107,6 @@ namespace RealEstate.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetUserFavorites(Guid userId)
         {
-            // ВИПРАВЛЕНО: перевірка, чи користувач переглядає своє обране
             var currentUserId = GetCurrentUserId();
             if (userId != currentUserId)
             {
@@ -140,7 +137,6 @@ namespace RealEstate.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CheckIfFavorite(Guid userId, Guid propertyId)
         {
-            // ВИПРАВЛЕНО: перевірка, чи користувач перевіряє своє обране
             var currentUserId = GetCurrentUserId();
             if (userId != currentUserId)
             {
@@ -185,7 +181,6 @@ namespace RealEstate.WebApi.Controllers
             }
         }
 
-        // ВИПРАВЛЕНО: додано метод для отримання ID поточного користувача
         private Guid GetCurrentUserId()
         {
             var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);

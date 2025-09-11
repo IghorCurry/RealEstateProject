@@ -65,7 +65,6 @@ namespace RealEstate.BLL.Managers
                 throw new Exception($"Failed to create user: {string.Join(", ", result.Errors.Select(e => e.Description))}");
             }
 
-            // Assign default role to new user
             await _userManager.AddToRoleAsync(user, "User");
 
             return await GenerateTokenPairAsync(user);
@@ -113,8 +112,6 @@ namespace RealEstate.BLL.Managers
 
         public Task<bool> LogoutAsync(string refreshToken)
         {
-            // In a real application, you would invalidate the refresh token
-            // by storing it in a blacklist or marking it as revoked in the database
             return Task.FromResult(true);
         }
 

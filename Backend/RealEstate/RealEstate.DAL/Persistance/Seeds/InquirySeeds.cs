@@ -4,11 +4,9 @@ namespace RealEstate.DAL.Persistance.Seeds
 {
     public static class InquirySeeds
     {
-        // User IDs from existing seeds
         private static readonly Guid user1Id = new Guid("e2403a4f-0d12-4555-bf66-7338cd13ff3e");
         private static readonly Guid user2Id = new Guid("d7e228e1-4c36-4ead-8bc1-622bb13140d2");
 
-        // Property IDs from PropertySeeds
         private static readonly Guid property1Id = new Guid("a1b2c3d4-e5f6-7890-abcd-ef1234567890");
         private static readonly Guid property2Id = new Guid("b2c3d4e5-f6a7-8901-bcde-f23456789012");
         private static readonly Guid property3Id = new Guid("c3d4e5f6-a7b8-9012-cdef-345678901234");
@@ -18,7 +16,6 @@ namespace RealEstate.DAL.Persistance.Seeds
         {
             return new List<Inquiry>
             {
-                // Зареєстровані користувачі
                 new Inquiry
                 {
                     Id = new Guid("1a2b3c4d-e5f6-7890-abcd-ef1234567890"),
@@ -52,7 +49,6 @@ namespace RealEstate.DAL.Persistance.Seeds
                     CreatedAt = DateTime.UtcNow.AddDays(-2)
                 },
 
-                // Анонімні користувачі
                 new Inquiry
                 {
                     Id = new Guid("5e6f7a8b-c9d0-1234-ef56-789012345678"),

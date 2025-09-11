@@ -7,6 +7,5 @@ public record PropertyUpdateModel : PropertyCreateModel
 {
     public Guid Id { get; init; }
     
-    // Additional image management
-    public List<Guid>? ImagesToDelete { get; init; } // IDs of images to remove
+    public List<Guid>? ImagesToDelete { get; init; }
 } 

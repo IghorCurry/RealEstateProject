@@ -15,7 +15,6 @@ namespace RealEstate.WebApi.Validators.InquiryValidators
             RuleFor(x => x.PropertyId)
                 .NotEmpty().WithMessage("ID нерухомості є обов'язковим полем");
 
-            // Умовна валідація для анонімних користувачів
             When(x => x.UserId == null, () =>
             {
                 RuleFor(x => x.Name)
@@ -34,7 +33,6 @@ namespace RealEstate.WebApi.Validators.InquiryValidators
                     .Matches(@"^\+380\d{9}$").WithMessage("Некоректний формат номера телефону. Використовуйте формат: +380XXXXXXXXX");
             });
 
-            // Валідація для зареєстрованих користувачів
             When(x => x.UserId != null, () =>
             {
                 RuleFor(x => x.Name)

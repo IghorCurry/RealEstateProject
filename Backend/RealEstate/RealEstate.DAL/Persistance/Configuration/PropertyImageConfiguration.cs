@@ -19,13 +19,11 @@ namespace RealEstate.DAL.Persistance.Configuration
                 .IsRequired()
                 .HasDefaultValue(0);
 
-            // Relationships
             builder.HasOne(pi => pi.Property)
                 .WithMany(p => p.Images)
                 .HasForeignKey(pi => pi.PropertyId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Indexes
             builder.HasIndex(pi => pi.PropertyId);
             
             builder.HasIndex(pi => new { pi.PropertyId, pi.Order });

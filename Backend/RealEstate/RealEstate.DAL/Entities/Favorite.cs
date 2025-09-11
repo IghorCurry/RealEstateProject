@@ -7,7 +7,6 @@ namespace RealEstate.DAL.Entities
         public Guid PropertyId { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        // Navigation properties
         public User User { get; set; } = null!;
         public Property Property { get; set; } = null!;
     }

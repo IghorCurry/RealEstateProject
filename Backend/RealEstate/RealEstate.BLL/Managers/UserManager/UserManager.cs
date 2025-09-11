@@ -61,7 +61,6 @@ namespace RealEstate.BLL.Managers
 
         public async Task<UserDetailedViewModel> CreateAsync(UserCreateModel model)
         {
-            // Validate required fields
             if (string.IsNullOrWhiteSpace(model.UserName))
             {
                 throw new Exception("Username is required");
@@ -125,7 +124,6 @@ namespace RealEstate.BLL.Managers
                 .FirstOrDefaultAsync(u => u.Id == model.Id)
                 ?? throw new Exception("The user with such id doesn't exist");
 
-            // Update basic properties
             model.Adapt(existingUser);
 
             var result = await _userManager.UpdateAsync(existingUser);

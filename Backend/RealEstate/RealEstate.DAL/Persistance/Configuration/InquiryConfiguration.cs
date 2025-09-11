@@ -37,10 +37,9 @@ namespace RealEstate.DAL.Persistance.Configuration
                 .OnDelete(DeleteBehavior.SetNull)
                 .IsRequired(false);
 
-            // Indexes
             builder.HasIndex(i => i.CreatedAt);
             builder.HasIndex(i => i.UserId);
-            builder.HasIndex(i => i.PropertyId); // ВИПРАВЛЕНО: додано індекс для покращення продуктивності
+            builder.HasIndex(i => i.PropertyId);
         }
     }
 } 

@@ -25,7 +25,6 @@ namespace RealEstate.WebApi.Controllers
                     return BadRequest("No file uploaded");
                 }
 
-                // Перевіряємо тип файлу
                 var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
                 var fileExtension = Path.GetExtension(file.FileName).ToLowerInvariant();
                 
@@ -34,13 +33,11 @@ namespace RealEstate.WebApi.Controllers
                     return BadRequest("Invalid file type. Only JPG, PNG, GIF, and WebP are allowed.");
                 }
 
-                // Перевіряємо розмір файлу (максимум 10MB)
                 if (file.Length > 10 * 1024 * 1024)
                 {
                     return BadRequest("File size too large. Maximum size is 10MB.");
                 }
 
-                // Завантажуємо файл в Azure Blob Storage
                 var imageUrl = await _blobStorageManager.UploadImageAsync(file, ContainerName);
 
                 return Ok(new { imageUrl });

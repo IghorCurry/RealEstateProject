@@ -23,7 +23,6 @@ namespace RealEstate.DAL.Persistance
             _configuration = configuration;
         }
 
-        // DbSets for entities
         public DbSet<Property> Properties { get; set; }
         public DbSet<PropertyImage> PropertyImages { get; set; }
         public DbSet<Inquiry> Inquiries { get; set; }
@@ -41,22 +40,18 @@ namespace RealEstate.DAL.Persistance
         {
             base.OnModelCreating(modelBuilder);
 
-            // Apply configurations
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new PropertyConfiguration());
             modelBuilder.ApplyConfiguration(new PropertyImageConfiguration());
             modelBuilder.ApplyConfiguration(new InquiryConfiguration());
             modelBuilder.ApplyConfiguration(new FavoriteConfiguration());
 
-            // Add seed data
             var defaultAdminSettings = _configuration.GetSection(nameof(DefaultAdminSettings)).Get<DefaultAdminSettings>();
             if (defaultAdminSettings != null)
             {
                 modelBuilder.AddTestableData(defaultAdminSettings);
             }
 
-            // ТИМЧАСОВО ВИМКНУТО: Add additional seed data
-            // AllSeeds.SeedAllData(modelBuilder);
         }
     }
 }

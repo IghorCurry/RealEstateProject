@@ -17,7 +17,7 @@ namespace RealEstate.DAL.Persistance.Configuration
 
             builder.Property(p => p.Description)
                 .IsRequired()
-                .HasMaxLength(1000); // ВИПРАВЛЕНО: узгоджено з валідатором
+                .HasMaxLength(1000);
 
             builder.Property(p => p.Price)
                 .IsRequired()
@@ -54,7 +54,6 @@ namespace RealEstate.DAL.Persistance.Configuration
                 .HasForeignKey(p => p.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Indexes for search
             builder.HasIndex(p => p.PropertyType);
             builder.HasIndex(p => p.Location);
             builder.HasIndex(p => p.Status);

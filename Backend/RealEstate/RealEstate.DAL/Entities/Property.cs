@@ -15,13 +15,11 @@ namespace RealEstate.DAL.Entities
         public PropertyType PropertyType { get; set; }
         public Location Location { get; set; }
         public PropertyStatus Status { get; set; } = PropertyStatus.Available;
-        public List<string> Features { get; set; } = new(); // Simple features like "Pool", "Garage", "Garden"
+        public List<string> Features { get; set; } = new();
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        // Foreign keys
         public Guid UserId { get; set; }
 
-        // Navigation properties
         public User User { get; set; } = null!;
         public ICollection<PropertyImage> Images { get; set; } = new List<PropertyImage>();
         public ICollection<Inquiry> Inquiries { get; set; } = new List<Inquiry>();

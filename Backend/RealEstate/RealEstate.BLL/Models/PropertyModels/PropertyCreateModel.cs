@@ -17,8 +17,7 @@ public record PropertyCreateModel
     public string Address { get; init; } = string.Empty;
     public List<string> Features { get; init; } = new();
     public Guid UserId { get; init; }
-    
-    // Image support
-    public List<IFormFile>? Images { get; init; } // For file uploads
-    public List<string>? ImageUrls { get; init; } // For existing URLs
-} 
+
+    public List<IFormFile>? Images { get; init; }
+    public List<string>? ImageUrls { get; init; }
+}

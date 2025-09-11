@@ -5,7 +5,6 @@ namespace RealEstate.DAL.Persistance.Seeds
 {
     public static class PropertySeeds
     {
-        // User IDs from existing seeds
         private static readonly Guid adminId = new Guid("cb37b3b6-88e7-4b4d-a6fc-56e1d1ed3aae");
         private static readonly Guid user1Id = new Guid("e2403a4f-0d12-4555-bf66-7338cd13ff3e");
         private static readonly Guid user2Id = new Guid("d7e228e1-4c36-4ead-8bc1-622bb13140d2");

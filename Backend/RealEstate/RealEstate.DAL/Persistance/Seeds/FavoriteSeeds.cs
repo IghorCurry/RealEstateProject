@@ -4,11 +4,9 @@ namespace RealEstate.DAL.Persistance.Seeds
 {
     public static class FavoriteSeeds
     {
-        // User IDs from existing seeds
         private static readonly Guid user1Id = new Guid("e2403a4f-0d12-4555-bf66-7338cd13ff3e");
         private static readonly Guid user2Id = new Guid("d7e228e1-4c36-4ead-8bc1-622bb13140d2");
 
-        // Property IDs from PropertySeeds
         private static readonly Guid property1Id = new Guid("a1b2c3d4-e5f6-7890-abcd-ef1234567890");
         private static readonly Guid property2Id = new Guid("b2c3d4e5-f6a7-8901-bcde-f23456789012");
         private static readonly Guid property3Id = new Guid("c3d4e5f6-a7b8-9012-cdef-345678901234");
@@ -19,7 +17,6 @@ namespace RealEstate.DAL.Persistance.Seeds
         {
             return new List<Favorite>
             {
-                // User1 favorites
                 new Favorite
                 {
                     Id = new Guid("1a1b2c3d-e5f6-7890-abcd-ef1234567890"),
@@ -42,7 +39,6 @@ namespace RealEstate.DAL.Persistance.Seeds
                     CreatedAt = DateTime.UtcNow.AddDays(-5)
                 },
 
-                // User2 favorites
                 new Favorite
                 {
                     Id = new Guid("1a4d5e6f-a8b9-0123-def4-567890123456"),
@@ -65,18 +61,17 @@ namespace RealEstate.DAL.Persistance.Seeds
                     CreatedAt = DateTime.UtcNow.AddDays(-3)
                 },
 
-                // Admin favorites (adminId)
                 new Favorite
                 {
                     Id = new Guid("1a7a8b9c-d1e2-3456-ef78-901234567890"),
-                    UserId = new Guid("cb37b3b6-88e7-4b4d-a6fc-56e1d1ed3aae"), // adminId
+                    UserId = new Guid("cb37b3b6-88e7-4b4d-a6fc-56e1d1ed3aae"),
                     PropertyId = property2Id,
                     CreatedAt = DateTime.UtcNow.AddDays(-15)
                 },
                 new Favorite
                 {
                     Id = new Guid("1a8b9c0d-e2f3-4567-ef89-012345678901"),
-                    UserId = new Guid("cb37b3b6-88e7-4b4d-a6fc-56e1d1ed3aae"), // adminId
+                    UserId = new Guid("cb37b3b6-88e7-4b4d-a6fc-56e1d1ed3aae"),
                     PropertyId = property5Id,
                     CreatedAt = DateTime.UtcNow.AddDays(-6)
                 }
