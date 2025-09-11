@@ -1,4 +1,5 @@
-using Azure.Storage.Blobs;
+using Supabase.Storage;
+using Supabase;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
@@ -6,13 +7,15 @@ namespace RealEstate.BLL.Managers.BlobStorageManager
 {
     public class BlobStorageManager : IBlobStorageManager
     {
-        private readonly BlobServiceClient _blobServiceClient;
-        private readonly string _connectionString;
+        private readonly SupabaseClient _supabaseClient;
+        private readonly string _bucketName = "real-estate-images";
 
         public BlobStorageManager(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("AzureStorage");
-            _blobServiceClient = new BlobServiceClient(_connectionString);
+            var supabaseUrl = configuration["Supabase:Url"];
+            var supabaseKey = configuration["Supabase:AnonKey"];
+            
+            _supabaseClient = new SupabaseClient(supabaseUrl, supabaseKey);
         }
 
         public async Task<string> UploadImageAsync(IFormFile file, string containerName)
@@ -22,23 +25,22 @@ namespace RealEstate.BLL.Managers.BlobStorageManager
                 // Створюємо унікальну назву файлу
                 var fileName = $"{Guid.NewGuid()}_{file.FileName}";
                 
-                // Отримуємо контейнер
-                var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
-                await containerClient.CreateIfNotExistsAsync();
+                // Читаємо файл в байти
+                using var memoryStream = new MemoryStream();
+                await file.CopyToAsync(memoryStream);
+                var fileBytes = memoryStream.ToArray();
 
-                // Отримуємо blob client
-                var blobClient = containerClient.GetBlobClient(fileName);
+                // Завантажуємо в Supabase Storage
+                var result = await _supabaseClient.Storage
+                    .From(_bucketName)
+                    .Upload(fileBytes, fileName);
 
-                // Завантажуємо файл
-                using var stream = file.OpenReadStream();
-                await blobClient.UploadAsync(stream, overwrite: true);
-
-                // Повертаємо URL файлу
-                return blobClient.Uri.ToString();
+                // Повертаємо публічний URL
+                return _supabaseClient.Storage.From(_bucketName).GetPublicUrl(fileName);
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error uploading image: {ex.Message}");
+                throw new Exception($"Error uploading image to Supabase: {ex.Message}");
             }
         }
 
@@ -50,19 +52,16 @@ namespace RealEstate.BLL.Managers.BlobStorageManager
                 var uri = new Uri(imageUrl);
                 var fileName = Path.GetFileName(uri.LocalPath);
 
-                // Отримуємо контейнер
-                var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
-                
-                // Отримуємо blob client
-                var blobClient = containerClient.GetBlobClient(fileName);
+                // Видаляємо з Supabase Storage
+                var result = await _supabaseClient.Storage
+                    .From(_bucketName)
+                    .Remove(new[] { fileName });
 
-                // Видаляємо файл
-                var response = await blobClient.DeleteIfExistsAsync();
-                return response.Value;
+                return result.Count > 0;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error deleting image: {ex.Message}");
+                throw new Exception($"Error deleting image from Supabase: {ex.Message}");
             }
         }
 
@@ -70,23 +69,12 @@ namespace RealEstate.BLL.Managers.BlobStorageManager
         {
             try
             {
-                // Отримуємо контейнер
-                var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
-                
-                // Отримуємо blob client
-                var blobClient = containerClient.GetBlobClient(imageName);
-
-                // Перевіряємо чи існує файл
-                if (await blobClient.ExistsAsync())
-                {
-                    return blobClient.Uri.ToString();
-                }
-
-                return string.Empty;
+                // Отримуємо публічний URL з Supabase Storage
+                return _supabaseClient.Storage.From(_bucketName).GetPublicUrl(imageName);
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error getting image URL: {ex.Message}");
+                throw new Exception($"Error getting image URL from Supabase: {ex.Message}");
             }
         }
     }
