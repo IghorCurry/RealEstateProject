@@ -132,4 +132,8 @@ out/
 
 # User uploaded files (should use Azure Blob Storage in production)
 Backend/RealEstate/RealEstate.WebApi/wwwroot/uploads/
-uploads/ 
+uploads/
+
+# Backup files with sensitive data
+azure-backup-*/
+backup-*/ 
