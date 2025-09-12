@@ -17,6 +17,8 @@ import {
   ErrorBoundary,
   NetworkErrorBoundary,
 } from "./components/common";
+import { useLocation } from "react-router-dom";
+import { ROUTES } from "./utils/constants";
 
 function App() {
   return (
@@ -47,10 +49,12 @@ function App() {
 // Окремий компонент для контенту всередині Router
 function AppContent() {
   useScrollToTop(); // Auto-scroll to top on route changes
+  const location = useLocation();
+  const isHomePage = location.pathname === ROUTES.HOME;
 
   return (
     <div className="App">
-      <Header />
+      {!isHomePage && <Header />}
       <main>
         <ErrorBoundary>
           <AppRoutes />

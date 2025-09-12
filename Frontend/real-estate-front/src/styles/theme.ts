@@ -3,24 +3,24 @@ import { createTheme } from "@mui/material/styles";
 export const theme = createTheme({
   palette: {
     primary: {
-      main: "#1976d2",
-      light: "#42a5f5",
-      dark: "#1565c0",
+      main: "#1A365D", // дорогий грибокий синій
+      light: "#2C5282",
+      dark: "#153E75",
       contrastText: "#ffffff",
     },
     secondary: {
-      main: "#dc004e",
-      light: "#ff5983",
-      dark: "#9a0036",
+      main: "#8B1538", // дорогий бардовий
+      light: "#A91B47",
+      dark: "#6B0F2A",
       contrastText: "#ffffff",
     },
     background: {
-      default: "#fafafa",
+      default: "#FFFFFF", // білий фон
       paper: "#ffffff",
     },
     text: {
-      primary: "#1a1a1a",
-      secondary: "#666666",
+      primary: "#1A365D", // дорогий грибокий синій
+      secondary: "#4A5568",
     },
     grey: {
       50: "#fafafa",
@@ -37,6 +37,7 @@ export const theme = createTheme({
   },
   typography: {
     fontFamily: [
+      '"Inter"',
       "-apple-system",
       "BlinkMacSystemFont",
       '"Segoe UI"',
@@ -46,28 +47,58 @@ export const theme = createTheme({
       "sans-serif",
     ].join(","),
     h1: {
+      fontFamily: [
+        '"Playfair Display"',
+        '"Times New Roman"',
+        "serif",
+      ].join(","),
       fontWeight: 700,
       lineHeight: 1.2,
       letterSpacing: "-0.02em",
     },
     h2: {
+      fontFamily: [
+        '"Playfair Display"',
+        '"Times New Roman"',
+        "serif",
+      ].join(","),
       fontWeight: 600,
       lineHeight: 1.3,
       letterSpacing: "-0.01em",
     },
     h3: {
+      fontFamily: [
+        '"Playfair Display"',
+        '"Times New Roman"',
+        "serif",
+      ].join(","),
       fontWeight: 600,
       lineHeight: 1.3,
     },
     h4: {
+      fontFamily: [
+        '"Playfair Display"',
+        '"Times New Roman"',
+        "serif",
+      ].join(","),
       fontWeight: 600,
       lineHeight: 1.4,
     },
     h5: {
+      fontFamily: [
+        '"Playfair Display"',
+        '"Times New Roman"',
+        "serif",
+      ].join(","),
       fontWeight: 600,
       lineHeight: 1.4,
     },
     h6: {
+      fontFamily: [
+        '"Playfair Display"',
+        '"Times New Roman"',
+        "serif",
+      ].join(","),
       fontWeight: 600,
       lineHeight: 1.4,
     },

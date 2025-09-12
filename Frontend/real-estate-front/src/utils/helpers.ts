@@ -1,9 +1,9 @@
 import { PropertyType, PropertyStatus, Location } from "../types/property";
 
 export const formatPrice = (price: number): string => {
-  return new Intl.NumberFormat("uk-UA", {
+  return new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "UAH",
+    currency: "USD",
     minimumFractionDigits: 0,
   }).format(price);
 };

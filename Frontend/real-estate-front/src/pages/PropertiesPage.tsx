@@ -179,7 +179,7 @@ export const PropertiesPage: React.FC = () => {
 
   if (error) {
     return (
-      <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Container maxWidth="lg" sx={{ py: 2 }}>
         <Box
           sx={{
             display: "flex",
@@ -221,7 +221,7 @@ export const PropertiesPage: React.FC = () => {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Container maxWidth="lg" sx={{ py: 2 }}>
       <Breadcrumbs items={breadcrumbItems} />
       {/* Header */}
       <SectionHeader

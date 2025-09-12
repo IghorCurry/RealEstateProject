@@ -112,10 +112,10 @@ export const DeveloperPage: React.FC = () => {
   };
 
   return (
-    <Box sx={{ minHeight: "100vh", py: 4 }}>
+    <Box sx={{ minHeight: "100vh", py: 2 }}>
       <Container maxWidth="lg">
         {/* Header */}
-        <Box sx={{ mb: 6 }}>
+        <Box sx={{ mb: 4 }}>
           <SectionHeader
             title={t("developer.title")}
             subtitle={t("developer.subtitle")}
@@ -124,7 +124,7 @@ export const DeveloperPage: React.FC = () => {
         </Box>
 
         {/* Developer Info */}
-        <Grid container spacing={4} sx={{ mb: 6 }}>
+        <Grid container spacing={4} sx={{ mb: 4 }}>
           <Grid item xs={12} md={4}>
             <Fade in={true} timeout={800}>
               <Card

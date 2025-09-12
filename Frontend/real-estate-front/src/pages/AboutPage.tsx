@@ -49,10 +49,10 @@ export const AboutPage: React.FC = () => {
   const { t } = useLanguage();
 
   return (
-    <Box sx={{ minHeight: "100vh", py: 4 }}>
+    <Box sx={{ minHeight: "100vh", py: 2 }}>
       <Container maxWidth="lg">
         {/* Header */}
-        <Box sx={{ mb: 6 }}>
+        <Box sx={{ mb: 4 }}>
           <SectionHeader
             title={t("about.title")}
             subtitle={t("about.subtitle")}
@@ -116,7 +116,7 @@ export const AboutPage: React.FC = () => {
         </Grid>
 
         {/* Mission Statement */}
-        <Box sx={{ mt: 8 }}>
+        <Box sx={{ mt: 6 }}>
           <Fade in={true} timeout={1200}>
             <Card
               sx={{

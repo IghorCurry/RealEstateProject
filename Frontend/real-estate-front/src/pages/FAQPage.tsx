@@ -54,10 +54,10 @@ export const FAQPage: React.FC = () => {
     };
 
   return (
-    <Box sx={{ minHeight: "100vh", py: 4 }}>
+    <Box sx={{ minHeight: "100vh", py: 2 }}>
       <Container maxWidth="md">
         {/* Header */}
-        <Box sx={{ mb: 6 }}>
+        <Box sx={{ mb: 4 }}>
           <Box sx={{ textAlign: "center", mb: 4 }}>
             <HelpIcon
               sx={{
@@ -138,7 +138,7 @@ export const FAQPage: React.FC = () => {
         </Box>
 
         {/* Contact Support */}
-        <Box sx={{ mt: 8, textAlign: "center" }}>
+        <Box sx={{ mt: 6, textAlign: "center" }}>
           <Fade in={true} timeout={1200}>
             <Box
               sx={{
