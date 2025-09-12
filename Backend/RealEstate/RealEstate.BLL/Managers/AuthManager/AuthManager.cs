@@ -218,6 +218,7 @@ namespace RealEstate.BLL.Managers
         {
             var roles = await _userManager.GetRolesAsync(user);
             var role = roles.FirstOrDefault() ?? "User";
+            
 
             return new UserViewModel
             {

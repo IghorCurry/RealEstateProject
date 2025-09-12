@@ -34,7 +34,7 @@ namespace RealEstate.BLL
                 .Map(dest => dest.UserName, src => src.UserName != null ? src.UserName : (src.Email != null ? src.Email : ""))
                 .Map(dest => dest.PhoneNumber, src => src.PhoneNumber != null ? src.PhoneNumber : "")
                 .Map(dest => dest.FullName, src => $"{(src.FirstName != null ? src.FirstName : "")} {(src.LastName != null ? src.LastName : "")}".Trim())
-                .Map(dest => dest.Role, src => "User"); 
+                .Map(dest => dest.Role, src => "User");  
         }
     }
 } 

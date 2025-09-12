@@ -43,8 +43,16 @@ namespace RealEstate.BLL.Managers.BlobStorageManager
                 
                 if (string.IsNullOrEmpty(_supabaseUrl) || string.IsNullOrEmpty(_supabaseKey))
                 {
-                    Console.WriteLine("Using placeholder mode - Supabase config missing");
-                    return $"https://via.placeholder.com/400x300?text=Development+Mode";
+                    Console.WriteLine("Supabase config missing - using placeholder mode");
+                    var isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+                    if (isDevelopment)
+                    {
+                        return "/placeholder-house.svg";
+                    }
+                    else
+                    {
+                        return "https://via.placeholder.com/400x300?text=No+Image";
+                    }
                 }
 
                 var fileName = $"{Guid.NewGuid()}_{file.FileName}";
@@ -98,7 +106,16 @@ namespace RealEstate.BLL.Managers.BlobStorageManager
             {
                 if (string.IsNullOrEmpty(_supabaseUrl) || string.IsNullOrEmpty(_supabaseKey))
                 {
-                    return Task.FromResult($"https://via.placeholder.com/400x300?text=Development+Mode");
+                    // Для development - локальний placeholder, для production - повний URL
+                    var isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+                    if (isDevelopment)
+                    {
+                        return Task.FromResult("/placeholder-house.svg");
+                    }
+                    else
+                    {
+                        return Task.FromResult("https://via.placeholder.com/400x300?text=No+Image");
+                    }
                 }
 
                 var url = $"{_supabaseUrl}/storage/v1/object/public/{_bucketName}/{imageName}";

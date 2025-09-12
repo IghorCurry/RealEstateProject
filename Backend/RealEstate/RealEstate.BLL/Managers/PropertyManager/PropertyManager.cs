@@ -223,7 +223,7 @@ namespace RealEstate.BLL.Managers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"⚠️ WARNING: Failed to process images for property {property.Id}: {ex.Message}");
+                Console.WriteLine($" WARNING: Failed to process images for property {property.Id}: {ex.Message}");
             }
             
             return await GetByIdAsync(property.Id);
@@ -326,14 +326,18 @@ namespace RealEstate.BLL.Managers
         public async Task<bool> CanUserModifyPropertyAsync(Guid propertyId, Guid userId, bool isAdmin)
         {
             if (isAdmin)
+            {
                 return true;
+            }
 
             var property = await _dataContext.Properties
                 .AsNoTracking()
                 .FirstOrDefaultAsync(p => p.Id == propertyId);
 
             if (property == null)
+            {
                 return false;
+            }
 
             return property.UserId == userId;
         }
@@ -374,9 +378,17 @@ namespace RealEstate.BLL.Managers
                 Console.WriteLine($"File validation passed: {file.FileName}, ContentType: {file.ContentType}");
             }
 
-            Console.WriteLine($"Uploading file to Azure Blob Storage: {file.FileName}");
+            Console.WriteLine($"Uploading file to storage: {file.FileName}");
             var imageUrl = await _blobStorageManager.UploadImageAsync(file, ContainerName);
-            Console.WriteLine($"SUCCESS: File uploaded to Azure: {imageUrl}");
+            
+            // Перевіряємо, чи це не placeholder URL
+            if (imageUrl.Contains("placeholder") || imageUrl.Contains("via.placeholder"))
+            {
+                Console.WriteLine($"⚠️ WARNING: Received placeholder URL instead of real image: {imageUrl}");
+                throw new Exception("Image storage not configured. Cannot upload real images.");
+            }
+            
+            Console.WriteLine($"SUCCESS: File uploaded successfully: {imageUrl}");
 
             var maxOrder = await _dataContext.PropertyImages
                 .Where(pi => pi.PropertyId == propertyId)
@@ -455,8 +467,6 @@ namespace RealEstate.BLL.Managers
 
         public async Task<List<PropertyImageViewModel>> GetPropertyImagesAsync(Guid propertyId)
         {
-            Console.WriteLine($"🔍 GetPropertyImagesAsync - PropertyId: {propertyId}");
-            
             var images = await _dataContext.PropertyImages
                 .AsNoTracking()
                 .Where(pi => pi.PropertyId == propertyId)
@@ -468,12 +478,6 @@ namespace RealEstate.BLL.Managers
                     Order = pi.Order
                 })
                 .ToListAsync();
-            
-            Console.WriteLine($"🔍 GetPropertyImagesAsync - Found {images.Count} images:");
-            foreach (var img in images)
-            {
-                Console.WriteLine($"  - ID: {img.Id}, URL: '{img.ImageUrl}', Order: {img.Order}");
-            }
             
             return images;
         }

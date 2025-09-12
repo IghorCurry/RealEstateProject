@@ -62,6 +62,16 @@ export interface PropertyDetailed extends Property {
   inquiries?: Inquiry[]; // Запити (якщо потрібно)
   isFavoritedByCurrentUser?: boolean;
   updatedAt?: string; // Дата останнього оновлення
+  user?: {
+    // Додаємо user об'єкт з API
+    id: string;
+    firstName: string;
+    lastName: string;
+    fullName: string;
+    email: string;
+    role: string;
+    createdAt: string;
+  };
 }
 
 // Тип для запитів

@@ -272,11 +272,10 @@ namespace RealEstate.WebApi.Controllers
                 var currentUserId = GetCurrentUserId();
                 var isAdmin = User.IsInRole("Admin");
                 
-                if (!await _manager.CanUserModifyPropertyAsync(model.Id, currentUserId, isAdmin))
-                {
-                    _logger.LogWarning("User {UserId} attempted to update property {PropertyId} without permission", currentUserId, model.Id);
-                    return Forbid();
-                }
+        if (!await _manager.CanUserModifyPropertyAsync(model.Id, currentUserId, isAdmin))
+        {
+            return Forbid();
+        }
 
                 // Preserve the original UserId from the existing property
                 var existingUserId = await _manager.GetUserIdAsync(model.Id);

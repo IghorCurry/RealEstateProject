@@ -31,7 +31,7 @@ export const EditPropertyPage: React.FC = () => {
         const propertyData = await propertyService.getById(id);
         setProperty(propertyData);
 
-        const isOwner = currentUser?.id === propertyData.userId;
+        const isOwner = currentUser?.id === propertyData.user?.id;
 
         if (!isOwner && !isAdmin) {
           setError("You don't have permission to edit this property");
