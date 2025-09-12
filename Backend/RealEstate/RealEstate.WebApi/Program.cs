@@ -184,6 +184,16 @@ app.UseResponseCaching();
 
 app.UseStaticFiles();
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
+            Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads")),
+        RequestPath = "/uploads"
+    });
+}
+
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -193,4 +203,3 @@ app.Run();
 
 
 Log.CloseAndFlush();
-// Test trigger

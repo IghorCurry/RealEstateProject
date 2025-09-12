@@ -1,4 +1,3 @@
-// Утилита для очистки некорректных данных в localStorage
 export const cleanupLocalStorage = () => {
   const keys = [
     "user",
@@ -16,7 +15,6 @@ export const cleanupLocalStorage = () => {
   });
 };
 
-// Функция для полной очистки всех данных аутентификации
 export const clearAuthData = () => {
   localStorage.removeItem("user");
   localStorage.removeItem("accessToken");

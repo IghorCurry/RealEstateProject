@@ -36,7 +36,6 @@ export interface PropertyImage {
   order: number; // Added order field to match backend API
 }
 
-// Базовий тип для списку властивостей (PropertyViewModel)
 export interface Property {
   id: string;
   title: string;
@@ -56,14 +55,12 @@ export interface Property {
   images?: PropertyImage[]; // Додаємо зображення для списку
 }
 
-// Детальний тип для повної інформації (PropertyDetailedViewModel)
 export interface PropertyDetailed extends Property {
   images: PropertyImage[]; // Всі зображення для деталей
   inquiries?: Inquiry[]; // Запити (якщо потрібно)
   isFavoritedByCurrentUser?: boolean;
   updatedAt?: string; // Дата останнього оновлення
   user?: {
-    // Додаємо user об'єкт з API
     id: string;
     firstName: string;
     lastName: string;
@@ -74,7 +71,6 @@ export interface PropertyDetailed extends Property {
   };
 }
 
-// Тип для запитів
 export interface Inquiry {
   id: string;
   message: string;
@@ -116,7 +112,6 @@ export interface PropertyUpdate {
   bathrooms?: number;
   squareMeters?: number;
   features?: string[];
-  // Додано назад для сумісності з бекендом (може бути null)
   images?: File[] | null;
   imageUrls?: string[] | null;
   imagesToDelete?: string[] | null;

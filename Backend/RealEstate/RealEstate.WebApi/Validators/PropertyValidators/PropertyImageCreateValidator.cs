@@ -20,7 +20,6 @@ namespace RealEstate.WebApi.Validators.PropertyValidators
                 .WithMessage("Нерухомість не існує")
                 .MustAsync(async (propertyId, cancellation) => 
                 {
-                    // ВИПРАВЛЕНО: перевірка кількості зображень (максимум 20)
                     var imageCount = await _context.PropertyImages
                         .Where(pi => pi.PropertyId == propertyId)
                         .CountAsync();

@@ -17,13 +17,6 @@ interface PropertyDetailsCardProps {
 export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({
   property,
 }) => {
-  // Додаємо логування для діагностики
-  console.log("PropertyDetailsCard - Property features:", property.features);
-  console.log(
-    "PropertyDetailsCard - Features length:",
-    property.features?.length
-  );
-
   return (
     <>
       {/* Property Details */}

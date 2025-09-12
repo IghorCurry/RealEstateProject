@@ -74,11 +74,9 @@ export const propertyService = {
     try {
       const url = API_ENDPOINTS.PROPERTY.UPDATE;
 
-      // Спробуємо спочатку JSON
       try {
         return await apiClient.put<Property>(url, property);
       } catch {
-        // Fallback: використовуємо FormData
         const formData = new FormData();
         formData.append("Id", property.id);
         if (property.userId) formData.append("UserId", property.userId);

@@ -42,7 +42,6 @@ export const createPropertyUpdateFormData = (
 ): FormData => {
   const formData = new FormData();
 
-  // Add ID (обов'язкове поле для оновлення)
   if (property.id) formData.append("id", property.id);
 
   // Add basic property data

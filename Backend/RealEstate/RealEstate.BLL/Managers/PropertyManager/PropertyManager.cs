@@ -51,18 +51,10 @@ namespace RealEstate.BLL.Managers
                 .FirstOrDefaultAsync()
                 ?? throw new Exception("The property with such id doesn't exist");
 
-            Console.WriteLine($"GetByIdAsync - Property features count: {property.Features?.Count ?? 0}");
-            Console.WriteLine($"GetByIdAsync - Property features: {string.Join(", ", property.Features ?? new List<string>())}");
-
             var result = property.Adapt<PropertyDetailedViewModel>();
             
-            Console.WriteLine($"GetByIdAsync - Result features count: {result.Features?.Count ?? 0}");
-            Console.WriteLine($"GetByIdAsync - Result features: {string.Join(", ", result.Features ?? new List<string>())}");
-            
-            // Отримуємо запити окремо
             var inquiries = await GetPropertyInquiriesAsync(id);
             
-            // Створюємо новий об'єкт з усіма даними
             return result with 
             {
                 Inquiries = inquiries
@@ -98,7 +90,7 @@ namespace RealEstate.BLL.Managers
             var properties = _dataContext.Properties
                 .AsNoTracking()
                 .Include(p => p.User)
-                .Include(p => p.Images) // Включаємо зображення для списку
+                .Include(p => p.Images) 
                 .Where(p => p.Status == status)
                 .Select(p => CreatePropertyViewModel(p));
             
@@ -195,10 +187,6 @@ namespace RealEstate.BLL.Managers
 
         public async Task<PropertyDetailedViewModel> CreateAsync(PropertyCreateModel model)
         {
-            Console.WriteLine($"Creating property: Images count: {model.Images?.Count ?? 0}, ImageUrls count: {model.ImageUrls?.Count ?? 0}");
-            Console.WriteLine($"Creating property: Features count: {model.Features?.Count ?? 0}");
-            Console.WriteLine($"Creating property: Features: {string.Join(", ", model.Features ?? new List<string>())}");
-            
             var property = model.Adapt<Property>();
             
             _dataContext.Properties.Add(property);
@@ -208,22 +196,16 @@ namespace RealEstate.BLL.Managers
             {
                 if (model.Images != null && model.Images.Any())
                 {
-                    Console.WriteLine($"Processing {model.Images.Count} image files for property {property.Id}");
                     await ProcessPropertyImagesAsync(property.Id, model.Images);
                 }
                 else if (model.ImageUrls != null && model.ImageUrls.Any())
                 {
-                    Console.WriteLine($"Processing {model.ImageUrls.Count} image URLs for property {property.Id}");
                     await ProcessImageUrlsAsync(property.Id, model.ImageUrls);
-                }
-                else
-                {
-                    Console.WriteLine($"No images provided for property {property.Id}");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($" WARNING: Failed to process images for property {property.Id}: {ex.Message}");
+                // Log error but continue with property creation
             }
             
             return await GetByIdAsync(property.Id);
@@ -358,7 +340,6 @@ namespace RealEstate.BLL.Managers
             if (file == null || file.Length == 0)
                 throw new Exception("No file provided");
 
-            Console.WriteLine($"Processing file: {file.FileName}, Size: {file.Length}, ContentType: {file.ContentType}");
 
             if (file.Length > 10 * 1024 * 1024) // 10MB limit
                 throw new Exception("File size too large. Maximum size is 10MB");
@@ -370,25 +351,10 @@ namespace RealEstate.BLL.Managers
 
             if (!IsValidImageFile(file))
             {
-                Console.WriteLine($"File validation failed: {file.FileName}, ContentType: {file.ContentType}");
                 throw new Exception("Invalid image file format");
             }
-            else
-            {
-                Console.WriteLine($"File validation passed: {file.FileName}, ContentType: {file.ContentType}");
-            }
 
-            Console.WriteLine($"Uploading file to storage: {file.FileName}");
             var imageUrl = await _blobStorageManager.UploadImageAsync(file, ContainerName);
-            
-            // Перевіряємо, чи це не placeholder URL
-            if (imageUrl.Contains("placeholder") || imageUrl.Contains("via.placeholder"))
-            {
-                Console.WriteLine($"⚠️ WARNING: Received placeholder URL instead of real image: {imageUrl}");
-                throw new Exception("Image storage not configured. Cannot upload real images.");
-            }
-            
-            Console.WriteLine($"SUCCESS: File uploaded successfully: {imageUrl}");
 
             var maxOrder = await _dataContext.PropertyImages
                 .Where(pi => pi.PropertyId == propertyId)
@@ -402,12 +368,8 @@ namespace RealEstate.BLL.Managers
                 Order = maxOrder + 1 
             };
 
-            Console.WriteLine($"About to save image: PropertyId={propertyId}, ImageUrl={propertyImage.ImageUrl}, Order={propertyImage.Order}");
-
             _dataContext.PropertyImages.Add(propertyImage);
             await _dataContext.SaveChangesAsync();
-            
-            Console.WriteLine($"Image saved successfully: PropertyId={propertyId}, ImageUrl={propertyImage.ImageUrl}, Order={propertyImage.Order}");
 
             return propertyImage.Adapt<PropertyImageViewModel>();
         }
@@ -423,11 +385,10 @@ namespace RealEstate.BLL.Managers
                 try
                 {
                     await _blobStorageManager.DeleteImageAsync(image.ImageUrl, ContainerName);
-                    Console.WriteLine($"Image deleted from Azure: {image.ImageUrl}");
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Warning: Failed to delete image from Azure: {ex.Message}");
+                    // Continue with database deletion even if storage deletion fails
                 }
             }
 
@@ -503,8 +464,6 @@ namespace RealEstate.BLL.Managers
 
         private async Task ProcessPropertyImagesAsync(Guid propertyId, List<IFormFile> images)
         {
-            Console.WriteLine($"Processing {images.Count} images for property {propertyId}");
-            
             var currentImageCount = await _dataContext.PropertyImages
                 .Where(pi => pi.PropertyId == propertyId)
                 .CountAsync();
@@ -514,15 +473,12 @@ namespace RealEstate.BLL.Managers
 
             foreach (var image in images)
             {
-                Console.WriteLine($"Processing image: {image.FileName}, Size: {image.Length}");
                 await AddImageAsync(propertyId, image);
             }
         }
 
         private async Task ProcessImageUrlsAsync(Guid propertyId, List<string> imageUrls)
         {
-            Console.WriteLine($"Processing {imageUrls.Count} image URLs for property {propertyId}");
-            
             var maxOrder = await _dataContext.PropertyImages
                 .Where(pi => pi.PropertyId == propertyId)
                 .MaxAsync(pi => (int?)pi.Order) ?? -1;
@@ -538,7 +494,6 @@ namespace RealEstate.BLL.Managers
                     Order = maxOrder 
                 };
 
-                Console.WriteLine($"Adding image URL: {imageUrl}, Order: {maxOrder}");
                 _dataContext.PropertyImages.Add(propertyImage);
             }
             await _dataContext.SaveChangesAsync();

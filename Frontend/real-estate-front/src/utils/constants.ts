@@ -1,25 +1,16 @@
-// Автоматичне визначення API URL залежно від середовища
 const getApiUrl = () => {
-  // Якщо є змінна середовища - використовуємо її
   if (import.meta.env.VITE_API_URL) {
     return import.meta.env.VITE_API_URL;
   }
 
-  // Якщо розробка - локальний сервер
   if (import.meta.env.DEV) {
     return "http://localhost:5158/api";
   }
 
-  // Якщо production - Azure
   return "https://real-estate-api-ig25-eahbg3dwgwemfjej.northeurope-01.azurewebsites.net/api";
 };
 
 export const API_BASE_URL = getApiUrl();
-
-// Логування для відстеження
-console.log(`🚀 Frontend connecting to: ${API_BASE_URL}`);
-console.log(`🌍 Environment: ${import.meta.env.MODE}`);
-console.log(`🔧 Development mode: ${import.meta.env.DEV}`);
 
 // API endpoints with correct capitalization matching backend
 export const API_ENDPOINTS = {
@@ -73,7 +64,7 @@ export const API_ENDPOINTS = {
     DELETE: "/Inquiry/:id",
   },
 
-  // Favorite endpoints - згідно з backend контролером
+  // Favorite endpoints
   FAVORITE: {
     ALL: "/Favorite/user/:userId", // GET /api/Favorite/user/{userId} - отримання улюблених користувача
     CHECK: "/Favorite/check/:userId/:propertyId", // GET /api/Favorite/check/{userId}/{propertyId}
@@ -125,12 +116,12 @@ export const API_CONFIG = {
   SUPPORTED_IMAGE_EXTENSIONS: [".jpg", ".jpeg", ".png", ".gif", ".webp"],
 } as const;
 
-// React Query cache time constants
+// React Query cache time
 export const CACHE_TIMES = {
-  PROPERTIES: 2 * 60 * 1000, // 2 minutes
-  PROPERTY_DETAIL: 5 * 60 * 1000, // 5 minutes
-  USER_DATA: 10 * 60 * 1000, // 10 minutes
-  FAVORITES: 3 * 60 * 1000, // 3 minutes
-  INQUIRIES: 5 * 60 * 1000, // 5 minutes
-  GARBAGE_COLLECTION: 15 * 60 * 1000, // 15 minutes
+  PROPERTIES: 2 * 60 * 1000, // 2 m
+  PROPERTY_DETAIL: 5 * 60 * 1000, // 5 m
+  USER_DATA: 10 * 60 * 1000, // 10 m
+  FAVORITES: 3 * 60 * 1000, // 3 m
+  INQUIRIES: 5 * 60 * 1000, // 5 m
+  m,
 } as const;

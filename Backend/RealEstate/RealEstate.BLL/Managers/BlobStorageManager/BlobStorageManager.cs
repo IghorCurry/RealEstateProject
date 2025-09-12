@@ -17,19 +17,10 @@ namespace RealEstate.BLL.Managers.BlobStorageManager
             _supabaseUrl = configuration["Supabase:Url"];
             _supabaseKey = configuration["Supabase:AnonKey"];
             
-            Console.WriteLine($"BlobStorageManager initialized:");
-            Console.WriteLine($"Supabase URL: {_supabaseUrl ?? "NULL"}");
-            Console.WriteLine($"Supabase Key: {(_supabaseKey?.Length > 0 ? "SET" : "NULL")}");
-            
             if (!string.IsNullOrEmpty(_supabaseUrl) && !string.IsNullOrEmpty(_supabaseKey))
             {
                 _httpClient.DefaultRequestHeaders.Add("apikey", _supabaseKey);
                 _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_supabaseKey}");
-                Console.WriteLine("Supabase headers configured successfully");
-            }
-            else
-            {
-                Console.WriteLine("Supabase configuration missing - using placeholder mode");
             }
         }
 
@@ -37,17 +28,13 @@ namespace RealEstate.BLL.Managers.BlobStorageManager
         {
             try
             {
-                Console.WriteLine($"UploadImageAsync called: File={file?.FileName}, Size={file?.Length}");
-                Console.WriteLine($"Supabase URL: {_supabaseUrl ?? "NULL"}");
-                Console.WriteLine($"Supabase Key: {(_supabaseKey?.Length > 0 ? "SET" : "NULL")}");
-                
                 if (string.IsNullOrEmpty(_supabaseUrl) || string.IsNullOrEmpty(_supabaseKey))
                 {
-                    Console.WriteLine("Supabase config missing - using placeholder mode");
                     var isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
                     if (isDevelopment)
                     {
-                        return "/placeholder-house.svg";
+                        // Зберігаємо файл локально в Development режимі
+                        return await SaveFileLocallyAsync(file);
                     }
                     else
                     {
@@ -124,6 +111,32 @@ namespace RealEstate.BLL.Managers.BlobStorageManager
             catch (Exception ex)
             {
                 throw new Exception($"Error getting image URL from Supabase: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Зберігає файл локально в папці wwwroot/uploads/properties для Development режиму
+        /// </summary>
+        private async Task<string> SaveFileLocallyAsync(IFormFile file)
+        {
+            try
+            {
+                var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "properties");
+                Directory.CreateDirectory(uploadsPath);
+                
+                var fileName = $"{Guid.NewGuid()}_{file.FileName}";
+                var filePath = Path.Combine(uploadsPath, fileName);
+                
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+                
+                return $"/uploads/properties/{fileName}";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error saving file locally: {ex.Message}");
             }
         }
     }

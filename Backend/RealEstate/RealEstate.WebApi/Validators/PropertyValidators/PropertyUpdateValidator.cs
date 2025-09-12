@@ -59,7 +59,6 @@ namespace RealEstate.WebApi.Validators.PropertyValidators
                 .NotEmpty().WithMessage("Особливість не може бути пустою")
                 .MaximumLength(100).WithMessage("Особливість не може перевищувати 100 символів");
 
-            // ВИПРАВЛЕНО: додано валідацію зображень для оновлення
             RuleFor(x => x.Images)
                 .Must(images => images == null || images.Count <= 10)
                 .WithMessage("Максимальна кількість зображень: 10");

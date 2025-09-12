@@ -6,7 +6,6 @@ import { ImageGrid } from "./ImageGrid";
 import { validateImageFiles } from "../../utils/imageValidation";
 import type { PropertyImage } from "../../types/property";
 
-// Розширений тип для PropertyImage з файлом
 type PropertyImageWithFile = PropertyImage & { file?: File };
 
 interface ImageUploadProps {
@@ -58,18 +57,16 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
     setIsUploading(true);
     try {
       if (onImagesUpload) {
-        // Миттєво завантажуємо зображення через API
         await onImagesUpload(selectedFiles);
       } else {
-        // Fallback: створюємо preview URLs для тимчасового відображення
         const newImages: PropertyImageWithFile[] = await Promise.all(
           selectedFiles.map(async (file, index) => {
             const previewUrl = URL.createObjectURL(file);
             return {
-              id: `temp-${Date.now()}-${Math.random()}`, // Temporary ID
+              id: `temp-${Date.now()}-${Math.random()}`,
               imageUrl: previewUrl,
-              order: images.length + index, // Add order field
-              file, // Store the file for later upload
+              order: images.length + index,
+              file,
             };
           })
         );
@@ -78,7 +75,6 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
         toast.success(`${selectedFiles.length} image(s) added successfully`);
       }
     } catch (error) {
-      // Покращена обробка помилок
       if (error instanceof Error) {
         toast.error(`Failed to process images: ${error.message}`);
       } else {
@@ -93,7 +89,6 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
     const imageToDelete = images.find((img) => img.id === imageId);
     if (!imageToDelete) return;
 
-    // If it's a temporary image (has file property), just remove from state
     if ("file" in imageToDelete) {
       const updatedImages = images.filter((img) => img.id !== imageId);
       onImagesChange(updatedImages);
