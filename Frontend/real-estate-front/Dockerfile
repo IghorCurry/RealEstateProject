@@ -22,5 +22,5 @@ RUN npm install -g serve
 # Expose port 3000
 EXPOSE 3000
 
-# Start the app with serve
-CMD ["serve", "-s", "dist", "-l", "3000"] 
+# Start the app with serve and proper SPA configuration
+CMD ["serve", "-s", "dist", "-l", "3000", "--single"] 
