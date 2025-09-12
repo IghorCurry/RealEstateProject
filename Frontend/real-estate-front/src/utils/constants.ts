@@ -123,5 +123,5 @@ export const CACHE_TIMES = {
   USER_DATA: 10 * 60 * 1000, // 10 m
   FAVORITES: 3 * 60 * 1000, // 3 m
   INQUIRIES: 5 * 60 * 1000, // 5 m
-  m,
+  GARBAGE_COLLECTION: 15 * 60 * 1000, // 15 m
 } as const;
