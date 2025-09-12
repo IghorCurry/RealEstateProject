@@ -77,8 +77,8 @@ export const performHealthCheck = async (): Promise<ApiHealthReport> => {
     // Define critical endpoints to check
     const endpointsToCheck = [
       { name: "properties", url: API_ENDPOINTS.PROPERTY.ALL },
-      { name: "auth", url: API_ENDPOINTS.AUTH.VALIDATE_TOKEN },
       { name: "user", url: API_ENDPOINTS.USER.CURRENT },
+      // Removed auth endpoint as it requires POST method, not GET
     ];
 
     // Perform health checks in parallel

@@ -4,7 +4,7 @@ import type { User, UserUpdate } from "../types/user";
 export const userService = {
   async getCurrentUser(): Promise<User> {
     try {
-      return await apiClient.get<User>("/User/current");
+      return await apiClient.get<User>("/User/me");
     } catch (error) {
       console.error("Failed to get current user:", error);
       throw error;

@@ -218,20 +218,18 @@ export const Header = React.memo(() => {
 
               {/* Profile Menu */}
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <Typography
-                  variant="body2"
-                  sx={{
-                    fontWeight: 500,
-                    color: "text.primary",
-                    display: { xs: "none", sm: "block" },
-                  }}
-                >
-                  {user && (
-                    <Typography variant="body2" color="text.secondary">
-                      {getUserFullName(user)}
-                    </Typography>
-                  )}
-                </Typography>
+                {user && (
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      fontWeight: 500,
+                      color: "text.secondary",
+                      display: { xs: "none", sm: "block" },
+                    }}
+                  >
+                    {getUserFullName(user)}
+                  </Typography>
+                )}
                 <IconButton
                   onClick={handleProfileMenuOpen}
                   sx={{

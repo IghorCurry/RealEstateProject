@@ -56,7 +56,7 @@ export const API_ENDPOINTS = {
 
   // User endpoints
   USER: {
-    CURRENT: "/User/current",
+    CURRENT: "/User/me",
     ALL: "/User",
     BY_ID: "/User/:id",
   },

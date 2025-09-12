@@ -66,7 +66,6 @@ export const checkEndpointHealth = async (
 export const performHealthCheck = async (): Promise<HealthReport> => {
   const endpointsToCheck = [
     { name: "properties", url: API_ENDPOINTS.PROPERTY.ALL },
-    { name: "auth", url: API_ENDPOINTS.AUTH.VALIDATE_TOKEN },
   ];
 
   const healthChecks = await Promise.allSettled(
@@ -82,7 +81,7 @@ export const performHealthCheck = async (): Promise<HealthReport> => {
 
   healthChecks.forEach((result, index) => {
     const { name } = endpointsToCheck[index];
-    
+
     if (result.status === "fulfilled") {
       endpoints[name] = result.value.status;
       totalResponseTime += result.value.status.responseTime;
@@ -99,7 +98,10 @@ export const performHealthCheck = async (): Promise<HealthReport> => {
   });
 
   const isAllOnline = onlineCount === endpointsToCheck.length;
-  const avgResponseTime = endpointsToCheck.length > 0 ? totalResponseTime / endpointsToCheck.length : 0;
+  const avgResponseTime =
+    endpointsToCheck.length > 0
+      ? totalResponseTime / endpointsToCheck.length
+      : 0;
 
   return {
     overall: {
