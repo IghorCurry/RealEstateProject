@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Container,
@@ -32,11 +32,30 @@ import { FavoriteCount } from "./FavoriteCount";
 export const ModernHero: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const [backgroundImage, setBackgroundImage] = useState("/hero-bg.jpg");
   const navigate = useNavigate();
   const { user, isAuthenticated, logout } = useAuth();
   const { t } = useLanguage();
   const isAdmin = user?.role === "Admin";
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  // Check if local image is available, fallback to external URL for deployed site
+  useEffect(() => {
+    const checkImageAvailability = () => {
+      const img = new Image();
+      img.onload = () => {
+        setBackgroundImage("/hero-bg.jpg");
+      };
+      img.onerror = () => {
+        setBackgroundImage(
+          "https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop"
+        );
+      };
+      img.src = "/hero-bg.jpg";
+    };
+
+    checkImageAvailability();
+  }, []);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -87,7 +106,7 @@ export const ModernHero: React.FC = () => {
           left: 0,
           right: 0,
           bottom: 0,
-          background: `url('/hero-bg.jpg')`,
+          background: `url('${backgroundImage}')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundAttachment: "fixed",
@@ -415,7 +434,7 @@ export const ModernHero: React.FC = () => {
                     color: "rgba(255, 255, 255, 0.95)",
                     fontWeight: 300,
                     lineHeight: 1.6,
-                    mb: { xs: 3, md: 4 },
+                    mb: { xs: 4, md: 4 },
                     maxWidth: { xs: 350, md: 500 },
                     fontSize: { xs: "1.1rem", md: "1.5rem" },
                     textShadow:
@@ -432,6 +451,7 @@ export const ModernHero: React.FC = () => {
                     gap: 2,
                     alignItems: "center",
                     flexWrap: "wrap",
+                    mt: { xs: 1, md: 0 },
                   }}
                 >
                   <motion.div
@@ -446,8 +466,8 @@ export const ModernHero: React.FC = () => {
                       sx={{
                         bgcolor: "white",
                         color: "primary.main",
-                        px: { xs: 3, md: 4 },
-                        py: { xs: 1, md: 1.5 },
+                        px: { xs: 2.5, md: 4 },
+                        py: { xs: 0.8, md: 1.5 },
                         fontSize: { xs: "0.9rem", md: "1rem" },
                         fontWeight: 700,
                         borderRadius: 2,
@@ -484,9 +504,9 @@ export const ModernHero: React.FC = () => {
                       sx={{
                         borderColor: "rgba(255, 255, 255, 0.5)",
                         color: "white",
-                        px: 4,
-                        py: 1.5,
-                        fontSize: "1rem",
+                        px: { xs: 2.5, md: 4 },
+                        py: { xs: 0.8, md: 1.5 },
+                        fontSize: { xs: "0.9rem", md: "1rem" },
                         fontWeight: 500,
                         borderRadius: 2,
                         textTransform: "none",
