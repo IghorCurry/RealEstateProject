@@ -204,19 +204,26 @@ namespace RealEstate.BLL.Managers
             _dataContext.Properties.Add(property);
             await _dataContext.SaveChangesAsync();
             
-            if (model.Images != null && model.Images.Any())
+            try
             {
-                Console.WriteLine($"Processing {model.Images.Count} image files for property {property.Id}");
-                await ProcessPropertyImagesAsync(property.Id, model.Images);
+                if (model.Images != null && model.Images.Any())
+                {
+                    Console.WriteLine($"Processing {model.Images.Count} image files for property {property.Id}");
+                    await ProcessPropertyImagesAsync(property.Id, model.Images);
+                }
+                else if (model.ImageUrls != null && model.ImageUrls.Any())
+                {
+                    Console.WriteLine($"Processing {model.ImageUrls.Count} image URLs for property {property.Id}");
+                    await ProcessImageUrlsAsync(property.Id, model.ImageUrls);
+                }
+                else
+                {
+                    Console.WriteLine($"No images provided for property {property.Id}");
+                }
             }
-            else if (model.ImageUrls != null && model.ImageUrls.Any())
+            catch (Exception ex)
             {
-                Console.WriteLine($"Processing {model.ImageUrls.Count} image URLs for property {property.Id}");
-                await ProcessImageUrlsAsync(property.Id, model.ImageUrls);
-            }
-            else
-            {
-                Console.WriteLine($"No images provided for property {property.Id}");
+                Console.WriteLine($"⚠️ WARNING: Failed to process images for property {property.Id}: {ex.Message}");
             }
             
             return await GetByIdAsync(property.Id);
