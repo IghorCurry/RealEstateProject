@@ -40,23 +40,29 @@ export const ModernHero: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   useEffect(() => {
-    const supabaseUrl =
-      "https://euvqeqtcazmsomxkiisi.supabase.co/storage/v1/object/public/real-estate-images/hero-bg.jpg";
-    console.log("Setting background image to:", supabaseUrl);
+    // Test with Unsplash first
+    const unsplashUrl =
+      "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1973&q=80";
+    console.log("Testing with Unsplash:", unsplashUrl);
+    setBackgroundImage(unsplashUrl);
 
-    // Force immediate update
-    setBackgroundImage(supabaseUrl);
+    // Test Supabase after 2 seconds
+    setTimeout(() => {
+      const supabaseUrl =
+        "https://euvqeqtcazmsomxkiisi.supabase.co/storage/v1/object/public/real-estate-images/hero-bg.jpg";
+      console.log("Testing with Supabase:", supabaseUrl);
 
-    // Test if image loads
-    const testImg = new Image();
-    testImg.onload = () => {
-      console.log("Supabase image loaded successfully");
-      setBackgroundImage(supabaseUrl);
-    };
-    testImg.onerror = () => {
-      console.log("Supabase image failed to load");
-    };
-    testImg.src = supabaseUrl;
+      const testImg = new Image();
+      testImg.onload = () => {
+        console.log("Supabase image loaded successfully");
+        setBackgroundImage(supabaseUrl);
+      };
+      testImg.onerror = () => {
+        console.log("Supabase image failed to load");
+        // Keep Unsplash if Supabase fails
+      };
+      testImg.src = supabaseUrl;
+    }, 2000);
   }, []);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
