@@ -108,19 +108,37 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   ];
 
   return (
-    <Box sx={{ p: 3 }}>
+    <Box sx={{ p: 3, width: "100%", maxWidth: "100%", overflow: "hidden" }}>
       <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
           mb: 3,
+          flexWrap: "wrap",
+          gap: 2,
         }}
       >
-        <Typography variant="h6" sx={{ fontWeight: 600 }}>
+        <Typography
+          variant="h6"
+          sx={{
+            fontWeight: 600,
+            flex: "1 1 auto",
+            minWidth: 0,
+            wordBreak: "break-word",
+          }}
+        >
           {t("properties.filter.title")}
         </Typography>
-        <Button startIcon={<ClearIcon />} onClick={onClearFilters} size="small">
+        <Button
+          startIcon={<ClearIcon />}
+          onClick={onClearFilters}
+          size="small"
+          sx={{
+            flex: "0 0 auto",
+            whiteSpace: "nowrap",
+          }}
+        >
           {t("properties.filter.clear")}
         </Button>
       </Box>

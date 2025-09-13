@@ -116,9 +116,9 @@ export const CreatePropertyForm: React.FC = () => {
   };
 
   return (
-    <Box sx={{ maxWidth: 800, mx: "auto", p: 3 }}>
-      <Card>
-        <CardContent>
+    <Box sx={{ maxWidth: 800, mx: "auto", p: 3, overflow: "hidden" }}>
+      <Card sx={{ overflow: "hidden" }}>
+        <CardContent sx={{ overflow: "hidden" }}>
           <Typography variant="h4" component="h1" gutterBottom>
             Create New Property
           </Typography>

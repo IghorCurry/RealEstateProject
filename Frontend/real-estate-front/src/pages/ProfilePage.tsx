@@ -213,8 +213,8 @@ export const ProfilePage: React.FC = () => {
     <ProtectedRoute>
       <PageContainer>
         {/* Profile Header */}
-        <Card sx={{ mb: 3 }}>
-          <CardContent>
+        <Card sx={{ mb: 3, overflow: "hidden" }}>
+          <CardContent sx={{ overflow: "hidden" }}>
             <Grid container spacing={3} alignItems="center">
               <Grid item>
                 <Avatar
@@ -232,7 +232,13 @@ export const ProfilePage: React.FC = () => {
                 <Typography
                   variant="h4"
                   component="h1"
-                  sx={{ fontWeight: 600, mb: 1 }}
+                  sx={{
+                    fontWeight: 600,
+                    mb: 1,
+                    wordBreak: "break-word",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
                 >
                   {getUserFullName(user)}
                 </Typography>

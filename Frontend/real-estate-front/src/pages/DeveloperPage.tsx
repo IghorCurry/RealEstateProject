@@ -112,8 +112,8 @@ export const DeveloperPage: React.FC = () => {
   };
 
   return (
-    <Box sx={{ minHeight: "100vh", py: 2 }}>
-      <Container maxWidth="lg">
+    <Box sx={{ minHeight: "100vh", py: 2, overflow: "hidden" }}>
+      <Container maxWidth="lg" sx={{ overflow: "hidden" }}>
         {/* Header */}
         <Box sx={{ mb: 4 }}>
           <SectionHeader

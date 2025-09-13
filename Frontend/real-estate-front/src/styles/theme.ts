@@ -47,58 +47,46 @@ export const theme = createTheme({
       "sans-serif",
     ].join(","),
     h1: {
-      fontFamily: [
-        '"Playfair Display"',
-        '"Times New Roman"',
-        "serif",
-      ].join(","),
+      fontFamily: ['"Playfair Display"', '"Times New Roman"', "serif"].join(
+        ","
+      ),
       fontWeight: 700,
       lineHeight: 1.2,
       letterSpacing: "-0.02em",
     },
     h2: {
-      fontFamily: [
-        '"Playfair Display"',
-        '"Times New Roman"',
-        "serif",
-      ].join(","),
+      fontFamily: ['"Playfair Display"', '"Times New Roman"', "serif"].join(
+        ","
+      ),
       fontWeight: 600,
       lineHeight: 1.3,
       letterSpacing: "-0.01em",
     },
     h3: {
-      fontFamily: [
-        '"Playfair Display"',
-        '"Times New Roman"',
-        "serif",
-      ].join(","),
+      fontFamily: ['"Playfair Display"', '"Times New Roman"', "serif"].join(
+        ","
+      ),
       fontWeight: 600,
       lineHeight: 1.3,
     },
     h4: {
-      fontFamily: [
-        '"Playfair Display"',
-        '"Times New Roman"',
-        "serif",
-      ].join(","),
+      fontFamily: ['"Playfair Display"', '"Times New Roman"', "serif"].join(
+        ","
+      ),
       fontWeight: 600,
       lineHeight: 1.4,
     },
     h5: {
-      fontFamily: [
-        '"Playfair Display"',
-        '"Times New Roman"',
-        "serif",
-      ].join(","),
+      fontFamily: ['"Playfair Display"', '"Times New Roman"', "serif"].join(
+        ","
+      ),
       fontWeight: 600,
       lineHeight: 1.4,
     },
     h6: {
-      fontFamily: [
-        '"Playfair Display"',
-        '"Times New Roman"',
-        "serif",
-      ].join(","),
+      fontFamily: ['"Playfair Display"', '"Times New Roman"', "serif"].join(
+        ","
+      ),
       fontWeight: 600,
       lineHeight: 1.4,
     },
@@ -264,6 +252,20 @@ export const theme = createTheme({
           "& .MuiCircularProgress-circle": {
             strokeLinecap: "round",
           },
+        },
+      },
+    },
+    MuiContainer: {
+      styleOverrides: {
+        root: {
+          overflow: "hidden",
+        },
+      },
+    },
+    MuiGrid: {
+      styleOverrides: {
+        root: {
+          overflow: "hidden",
         },
       },
     },

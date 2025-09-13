@@ -50,6 +50,7 @@ export const NotFoundPage: React.FC = () => {
             textAlign: "center",
             borderRadius: 3,
             background: `linear-gradient(135deg, ${theme.palette.primary.light}15 0%, ${theme.palette.secondary.light}15 100%)`,
+            overflow: "hidden",
           }}
         >
           {/* 404 Number */}

@@ -136,8 +136,8 @@ export const InquiriesPage: React.FC = () => {
   }
 
   return (
-    <Box sx={{ minHeight: "100vh", py: 4 }}>
-      <Container maxWidth="lg">
+    <Box sx={{ minHeight: "100vh", py: 4, overflow: "hidden" }}>
+      <Container maxWidth="lg" sx={{ overflow: "hidden" }}>
         <SectionHeader
           title={isAdmin ? "All Inquiries" : "My Inquiries"}
           subtitle={

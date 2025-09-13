@@ -166,6 +166,7 @@ export const LoginPage: React.FC = () => {
             borderRadius: 2,
             width: "100%",
             maxWidth: 400,
+            overflow: "hidden",
           }}
         >
           {/* Header */}

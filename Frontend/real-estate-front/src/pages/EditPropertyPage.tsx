@@ -101,7 +101,7 @@ export const EditPropertyPage: React.FC = () => {
   }
 
   return (
-    <Box sx={{ maxWidth: 800, mx: "auto", p: 3 }}>
+    <Box sx={{ maxWidth: 800, mx: "auto", p: 3, overflow: "hidden" }}>
       <Breadcrumbs items={breadcrumbItems} />
       <EditPropertyForm property={property} />
     </Box>

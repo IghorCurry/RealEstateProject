@@ -302,9 +302,21 @@ export const PropertiesPage: React.FC = () => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
+              flexWrap: "wrap",
+              gap: 2,
             }}
           >
-            <Typography variant="body1" color="text.secondary">
+            <Typography
+              variant="body1"
+              color="text.secondary"
+              sx={{
+                wordBreak: "break-word",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                minWidth: 0,
+                flex: "1 1 auto",
+              }}
+            >
               {totalCount}{" "}
               {totalCount === 1
                 ? t("properties.count.singular")
@@ -315,7 +327,11 @@ export const PropertiesPage: React.FC = () => {
               <Button
                 variant="text"
                 onClick={handleClearFilters}
-                sx={{ textTransform: "none" }}
+                sx={{
+                  textTransform: "none",
+                  flex: "0 0 auto",
+                  whiteSpace: "nowrap",
+                }}
               >
                 {t("properties.filter.clear")}
               </Button>

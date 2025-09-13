@@ -48,6 +48,11 @@ export const PropertyFormFields: React.FC<PropertyFormFieldsProps> = ({
               fullWidth
               error={!!errors.title}
               helperText={errors.title?.message?.toString()}
+              sx={{
+                "& .MuiInputBase-root": {
+                  overflow: "hidden",
+                },
+              }}
             />
           )}
         />

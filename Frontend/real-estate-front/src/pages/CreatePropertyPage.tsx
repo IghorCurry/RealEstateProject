@@ -8,7 +8,7 @@ export const CreatePropertyPage: React.FC = () => {
   const breadcrumbItems = useBreadcrumbs();
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Container maxWidth="lg" sx={{ py: 4, overflow: "hidden" }}>
       <Breadcrumbs items={breadcrumbItems} />
       <SectionHeader
         title="Create Property"

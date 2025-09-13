@@ -376,6 +376,8 @@ export const PropertyCard = React.memo<PropertyCardProps>(
                 WebkitLineClamp: 2,
                 WebkitBoxOrient: "vertical",
                 overflow: "hidden",
+                wordBreak: "break-word",
+                hyphens: "auto",
               }}
             >
               {property.title}

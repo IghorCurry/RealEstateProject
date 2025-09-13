@@ -54,8 +54,8 @@ export const FAQPage: React.FC = () => {
     };
 
   return (
-    <Box sx={{ minHeight: "100vh", py: 2 }}>
-      <Container maxWidth="md">
+    <Box sx={{ minHeight: "100vh", py: 2, overflow: "hidden" }}>
+      <Container maxWidth="md" sx={{ overflow: "hidden" }}>
         {/* Header */}
         <Box sx={{ mb: 4 }}>
           <Box sx={{ textAlign: "center", mb: 4 }}>

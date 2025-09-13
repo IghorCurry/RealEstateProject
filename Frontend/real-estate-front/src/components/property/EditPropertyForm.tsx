@@ -194,9 +194,9 @@ export const EditPropertyForm: React.FC<EditPropertyFormProps> = ({
   };
 
   return (
-    <Box sx={{ maxWidth: 800, mx: "auto", p: 3 }}>
-      <Card>
-        <CardContent>
+    <Box sx={{ maxWidth: 800, mx: "auto", p: 3, overflow: "hidden" }}>
+      <Card sx={{ overflow: "hidden" }}>
+        <CardContent sx={{ overflow: "hidden" }}>
           <Typography variant="h4" component="h1" gutterBottom>
             {t("property.edit.title")}
           </Typography>

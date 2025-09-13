@@ -238,8 +238,14 @@ export const PropertyDetailPage: React.FC = () => {
     .slice(0, 4);
 
   return (
-    <Box sx={{ minHeight: "100vh", backgroundColor: "background.default" }}>
-      <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        backgroundColor: "background.default",
+        overflow: "hidden",
+      }}
+    >
+      <Container maxWidth="lg" sx={{ py: 4, overflow: "hidden" }}>
         {/* Breadcrumbs */}
         <PropertyBreadcrumbs propertyTitle={property.title} />
 

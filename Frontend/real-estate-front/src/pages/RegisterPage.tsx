@@ -172,6 +172,7 @@ export const RegisterPage: React.FC = () => {
             borderRadius: 2,
             width: "100%",
             maxWidth: 500,
+            overflow: "hidden",
           }}
         >
           {/* Header */}

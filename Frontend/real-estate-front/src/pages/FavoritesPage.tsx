@@ -82,7 +82,7 @@ export const FavoritesPage: React.FC = () => {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Container maxWidth="lg" sx={{ py: 4, overflow: "hidden" }}>
       <Breadcrumbs items={breadcrumbItems} />
 
       <SectionHeader

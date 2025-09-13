@@ -101,6 +101,8 @@ export const ModernHero: React.FC = () => {
         overflow: "hidden",
         display: "flex",
         alignItems: "center",
+        width: "100%",
+        maxWidth: "100vw",
         "&::before": {
           content: '""',
           position: "absolute",

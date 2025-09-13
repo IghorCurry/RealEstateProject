@@ -49,8 +49,8 @@ export const AboutPage: React.FC = () => {
   const { t } = useLanguage();
 
   return (
-    <Box sx={{ minHeight: "100vh", py: 2 }}>
-      <Container maxWidth="lg">
+    <Box sx={{ minHeight: "100vh", py: 2, overflow: "hidden" }}>
+      <Container maxWidth="lg" sx={{ overflow: "hidden" }}>
         {/* Header */}
         <Box sx={{ mb: 4 }}>
           <SectionHeader
