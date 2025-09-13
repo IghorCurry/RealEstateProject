@@ -40,7 +40,6 @@ export const ModernHero: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   useEffect(() => {
-    // Supabase 
     setBackgroundImage(
       "https://euvqeqtcazmsomxkiisi.supabase.co/storage/v1/object/public/real-estate-images/hero-bg.jpg"
     );
