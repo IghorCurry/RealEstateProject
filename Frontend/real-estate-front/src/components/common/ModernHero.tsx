@@ -40,11 +40,23 @@ export const ModernHero: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   useEffect(() => {
-    // Use optimized Unsplash image for mobile (smaller size, lower quality)
-    const optimizedUrl =
-      "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60";
-    console.log("Setting optimized background image for mobile:", optimizedUrl);
-    setBackgroundImage(optimizedUrl);
+    const supabaseUrl =
+      "https://euvqeqtcazmsomxkiisi.supabase.co/storage/v1/object/public/real-estate-images/hero-bg.jpg";
+    console.log("Setting background image to:", supabaseUrl);
+
+    // Force immediate update
+    setBackgroundImage(supabaseUrl);
+
+    // Test if image loads
+    const testImg = new Image();
+    testImg.onload = () => {
+      console.log("Supabase image loaded successfully");
+      setBackgroundImage(supabaseUrl);
+    };
+    testImg.onerror = () => {
+      console.log("Supabase image failed to load");
+    };
+    testImg.src = supabaseUrl;
   }, []);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -96,10 +108,10 @@ export const ModernHero: React.FC = () => {
           left: 0,
           right: 0,
           bottom: 0,
-          background: `url('${backgroundImage}')`,
+          background: `url("${backgroundImage}")`,
           backgroundSize: "cover",
           backgroundPosition: "center",
-          backgroundAttachment: "fixed",
+          backgroundAttachment: isMobile ? "scroll" : "fixed",
           transition: "all 0.3s ease",
         },
         "&::after": {
