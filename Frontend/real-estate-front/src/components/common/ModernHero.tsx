@@ -39,17 +39,38 @@ export const ModernHero: React.FC = () => {
   const isAdmin = user?.role === "Admin";
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  // Use external URL for deployed site, local for development
   useEffect(() => {
-    const isProduction =
-      window.location.hostname !== "localhost" &&
-      window.location.hostname !== "127.0.0.1";
+    const hostname = window.location.hostname;
+    console.log("Current hostname:", hostname);
 
-    if (isProduction) {
-      setBackgroundImage(
-        "https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop"
-      );
+    const isDeployed =
+      hostname.includes("azurestaticapps") ||
+      hostname.includes("netlify") ||
+      hostname.includes("vercel") ||
+      hostname.includes("github.io") ||
+      (hostname !== "localhost" &&
+        hostname !== "127.0.0.1" &&
+        !hostname.includes("192.168"));
+
+    console.log("Is deployed:", isDeployed);
+
+    if (isDeployed) {
+      console.log("Using Pexels image for deployed site");
+      const pexelsUrl =
+        "https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop";
+
+      const testImg = new Image();
+      testImg.onload = () => {
+        console.log("Pexels image loaded successfully");
+        setBackgroundImage(pexelsUrl);
+      };
+      testImg.onerror = () => {
+        console.log("Pexels image failed, using local fallback");
+        setBackgroundImage("/hero-bg.jpg");
+      };
+      testImg.src = pexelsUrl;
     } else {
+      console.log("Using local image for development");
       setBackgroundImage("/hero-bg.jpg");
     }
   }, []);
