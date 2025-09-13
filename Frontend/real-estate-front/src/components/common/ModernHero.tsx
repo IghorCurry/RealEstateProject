@@ -39,22 +39,19 @@ export const ModernHero: React.FC = () => {
   const isAdmin = user?.role === "Admin";
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  // Check if local image is available, fallback to external URL for deployed site
+  // Use external URL for deployed site, local for development
   useEffect(() => {
-    const checkImageAvailability = () => {
-      const img = new Image();
-      img.onload = () => {
-        setBackgroundImage("/hero-bg.jpg");
-      };
-      img.onerror = () => {
-        setBackgroundImage(
-          "https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop"
-        );
-      };
-      img.src = "/hero-bg.jpg";
-    };
+    const isProduction =
+      window.location.hostname !== "localhost" &&
+      window.location.hostname !== "127.0.0.1";
 
-    checkImageAvailability();
+    if (isProduction) {
+      setBackgroundImage(
+        "https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop"
+      );
+    } else {
+      setBackgroundImage("/hero-bg.jpg");
+    }
   }, []);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
