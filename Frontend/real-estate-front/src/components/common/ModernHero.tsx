@@ -43,6 +43,7 @@ export const ModernHero: React.FC = () => {
     const hostname = window.location.hostname;
     console.log("Current hostname:", hostname);
 
+    // Always try Pexels first for deployed sites, with immediate fallback
     const isDeployed =
       hostname.includes("azurestaticapps") ||
       hostname.includes("netlify") ||
@@ -56,19 +57,50 @@ export const ModernHero: React.FC = () => {
 
     if (isDeployed) {
       console.log("Using Pexels image for deployed site");
-      const pexelsUrl =
-        "https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop";
+      const pexelsUrls = [
+        "https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
+        "https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg",
+        "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080&q=80",
+      ];
 
-      const testImg = new Image();
-      testImg.onload = () => {
-        console.log("Pexels image loaded successfully");
-        setBackgroundImage(pexelsUrl);
+      const pexelsUrl = pexelsUrls[0];
+
+      setBackgroundImage(pexelsUrl);
+
+      let currentUrlIndex = 0;
+
+      const tryNextUrl = () => {
+        if (currentUrlIndex < pexelsUrls.length) {
+          const currentUrl = pexelsUrls[currentUrlIndex];
+          console.log(`Trying URL ${currentUrlIndex + 1}:`, currentUrl);
+
+          const testImg = new Image();
+          testImg.crossOrigin = "anonymous";
+
+          testImg.onload = () => {
+            console.log(`URL ${currentUrlIndex + 1} loaded successfully`);
+            setBackgroundImage(currentUrl);
+          };
+
+          testImg.onerror = () => {
+            console.log(`URL ${currentUrlIndex + 1} failed`);
+            currentUrlIndex++;
+            tryNextUrl();
+          };
+
+          testImg.src = currentUrl;
+        } else {
+          console.log("All external URLs failed, using local fallback");
+          setBackgroundImage("/hero-bg.jpg");
+        }
       };
-      testImg.onerror = () => {
-        console.log("Pexels image failed, using local fallback");
+
+      setTimeout(() => {
+        console.log("Timeout reached, using local fallback");
         setBackgroundImage("/hero-bg.jpg");
-      };
-      testImg.src = pexelsUrl;
+      }, 5000); // 5 second timeout
+
+      tryNextUrl();
     } else {
       console.log("Using local image for development");
       setBackgroundImage("/hero-bg.jpg");
