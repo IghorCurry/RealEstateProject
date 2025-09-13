@@ -43,15 +43,64 @@ export const ModernHero: React.FC = () => {
     const hostname = window.location.hostname;
     console.log("Current hostname:", hostname);
 
-    // Use external image for deployed sites, local for development
-    const isDeployed = hostname !== "localhost" && hostname !== "127.0.0.1";
+    // Always try Pexels first for deployed sites, with immediate fallback
+    const isDeployed =
+      hostname.includes("azurestaticapps") ||
+      hostname.includes("netlify") ||
+      hostname.includes("vercel") ||
+      hostname.includes("github.io") ||
+      (hostname !== "localhost" &&
+        hostname !== "127.0.0.1" &&
+        !hostname.includes("192.168"));
+
+    console.log("Is deployed:", isDeployed);
 
     if (isDeployed) {
-      console.log("Using external image for deployed site");
-      // Use a more reliable external image service
-      const externalUrl =
-        "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080&q=80";
-      setBackgroundImage(externalUrl);
+      console.log("Using Pexels image for deployed site");
+      const pexelsUrls = [
+        "https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
+        "https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg",
+        "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080&q=80",
+      ];
+
+      const pexelsUrl = pexelsUrls[0];
+
+      setBackgroundImage(pexelsUrl);
+
+      let currentUrlIndex = 0;
+
+      const tryNextUrl = () => {
+        if (currentUrlIndex < pexelsUrls.length) {
+          const currentUrl = pexelsUrls[currentUrlIndex];
+          console.log(`Trying URL ${currentUrlIndex + 1}:`, currentUrl);
+
+          const testImg = new Image();
+          testImg.crossOrigin = "anonymous";
+
+          testImg.onload = () => {
+            console.log(`URL ${currentUrlIndex + 1} loaded successfully`);
+            setBackgroundImage(currentUrl);
+          };
+
+          testImg.onerror = () => {
+            console.log(`URL ${currentUrlIndex + 1} failed`);
+            currentUrlIndex++;
+            tryNextUrl();
+          };
+
+          testImg.src = currentUrl;
+        } else {
+          console.log("All external URLs failed, using local fallback");
+          setBackgroundImage("/hero-bg.jpg");
+        }
+      };
+
+      setTimeout(() => {
+        console.log("Timeout reached, using local fallback");
+        setBackgroundImage("/hero-bg.jpg");
+      }, 5000); // 5 second timeout
+
+      tryNextUrl();
     } else {
       console.log("Using local image for development");
       setBackgroundImage("/hero-bg.jpg");
@@ -107,7 +156,7 @@ export const ModernHero: React.FC = () => {
           left: 0,
           right: 0,
           bottom: 0,
-          background: `url('${backgroundImage}'), linear-gradient(135deg, #1A365D 0%, #2C5282 50%, #1A365D 100%)`,
+          background: `url('${backgroundImage}')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundAttachment: "fixed",
