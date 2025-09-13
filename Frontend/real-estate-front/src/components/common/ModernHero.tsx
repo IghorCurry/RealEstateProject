@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-// @ts-expect-error - Vite handles image imports
-import heroBgImage from "../../../public/hero-bg.jpg";
 import {
   Box,
   Container,
@@ -42,24 +40,10 @@ export const ModernHero: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   useEffect(() => {
-    console.log("Setting background image to imported hero-bg.jpg");
-
-    // Use imported image first (Vite will handle the path correctly)
-    setBackgroundImage(heroBgImage);
-
-    // Test if imported image loads, with fallback to external if needed
-    const testImg = new Image();
-    testImg.onload = () => {
-      console.log("Imported hero-bg.jpg loaded successfully");
-    };
-    testImg.onerror = () => {
-      console.log("Imported hero-bg.jpg failed, trying external fallback");
-      // Fallback to external image if imported fails
-      setBackgroundImage(
-        "https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop"
-      );
-    };
-    testImg.src = heroBgImage;
+    // Supabase 
+    setBackgroundImage(
+      "https://euvqeqtcazmsomxkiisi.supabase.co/storage/v1/object/public/real-estate-images/hero-bg.jpg"
+    );
   }, []);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
