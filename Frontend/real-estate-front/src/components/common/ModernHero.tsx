@@ -40,9 +40,23 @@ export const ModernHero: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   useEffect(() => {
-    setBackgroundImage(
-      "https://euvqeqtcazmsomxkiisi.supabase.co/storage/v1/object/public/real-estate-images/hero-bg.jpg"
-    );
+    const supabaseUrl =
+      "https://euvqeqtcazmsomxkiisi.supabase.co/storage/v1/object/public/real-estate-images/hero-bg.jpg";
+    console.log("Setting background image to:", supabaseUrl);
+
+    // Force immediate update
+    setBackgroundImage(supabaseUrl);
+
+    // Test if image loads
+    const testImg = new Image();
+    testImg.onload = () => {
+      console.log("Supabase image loaded successfully");
+      setBackgroundImage(supabaseUrl);
+    };
+    testImg.onerror = () => {
+      console.log("Supabase image failed to load");
+    };
+    testImg.src = supabaseUrl;
   }, []);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
