@@ -53,7 +53,7 @@ function AppContent() {
   const isHomePage = location.pathname === ROUTES.HOME;
 
   return (
-    <div className="App">
+    <div className="App" style={{ width: "100%", maxWidth: "100vw", overflowX: "hidden" }}>
       {!isHomePage && <Header />}
       <main>
         <ErrorBoundary>

@@ -103,7 +103,12 @@ export const Header = React.memo(() => {
         borderBottom: `1px solid ${theme.palette.divider}`,
       }}
     >
-      <Toolbar sx={{ px: { xs: 2, md: 4 }, py: 1 }}>
+      <Toolbar sx={{ 
+        px: { xs: 1, md: 4 }, 
+        py: 1,
+        minHeight: { xs: 56, md: 64 },
+        flexWrap: { xs: "wrap", md: "nowrap" },
+      }}>
         {/* Logo */}
         <Fade in={true} timeout={600}>
           <Typography
@@ -114,11 +119,12 @@ export const Header = React.memo(() => {
               fontWeight: 700,
               color: "primary.main",
               cursor: "pointer",
-              fontSize: { xs: "1.25rem", md: "1.5rem" },
+              fontSize: { xs: "1.1rem", md: "1.5rem" },
               "&:hover": {
                 color: "primary.dark",
               },
               transition: "color 0.2s ease",
+              order: { xs: 1, md: 1 },
             }}
             onClick={() => navigate(ROUTES.HOME)}
           >
@@ -130,7 +136,7 @@ export const Header = React.memo(() => {
         <Fade in={true} timeout={800}>
           <Box
             sx={{
-              display: "flex",
+              display: { xs: "none", md: "flex" },
               alignItems: "center",
               gap: 1,
               ml: 4,
@@ -195,8 +201,70 @@ export const Header = React.memo(() => {
           </Box>
         </Fade>
 
+        {/* Mobile Navigation */}
+        <Box
+          sx={{
+            display: { xs: "flex", md: "none" },
+            alignItems: "center",
+            gap: 1,
+            ml: 2,
+            flexGrow: 1,
+            order: { xs: 2, md: 2 },
+          }}
+        >
+          <Button
+            color="inherit"
+            startIcon={<HomeIcon />}
+            onClick={handleHomeClick}
+            sx={{
+              color: isActiveRoute(ROUTES.HOME)
+                ? "primary.main"
+                : "text.primary",
+              fontWeight: isActiveRoute(ROUTES.HOME) ? 600 : 500,
+              fontSize: "0.75rem",
+              px: 1,
+              minWidth: "auto",
+              "&:hover": {
+                backgroundColor: "primary.light",
+                color: "white",
+              },
+            }}
+          >
+            {t("nav.home")}
+          </Button>
+          <Button
+            color="inherit"
+            startIcon={<BusinessIcon />}
+            onClick={handlePropertiesClick}
+            sx={{
+              textTransform: "none",
+              fontWeight: 500,
+              color: isActiveRoute(ROUTES.PROPERTIES)
+                ? "primary.main"
+                : "text.primary",
+              fontSize: "0.75rem",
+              px: 1,
+              minWidth: "auto",
+              transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+              "&:hover": {
+                backgroundColor: "primary.light",
+                color: "white",
+              },
+            }}
+          >
+            {t("nav.properties")}
+          </Button>
+        </Box>
+
         {/* User Menu */}
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+        <Box sx={{ 
+          display: "flex", 
+          alignItems: "center", 
+          gap: { xs: 1, md: 2 },
+          order: { xs: 3, md: 2 },
+          flexGrow: { xs: 1, md: 0 },
+          justifyContent: { xs: "flex-end", md: "flex-start" },
+        }}>
           {isAuthenticated ? (
             <>
               {/* Admin Badge */}
@@ -276,13 +344,15 @@ export const Header = React.memo(() => {
             </>
           ) : (
             <Fade in={true} timeout={1000}>
-              <Box sx={{ display: "flex", gap: 1 }}>
+              <Box sx={{ display: "flex", gap: { xs: 0.5, md: 1 } }}>
                 <Button
                   variant="outlined"
                   onClick={handleLoginClick}
                   sx={{
                     borderRadius: 2,
-                    px: 3,
+                    px: { xs: 2, md: 3 },
+                    fontSize: { xs: "0.75rem", md: "0.875rem" },
+                    minWidth: { xs: "auto", md: "auto" },
                     transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
                     "&:hover": {
                       transform: "translateY(-1px)",
@@ -296,7 +366,9 @@ export const Header = React.memo(() => {
                   onClick={() => navigate(ROUTES.REGISTER)}
                   sx={{
                     borderRadius: 2,
-                    px: 3,
+                    px: { xs: 2, md: 3 },
+                    fontSize: { xs: "0.75rem", md: "0.875rem" },
+                    minWidth: { xs: "auto", md: "auto" },
                     transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
                     "&:hover": {
                       transform: "translateY(-1px)",
