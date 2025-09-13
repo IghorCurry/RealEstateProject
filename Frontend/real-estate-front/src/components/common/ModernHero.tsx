@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+// @ts-expect-error - Vite handles image imports
+import heroBgImage from "../../../public/hero-bg.jpg";
 import {
   Box,
   Container,
@@ -40,71 +42,24 @@ export const ModernHero: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   useEffect(() => {
-    const hostname = window.location.hostname;
-    console.log("Current hostname:", hostname);
+    console.log("Setting background image to imported hero-bg.jpg");
 
-    // Always try Pexels first for deployed sites, with immediate fallback
-    const isDeployed =
-      hostname.includes("azurestaticapps") ||
-      hostname.includes("netlify") ||
-      hostname.includes("vercel") ||
-      hostname.includes("github.io") ||
-      (hostname !== "localhost" &&
-        hostname !== "127.0.0.1" &&
-        !hostname.includes("192.168"));
+    // Use imported image first (Vite will handle the path correctly)
+    setBackgroundImage(heroBgImage);
 
-    console.log("Is deployed:", isDeployed);
-
-    if (isDeployed) {
-      console.log("Using Pexels image for deployed site");
-      const pexelsUrls = [
-        "https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
-        "https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg",
-        "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080&q=80",
-      ];
-
-      const pexelsUrl = pexelsUrls[0];
-
-      setBackgroundImage(pexelsUrl);
-
-      let currentUrlIndex = 0;
-
-      const tryNextUrl = () => {
-        if (currentUrlIndex < pexelsUrls.length) {
-          const currentUrl = pexelsUrls[currentUrlIndex];
-          console.log(`Trying URL ${currentUrlIndex + 1}:`, currentUrl);
-
-          const testImg = new Image();
-          testImg.crossOrigin = "anonymous";
-
-          testImg.onload = () => {
-            console.log(`URL ${currentUrlIndex + 1} loaded successfully`);
-            setBackgroundImage(currentUrl);
-          };
-
-          testImg.onerror = () => {
-            console.log(`URL ${currentUrlIndex + 1} failed`);
-            currentUrlIndex++;
-            tryNextUrl();
-          };
-
-          testImg.src = currentUrl;
-        } else {
-          console.log("All external URLs failed, using local fallback");
-          setBackgroundImage("/hero-bg.jpg");
-        }
-      };
-
-      setTimeout(() => {
-        console.log("Timeout reached, using local fallback");
-        setBackgroundImage("/hero-bg.jpg");
-      }, 5000); // 5 second timeout
-
-      tryNextUrl();
-    } else {
-      console.log("Using local image for development");
-      setBackgroundImage("/hero-bg.jpg");
-    }
+    // Test if imported image loads, with fallback to external if needed
+    const testImg = new Image();
+    testImg.onload = () => {
+      console.log("Imported hero-bg.jpg loaded successfully");
+    };
+    testImg.onerror = () => {
+      console.log("Imported hero-bg.jpg failed, trying external fallback");
+      // Fallback to external image if imported fails
+      setBackgroundImage(
+        "https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop"
+      );
+    };
+    testImg.src = heroBgImage;
   }, []);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
