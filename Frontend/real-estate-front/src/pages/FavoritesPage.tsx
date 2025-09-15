@@ -19,7 +19,8 @@ import type { Property } from "../types/property";
 import { SectionHeader } from "../components/common/SectionHeader";
 import { LoadingState } from "../components/common/LoadingState";
 import { EmptyState } from "../components/common/EmptyState";
-import { Breadcrumbs, useBreadcrumbs } from "../components/common/Breadcrumbs";
+import { Breadcrumbs } from "../components/common/Breadcrumbs";
+import { useBreadcrumbs } from "../hooks/useBreadcrumbs";
 import { ROUTES } from "../utils/constants";
 
 export const FavoritesPage: React.FC = () => {

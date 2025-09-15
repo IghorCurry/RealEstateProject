@@ -99,15 +99,16 @@ export const Header = React.memo(() => {
       elevation={0}
       sx={{
         background: "rgba(255, 255, 255, 0.95)",
-        backdropFilter: "blur(10px)",
+        backdropFilter: "blur(15px)",
         borderBottom: `1px solid ${theme.palette.divider}`,
+        transition: "all 0.3s ease",
       }}
     >
       <Toolbar
         sx={{
-          px: { xs: 1, md: 4 },
-          py: 1,
-          minHeight: { xs: 56, md: 64 },
+          px: { xs: 2, md: 3 },
+          py: { xs: 1.5, md: 2 },
+          minHeight: { xs: 56, md: 64 }, // Зменшена висота
           flexWrap: { xs: "wrap", md: "nowrap" },
           gap: { xs: 1, md: 0 },
         }}
@@ -145,10 +146,16 @@ export const Header = React.memo(() => {
                 ? "primary.main"
                 : "text.primary",
               fontWeight: isActiveRoute(ROUTES.HOME) ? 600 : 500,
-              ml: 4,
+              ml: 3,
+              px: 2,
+              py: 1,
+              borderRadius: 2,
+              transition: "all 0.3s ease",
               "&:hover": {
                 backgroundColor: "primary.light",
                 color: "white",
+                transform: "translateY(-1px)",
+                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
               },
             }}
           >
@@ -157,22 +164,29 @@ export const Header = React.memo(() => {
         </Fade>
 
         {/* Properties Button */}
-        <Fade in={true} timeout={800}>
+        <Fade in={!isActiveRoute(ROUTES.PROPERTIES)} timeout={800}>
           <Button
             color="inherit"
             startIcon={<BusinessIcon />}
             onClick={handlePropertiesClick}
             sx={{
-              display: { xs: "none", md: "flex" },
+              display: isActiveRoute(ROUTES.PROPERTIES)
+                ? "none"
+                : { xs: "none", md: "flex" },
               textTransform: "none",
               fontWeight: 500,
               color: isActiveRoute(ROUTES.PROPERTIES)
                 ? "primary.main"
                 : "text.primary",
-              transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+              px: 2,
+              py: 1,
+              borderRadius: 2,
+              transition: "all 0.3s ease",
               "&:hover": {
                 backgroundColor: "primary.light",
                 color: "white",
+                transform: "translateY(-1px)",
+                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
               },
             }}
           >
@@ -193,10 +207,15 @@ export const Header = React.memo(() => {
               color: isActiveRoute(ROUTES.DEVELOPER)
                 ? "primary.main"
                 : "text.primary",
-              transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+              px: 2,
+              py: 1,
+              borderRadius: 2,
+              transition: "all 0.3s ease",
               "&:hover": {
                 backgroundColor: "primary.light",
                 color: "white",
+                transform: "translateY(-1px)",
+                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
               },
             }}
           >
@@ -237,23 +256,25 @@ export const Header = React.memo(() => {
           >
             <HomeIcon fontSize="small" />
           </IconButton>
-          <IconButton
-            color="inherit"
-            onClick={handlePropertiesClick}
-            sx={{
-              color: isActiveRoute(ROUTES.PROPERTIES)
-                ? "primary.main"
-                : "text.primary",
-              p: 0.5,
-              transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
-              "&:hover": {
-                backgroundColor: "primary.light",
-                color: "white",
-              },
-            }}
-          >
-            <BusinessIcon fontSize="small" />
-          </IconButton>
+          {!isActiveRoute(ROUTES.PROPERTIES) && (
+            <IconButton
+              color="inherit"
+              onClick={handlePropertiesClick}
+              sx={{
+                color: isActiveRoute(ROUTES.PROPERTIES)
+                  ? "primary.main"
+                  : "text.primary",
+                p: 0.5,
+                transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+                "&:hover": {
+                  backgroundColor: "primary.light",
+                  color: "white",
+                },
+              }}
+            >
+              <BusinessIcon fontSize="small" />
+            </IconButton>
+          )}
           <IconButton
             color="inherit"
             onClick={() => navigate(ROUTES.DEVELOPER)}
@@ -318,7 +339,7 @@ export const Header = React.memo(() => {
                 <IconButton
                   onClick={handleProfileMenuOpen}
                   sx={{
-                    p: 0.5,
+                    p: 1,
                     transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
                     "&:hover": {
                       transform: "scale(1.03)",
@@ -332,6 +353,8 @@ export const Header = React.memo(() => {
                         color: "white",
                         fontWeight: 600,
                         fontSize: "0.875rem",
+                        width: 40,
+                        height: 40,
                       }}
                     >
                       {getInitials(user)}
@@ -480,10 +503,12 @@ export const Header = React.memo(() => {
           <HomeIcon sx={{ mr: 2, color: "text.secondary" }} />
           {t("Home")}
         </MenuItem>
-        <MenuItem onClick={handlePropertiesClick}>
-          <SearchIcon sx={{ mr: 2, color: "text.secondary" }} />
-          {t("Properties")}
-        </MenuItem>
+        {!isActiveRoute(ROUTES.PROPERTIES) && (
+          <MenuItem onClick={handlePropertiesClick}>
+            <SearchIcon sx={{ mr: 2, color: "text.secondary" }} />
+            {t("Properties")}
+          </MenuItem>
+        )}
         <MenuItem
           onClick={() => {
             navigate(ROUTES.DEVELOPER);

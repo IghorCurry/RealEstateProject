@@ -2,7 +2,8 @@ import React from "react";
 import { Container } from "@mui/material";
 import { CreatePropertyForm } from "../components/property/CreatePropertyForm";
 import { SectionHeader } from "../components/common/SectionHeader";
-import { Breadcrumbs, useBreadcrumbs } from "../components/common/Breadcrumbs";
+import { Breadcrumbs } from "../components/common/Breadcrumbs";
+import { useBreadcrumbs } from "../hooks/useBreadcrumbs";
 
 export const CreatePropertyPage: React.FC = () => {
   const breadcrumbItems = useBreadcrumbs();

@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Box,
-  Container,
-  Typography,
-  Grid,
-  useTheme,
-  useMediaQuery,
-} from "@mui/material";
+import { Box, Container, Typography, Grid } from "@mui/material";
 import { motion } from "framer-motion";
 
 const features = [
@@ -34,9 +27,6 @@ const features = [
 ];
 
 export const ModernFeatures: React.FC = () => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
   return (
     <Box
       sx={{
@@ -45,7 +35,6 @@ export const ModernFeatures: React.FC = () => {
         py: { xs: 8, md: 12 },
         position: "relative",
         overflow: "hidden",
-        borderTop: "1px solid rgba(0, 0, 0, 0.08)",
         boxShadow: "0 -4px 20px rgba(0, 0, 0, 0.05)",
       }}
     >

@@ -11,6 +11,6 @@ export { ErrorBoundary } from "./ErrorBoundary";
 export { NetworkErrorBoundary } from "./NetworkErrorBoundary";
 export { ApiStatusIndicator } from "./ApiStatusIndicator";
 export { Footer } from "./Footer";
-export { Breadcrumbs, useBreadcrumbs } from "./Breadcrumbs";
+export { Breadcrumbs } from "./Breadcrumbs";
 export { ModernHero } from "./ModernHero";
 export { ModernFeatures } from "./ModernFeatures";

@@ -108,15 +108,25 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   ];
 
   return (
-    <Box sx={{ p: 3, width: "100%", maxWidth: "100%", overflow: "hidden" }}>
+    <Box
+      sx={{
+        p: { xs: 2, md: 3 },
+        width: "100%",
+        maxWidth: "100%",
+        overflow: "visible",
+        backgroundColor: "background.paper",
+        borderRadius: 2,
+        boxShadow: 1,
+      }}
+    >
       <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          mb: 3,
+          mb: { xs: 2, md: 3 },
           flexWrap: "wrap",
-          gap: 2,
+          gap: { xs: 1.5, md: 2 },
         }}
       >
         <Typography
@@ -143,7 +153,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
         </Button>
       </Box>
 
-      <Grid container spacing={3}>
+      <Grid container spacing={{ xs: 2, md: 3 }}>
         {/* Property Type */}
         <Grid item xs={12} sm={6}>
           <FormControl fullWidth size="small">
@@ -152,6 +162,11 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
               value={filters.propertyType || ""}
               label={t("properties.filter.type")}
               onChange={(e) => onFilterChange("propertyType", e.target.value)}
+              sx={{
+                "& .MuiSelect-select": {
+                  py: { xs: 1.2, md: 1 },
+                },
+              }}
             >
               <MenuItem value="">{t("properties.filter.allTypes")}</MenuItem>
               {propertyTypeOptions.map((option) => (
@@ -171,6 +186,11 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
               value={filters.status || ""}
               label={t("properties.filter.status")}
               onChange={(e) => onFilterChange("status", e.target.value)}
+              sx={{
+                "& .MuiSelect-select": {
+                  py: { xs: 1.2, md: 1 },
+                },
+              }}
             >
               <MenuItem value="">{t("properties.filter.allStatuses")}</MenuItem>
               {propertyStatusOptions.map((option) => (
@@ -190,6 +210,11 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
               value={filters.location || ""}
               label={t("properties.filter.location")}
               onChange={(e) => onFilterChange("location", e.target.value)}
+              sx={{
+                "& .MuiSelect-select": {
+                  py: { xs: 1.2, md: 1 },
+                },
+              }}
             >
               <MenuItem value="">
                 {t("properties.filter.allLocations")}
@@ -211,6 +236,11 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
               value={filters.minBedrooms || ""}
               label={t("properties.filter.bedrooms")}
               onChange={(e) => onFilterChange("minBedrooms", e.target.value)}
+              sx={{
+                "& .MuiSelect-select": {
+                  py: { xs: 1.2, md: 1 },
+                },
+              }}
             >
               <MenuItem value="">{t("properties.filter.any")}</MenuItem>
               {[1, 2, 3, 4, 5, 6].map((num) => (
@@ -228,19 +258,39 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
 
         {/* Price Range */}
         <Grid item xs={12}>
-          <Typography variant="subtitle2" sx={{ mb: 2 }}>
+          <Typography variant="subtitle2" sx={{ mb: { xs: 1.5, md: 2 } }}>
             {t("properties.filter.price")} (USD)
           </Typography>
-          <Slider
-            value={priceRange}
-            onChange={onPriceRangeChange}
-            valueLabelDisplay="auto"
-            min={0}
-            max={1000000}
-            step={10000}
-            valueLabelFormat={(value) => `$${value.toLocaleString()}`}
-          />
-          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 1 }}>
+          <Box sx={{ px: { xs: 1, md: 2 } }}>
+            <Slider
+              value={priceRange}
+              onChange={onPriceRangeChange}
+              valueLabelDisplay="auto"
+              min={0}
+              max={1000000}
+              step={10000}
+              valueLabelFormat={(value) => `$${value.toLocaleString()}`}
+              sx={{
+                "& .MuiSlider-thumb": {
+                  width: { xs: 20, md: 24 },
+                  height: { xs: 20, md: 24 },
+                },
+                "& .MuiSlider-track": {
+                  height: { xs: 4, md: 6 },
+                },
+                "& .MuiSlider-rail": {
+                  height: { xs: 4, md: 6 },
+                },
+              }}
+            />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              mt: { xs: 1, md: 1.5 },
+            }}
+          >
             <Typography variant="caption" color="text.secondary">
               ${priceRange[0].toLocaleString()}
             </Typography>
@@ -252,19 +302,39 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
 
         {/* Area Range */}
         <Grid item xs={12}>
-          <Typography variant="subtitle2" sx={{ mb: 2 }}>
+          <Typography variant="subtitle2" sx={{ mb: { xs: 1.5, md: 2 } }}>
             {t("properties.filter.area")} (m²)
           </Typography>
-          <Slider
-            value={areaRange}
-            onChange={onAreaRangeChange}
-            valueLabelDisplay="auto"
-            min={0}
-            max={500}
-            step={10}
-            valueLabelFormat={(value) => `${value}m²`}
-          />
-          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 1 }}>
+          <Box sx={{ px: { xs: 1, md: 2 } }}>
+            <Slider
+              value={areaRange}
+              onChange={onAreaRangeChange}
+              valueLabelDisplay="auto"
+              min={0}
+              max={500}
+              step={10}
+              valueLabelFormat={(value) => `${value}m²`}
+              sx={{
+                "& .MuiSlider-thumb": {
+                  width: { xs: 20, md: 24 },
+                  height: { xs: 20, md: 24 },
+                },
+                "& .MuiSlider-track": {
+                  height: { xs: 4, md: 6 },
+                },
+                "& .MuiSlider-rail": {
+                  height: { xs: 4, md: 6 },
+                },
+              }}
+            />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              mt: { xs: 1, md: 1.5 },
+            }}
+          >
             <Typography variant="caption" color="text.secondary">
               {areaRange[0]}m²
             </Typography>

@@ -410,7 +410,9 @@ export const ProfilePage: React.FC = () => {
               <Grid container spacing={3} sx={{ p: 3 }}>
                 {userProperties.map((property) => (
                   <Grid item xs={12} sm={6} md={4} key={property.id}>
-                    <PropertyCard property={property} showOwnerActions={true} />
+                    <Box sx={{ height: "100%" }}>
+                      <PropertyCard property={property} showOwnerActions={true} />
+                    </Box>
                   </Grid>
                 ))}
               </Grid>
@@ -466,11 +468,13 @@ export const ProfilePage: React.FC = () => {
               <Grid container spacing={3} sx={{ p: 3 }}>
                 {favoritesList.map((property: Property) => (
                   <Grid item xs={12} sm={6} md={4} key={property.id}>
-                    <PropertyCard
-                      property={property}
-                      showOwnerActions={false}
-                      onFavoriteToggle={refetchFavorites}
-                    />
+                    <Box sx={{ height: "100%" }}>
+                      <PropertyCard
+                        property={property}
+                        showOwnerActions={false}
+                        onFavoriteToggle={refetchFavorites}
+                      />
+                    </Box>
                   </Grid>
                 ))}
               </Grid>

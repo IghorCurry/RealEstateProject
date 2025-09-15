@@ -23,6 +23,7 @@ export const usePropertyFilters = ({
     () => ({
       propertyType: filters.propertyType,
       status: filters.status,
+      location: filters.location,
       minPrice: filters.minPrice,
       maxPrice: filters.maxPrice,
       minBedrooms: filters.minBedrooms,
@@ -54,6 +55,11 @@ export const usePropertyFilters = ({
       // Фільтр по статусу
       if (normalizedFilters.status !== undefined) {
         if (property.status !== normalizedFilters.status) return false;
+      }
+
+      // Фільтр по локації
+      if (normalizedFilters.location !== undefined) {
+        if (property.location !== normalizedFilters.location) return false;
       }
 
       // Фільтр по ціні

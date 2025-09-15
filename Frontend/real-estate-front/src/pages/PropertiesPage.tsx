@@ -20,7 +20,8 @@ import { SearchBar } from "../components/common/SearchBar";
 import { LoadingState } from "../components/common/LoadingState";
 import { EmptyState } from "../components/common/EmptyState";
 import { SectionHeader } from "../components/common/SectionHeader";
-import { Breadcrumbs, useBreadcrumbs } from "../components/common/Breadcrumbs";
+import { Breadcrumbs } from "../components/common/Breadcrumbs";
+import { useBreadcrumbs } from "../hooks/useBreadcrumbs";
 import { ROUTES } from "../utils/constants";
 import type { PropertyFilter, Property } from "../types/property";
 
@@ -94,7 +95,7 @@ export const PropertiesPage: React.FC = () => {
   );
 
   const handlePriceRangeChange = useCallback(
-    (event: Event, newValue: number | number[]) => {
+    (_event: Event, newValue: number | number[]) => {
       const [minPrice, maxPrice] = newValue as number[];
       setFilters((prev) => ({
         ...prev,
@@ -106,7 +107,7 @@ export const PropertiesPage: React.FC = () => {
   );
 
   const handleAreaRangeChange = useCallback(
-    (event: Event, newValue: number | number[]) => {
+    (_event: Event, newValue: number | number[]) => {
       const [minSquareMeters, maxSquareMeters] = newValue as number[];
       setFilters((prev) => ({
         ...prev,
@@ -128,9 +129,11 @@ export const PropertiesPage: React.FC = () => {
     async (propertyId: string) => {
       try {
         if (import.meta.env.DEV) {
+          console.log("Deleting property:", propertyId);
         }
         await propertyService.delete(propertyId);
         if (import.meta.env.DEV) {
+          console.log("Property deleted successfully");
         }
         toast.success(t("property.delete.success"));
 
@@ -153,6 +156,7 @@ export const PropertiesPage: React.FC = () => {
         );
 
         if (import.meta.env.DEV) {
+          console.log("Cache updated successfully");
         }
       } catch (error) {
         console.error("Error deleting property:", error);
@@ -162,7 +166,7 @@ export const PropertiesPage: React.FC = () => {
         await refetch();
       }
     },
-    [queryClient, refetch]
+    [queryClient, refetch, t]
   );
 
   const handleRetry = useCallback(() => {
@@ -179,7 +183,7 @@ export const PropertiesPage: React.FC = () => {
 
   if (error) {
     return (
-      <Container maxWidth="lg" sx={{ py: 2 }}>
+      <Container maxWidth="lg" sx={{ py: { xs: 3, md: 4 } }}>
         <Box
           sx={{
             display: "flex",
@@ -221,7 +225,10 @@ export const PropertiesPage: React.FC = () => {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 2 }}>
+    <Container
+      maxWidth="lg"
+      sx={{ py: { xs: 3, md: 4 }, overflow: "visible", pb: { xs: 6, md: 8 } }}
+    >
       <Breadcrumbs items={breadcrumbItems} />
       {/* Header */}
       <SectionHeader
@@ -231,8 +238,8 @@ export const PropertiesPage: React.FC = () => {
       />
 
       {/* Search and Filters */}
-      <Box sx={{ mb: 4 }}>
-        <Grid container spacing={3} alignItems="center">
+      <Box sx={{ mb: { xs: 4, md: 5 } }}>
+        <Grid container spacing={{ xs: 2, md: 3 }} alignItems="center">
           <Grid item xs={12} md={8}>
             <SearchBar
               placeholder={t("properties.search.placeholder")}
@@ -243,8 +250,9 @@ export const PropertiesPage: React.FC = () => {
             <Box
               sx={{
                 display: "flex",
-                gap: 2,
+                gap: { xs: 1.5, md: 2 },
                 justifyContent: { xs: "stretch", md: "flex-end" },
+                mt: { xs: 2, md: 0 },
               }}
             >
               <Button
@@ -254,6 +262,9 @@ export const PropertiesPage: React.FC = () => {
                   borderRadius: 2,
                   flex: { xs: 1, md: "none" },
                   minWidth: { md: 120 },
+                  py: { xs: 1.2, md: 1 },
+                  px: { xs: 2, md: 3 },
+                  overflow: "visible",
                 }}
               >
                 {showFilters ? t("common.hide") : t("common.show")}{" "}
@@ -268,6 +279,9 @@ export const PropertiesPage: React.FC = () => {
                     borderRadius: 2,
                     flex: { xs: 1, md: "none" },
                     minWidth: { md: 140 },
+                    py: { xs: 1.2, md: 1 },
+                    px: { xs: 2, md: 3 },
+                    overflow: "visible",
                   }}
                 >
                   {t("property.create.add")}
@@ -280,7 +294,7 @@ export const PropertiesPage: React.FC = () => {
         {/* Filter Panel */}
         {showFilters && (
           <Fade in={showFilters} timeout={300}>
-            <Box sx={{ mt: 3 }}>
+            <Box sx={{ mt: { xs: 3, md: 4 } }}>
               <FilterPanel
                 filters={filters}
                 onFilterChange={handleFilterChange}
@@ -298,12 +312,13 @@ export const PropertiesPage: React.FC = () => {
         <Fade in={true} timeout={400}>
           <Box
             sx={{
-              mb: 3,
+              mb: { xs: 3, md: 4 },
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
               flexWrap: "wrap",
-              gap: 2,
+              gap: { xs: 1.5, md: 2 },
+              py: { xs: 1, md: 1.5 },
             }}
           >
             <Typography
@@ -356,11 +371,11 @@ export const PropertiesPage: React.FC = () => {
           onAction={isAuthenticated ? handleCreateProperty : handleClearFilters}
         />
       ) : (
-        <Grid container spacing={3}>
+        <Grid container spacing={{ xs: 2, md: 3 }} sx={{ overflow: "visible" }}>
           {properties.map((property, index) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={property.id}>
+            <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={property.id}>
               <Grow in={true} timeout={300 + index * 100}>
-                <Box>
+                <Box sx={{ height: "100%", overflow: "visible" }}>
                   <PropertyCard
                     property={property}
                     onDelete={() => handlePropertyDelete(property.id)}

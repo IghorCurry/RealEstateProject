@@ -4,7 +4,8 @@ import { useParams } from "react-router-dom";
 import { EditPropertyForm } from "../components/property/EditPropertyForm";
 import { useAuth } from "../contexts/AuthContext"; // Замінюємо authService на useAuth
 import { propertyService } from "../services/propertyService";
-import { Breadcrumbs, useBreadcrumbs } from "../components/common/Breadcrumbs";
+import { Breadcrumbs } from "../components/common/Breadcrumbs";
+import { useBreadcrumbs } from "../hooks/useBreadcrumbs";
 import { ROUTES } from "../utils/constants";
 import { toast } from "react-hot-toast";
 import type { Property } from "../types/property";

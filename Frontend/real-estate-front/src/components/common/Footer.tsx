@@ -97,8 +97,8 @@ export const Footer: React.FC = () => {
         },
       }}
     >
-      <Container maxWidth="lg" sx={{ py: 6, position: "relative", zIndex: 1 }}>
-        <Grid container spacing={4}>
+      <Container maxWidth="lg" sx={{ py: 4, position: "relative", zIndex: 1 }}>
+        <Grid container spacing={3}>
           {/* Company Info */}
           <Grid item xs={12} md={4}>
             <Typography

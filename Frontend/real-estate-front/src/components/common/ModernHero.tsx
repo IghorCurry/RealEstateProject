@@ -140,10 +140,12 @@ export const ModernHero: React.FC = () => {
           left: 0,
           right: 0,
           zIndex: 10,
-          p: 3,
+          p: { xs: 3, md: 4 },
+          pt: { xs: 4, md: 6 },
+          pb: { xs: 3, md: 4 },
           background:
-            "linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, transparent 100%)",
-          backdropFilter: "blur(10px)",
+            "linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.1) 50%, transparent 100%)",
+          backdropFilter: "blur(15px)",
         }}
       >
         <Container maxWidth="lg">
@@ -190,13 +192,18 @@ export const ModernHero: React.FC = () => {
                       textTransform: "none",
                       fontWeight: 500,
                       fontSize: "1rem",
+                      px: 3,
+                      py: 1.5,
+                      borderRadius: 2,
                       transition: "all 0.3s ease",
                       textShadow:
                         "0 2px 8px rgba(0, 0, 0, 0.8), 0 1px 4px rgba(0, 0, 0, 0.6)",
                       "&:hover": {
                         color: "rgba(255, 255, 255, 0.9)",
+                        backgroundColor: "rgba(255, 255, 255, 0.1)",
                         textShadow:
                           "0 3px 12px rgba(0, 0, 0, 0.9), 0 1px 6px rgba(0, 0, 0, 0.7)",
+                        transform: "translateY(-1px)",
                       },
                     }}
                   >
@@ -209,13 +216,18 @@ export const ModernHero: React.FC = () => {
                       textTransform: "none",
                       fontWeight: 500,
                       fontSize: "1rem",
+                      px: 3,
+                      py: 1.5,
+                      borderRadius: 2,
                       transition: "all 0.3s ease",
                       textShadow:
                         "0 2px 8px rgba(0, 0, 0, 0.8), 0 1px 4px rgba(0, 0, 0, 0.6)",
                       "&:hover": {
                         color: "rgba(255, 255, 255, 0.9)",
+                        backgroundColor: "rgba(255, 255, 255, 0.1)",
                         textShadow:
                           "0 3px 12px rgba(0, 0, 0, 0.9), 0 1px 6px rgba(0, 0, 0, 0.7)",
+                        transform: "translateY(-1px)",
                       },
                     }}
                   >
@@ -228,13 +240,18 @@ export const ModernHero: React.FC = () => {
                       textTransform: "none",
                       fontWeight: 500,
                       fontSize: "1rem",
+                      px: 3,
+                      py: 1.5,
+                      borderRadius: 2,
                       transition: "all 0.3s ease",
                       textShadow:
                         "0 2px 8px rgba(0, 0, 0, 0.8), 0 1px 4px rgba(0, 0, 0, 0.6)",
                       "&:hover": {
                         color: "rgba(255, 255, 255, 0.9)",
+                        backgroundColor: "rgba(255, 255, 255, 0.1)",
                         textShadow:
                           "0 3px 12px rgba(0, 0, 0, 0.9), 0 1px 6px rgba(0, 0, 0, 0.7)",
+                        transform: "translateY(-1px)",
                       },
                     }}
                   >
@@ -291,7 +308,7 @@ export const ModernHero: React.FC = () => {
                   <IconButton
                     onClick={handleProfileMenuOpen}
                     sx={{
-                      p: 0.5,
+                      p: 1,
                       transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
                       "&:hover": {
                         transform: "scale(1.05)",
@@ -305,8 +322,8 @@ export const ModernHero: React.FC = () => {
                           color: "white",
                           fontWeight: 600,
                           fontSize: "0.875rem",
-                          width: 36,
-                          height: 36,
+                          width: 40,
+                          height: 40,
                           border: "2px solid rgba(255, 255, 255, 0.3)",
                         }}
                       >
@@ -325,8 +342,8 @@ export const ModernHero: React.FC = () => {
                       color: "white",
                       textTransform: "none",
                       fontWeight: 600,
-                      px: { xs: 2, md: 3 },
-                      py: { xs: 0.5, md: 1 },
+                      px: { xs: 3, md: 4 },
+                      py: { xs: 1.2, md: 1.5 },
                       borderRadius: 2,
                       fontSize: { xs: "0.875rem", md: "1rem" },
                       transition: "all 0.3s ease",
@@ -341,7 +358,7 @@ export const ModernHero: React.FC = () => {
                           "0 3px 12px rgba(0, 0, 0, 0.9), 0 1px 6px rgba(0, 0, 0, 0.7)",
                         boxShadow:
                           "0 4px 12px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 255, 255, 0.1)",
-                        transform: "translateY(-1px)",
+                        transform: "translateY(-2px)",
                       },
                     }}
                   >
@@ -355,8 +372,8 @@ export const ModernHero: React.FC = () => {
                       color: "primary.main",
                       textTransform: "none",
                       fontWeight: 700,
-                      px: { xs: 2, md: 3 },
-                      py: { xs: 0.5, md: 1 },
+                      px: { xs: 3, md: 4 },
+                      py: { xs: 1.2, md: 1.5 },
                       borderRadius: 2,
                       fontSize: { xs: "0.875rem", md: "1rem" },
                       transition: "all 0.3s ease",
@@ -386,7 +403,8 @@ export const ModernHero: React.FC = () => {
             display: "flex",
             alignItems: "center",
             minHeight: "100vh",
-            py: { xs: 4, md: 8 },
+            py: { xs: 6, md: 10 }, // Збільшені відступи для плавного переходу
+            pt: { xs: 8, md: 12 }, // Додатковий відступ зверху
           }}
         >
           <Grid container spacing={{ xs: 2, md: 4 }} alignItems="center">

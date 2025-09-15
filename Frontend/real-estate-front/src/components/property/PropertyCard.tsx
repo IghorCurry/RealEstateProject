@@ -140,12 +140,13 @@ export const PropertyCard = React.memo<PropertyCardProps>(
       <Fade in={true} timeout={300}>
         <Card
           sx={{
-            height: "100%",
+            height: "100%", // Використовуємо всю доступну висоту
+            minHeight: isMobile ? 380 : 420, // Адаптивна мінімальна висота
             display: "flex",
             flexDirection: "column",
             cursor: "pointer",
             borderRadius: 3,
-            overflow: "hidden",
+            overflow: "visible",
             boxShadow: isHovered ? theme.shadows[6] : theme.shadows[2],
             transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
             transform: isHovered ? "translateY(-4px)" : "translateY(0)",
@@ -160,7 +161,7 @@ export const PropertyCard = React.memo<PropertyCardProps>(
           <Box sx={{ position: "relative" }}>
             <CardMedia
               component="img"
-              height={isMobile ? 180 : 220}
+              height={isMobile ? 180 : 200}
               image={firstValidImageUrl}
               alt={property.title}
               sx={{
@@ -168,6 +169,11 @@ export const PropertyCard = React.memo<PropertyCardProps>(
                 transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                 transform: isHovered ? "scale(1.02)" : "scale(1)",
                 backgroundColor: "grey.100", // Placeholder background
+                width: "100%",
+                minHeight: isMobile ? 180 : 200,
+                maxHeight: isMobile ? 180 : 200,
+                borderTopLeftRadius: 24,
+                borderTopRightRadius: 24,
               }}
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
@@ -347,7 +353,9 @@ export const PropertyCard = React.memo<PropertyCardProps>(
               flexGrow: 1,
               display: "flex",
               flexDirection: "column",
-              p: 2.5,
+              p: { xs: 2, md: 2.5 },
+              borderBottomLeftRadius: 24, // Заокруглення знизу зліва
+              borderBottomRightRadius: 24, // Заокруглення знизу справа
             }}
           >
             {/* Property Type */}
@@ -357,7 +365,7 @@ export const PropertyCard = React.memo<PropertyCardProps>(
               variant="outlined"
               sx={{
                 alignSelf: "flex-start",
-                mb: 1.5,
+                mb: { xs: 1, md: 1.5 },
                 fontWeight: 500,
                 fontSize: "0.75rem",
               }}
@@ -369,7 +377,7 @@ export const PropertyCard = React.memo<PropertyCardProps>(
               component="h3"
               sx={{
                 fontWeight: 600,
-                mb: 1,
+                mb: { xs: 0.8, md: 1 },
                 lineHeight: 1.3,
                 fontSize: isMobile ? "1rem" : "1.1rem",
                 display: "-webkit-box",
@@ -384,7 +392,13 @@ export const PropertyCard = React.memo<PropertyCardProps>(
             </Typography>
 
             {/* Location */}
-            <Box sx={{ display: "flex", alignItems: "center", mb: 1.5 }}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                mb: { xs: 1, md: 1.5 },
+              }}
+            >
               <LocationIcon
                 sx={{
                   fontSize: 16,
@@ -409,8 +423,8 @@ export const PropertyCard = React.memo<PropertyCardProps>(
               sx={{
                 display: "flex",
                 alignItems: "center",
-                gap: 2,
-                mb: 2,
+                gap: { xs: 1.5, md: 2 },
+                mb: { xs: 1.5, md: 2 },
                 flexWrap: "wrap",
               }}
             >
@@ -468,7 +482,8 @@ export const PropertyCard = React.memo<PropertyCardProps>(
                   borderRadius: 2,
                   textTransform: "none",
                   fontWeight: 600,
-                  px: 2,
+                  px: { xs: 1.5, md: 2 },
+                  py: { xs: 0.8, md: 1 },
                   transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
                   "&:hover": {
                     transform: "translateY(-1px)",

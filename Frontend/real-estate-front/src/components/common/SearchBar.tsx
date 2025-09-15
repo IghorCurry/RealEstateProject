@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Box,
   TextField,
   InputAdornment,
   IconButton,
   Paper,
-} from '@mui/material';
-import { Search as SearchIcon, Clear as ClearIcon } from '@mui/icons-material';
+} from "@mui/material";
+import { Search as SearchIcon, Clear as ClearIcon } from "@mui/icons-material";
 
 interface SearchBarProps {
   placeholder?: string;
@@ -16,9 +16,9 @@ interface SearchBarProps {
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({
-  placeholder = 'Search properties...',
+  placeholder = "Search properties...",
   onSearch,
-  initialValue = '',
+  initialValue = "",
   fullWidth = true,
 }) => {
   const [searchTerm, setSearchTerm] = useState(initialValue);
@@ -28,12 +28,12 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   const handleClear = () => {
-    setSearchTerm('');
-    onSearch('');
+    setSearchTerm("");
+    onSearch("");
   };
 
   const handleKeyPress = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       handleSearch();
     }
   };
@@ -42,21 +42,32 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     <Paper
       elevation={2}
       sx={{
-        p: 2,
-        width: fullWidth ? '100%' : 'auto',
+        p: { xs: 1.5, md: 2 },
+        width: fullWidth ? "100%" : "auto",
+        borderRadius: 2,
+        overflow: "visible",
       }}
     >
-      <Box sx={{ display: 'flex', gap: 1 }}>
+      <Box sx={{ display: "flex", gap: { xs: 0.5, md: 1 } }}>
         <TextField
           fullWidth
           placeholder={placeholder}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           onKeyPress={handleKeyPress}
+          size="small"
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              py: { xs: 1.2, md: 1 },
+            },
+          }}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <SearchIcon color="action" />
+                <SearchIcon
+                  color="action"
+                  sx={{ fontSize: { xs: 20, md: 24 } }}
+                />
               </InputAdornment>
             ),
             endAdornment: searchTerm && (
@@ -65,6 +76,12 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                   size="small"
                   onClick={handleClear}
                   edge="end"
+                  sx={{
+                    p: { xs: 0.5, md: 1 },
+                    "& .MuiSvgIcon-root": {
+                      fontSize: { xs: 18, md: 20 },
+                    },
+                  }}
                 >
                   <ClearIcon />
                 </IconButton>
@@ -75,4 +92,4 @@ export const SearchBar: React.FC<SearchBarProps> = ({
       </Box>
     </Paper>
   );
-}; 
+};

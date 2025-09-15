@@ -62,7 +62,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
             mb: 3,
           },
           container: {
-            py: isMobile ? 4 : 6,
+            py: isMobile ? 3 : 4,
             textAlign: align,
           },
         };

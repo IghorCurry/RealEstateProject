@@ -258,14 +258,14 @@ export const theme = createTheme({
     MuiContainer: {
       styleOverrides: {
         root: {
-          overflow: "hidden",
+          overflow: "visible",
         },
       },
     },
     MuiGrid: {
       styleOverrides: {
         root: {
-          overflow: "hidden",
+          overflow: "visible",
         },
       },
     },
