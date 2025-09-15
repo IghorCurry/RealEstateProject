@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Grid,
   TextField,
@@ -9,9 +9,14 @@ import {
   FormHelperText,
   Chip,
   Box,
+  Alert,
+  IconButton,
+  InputAdornment,
 } from "@mui/material";
+import { Add as AddIcon, Close as CloseIcon } from "@mui/icons-material";
 import { Controller, useFormContext } from "react-hook-form";
 import { useLanguage } from "../../contexts/LanguageContext";
+import { featureValidationSchema } from "../../utils/validationSchemas";
 
 interface PropertyFormFieldsProps {
   features: string[];
@@ -33,6 +38,39 @@ export const PropertyFormFields: React.FC<PropertyFormFieldsProps> = ({
     control,
     formState: { errors },
   } = useFormContext();
+
+  const [featureError, setFeatureError] = useState<string>("");
+
+  // Функція для валідації та додавання feature
+  const handleAddFeature = async () => {
+    try {
+      setFeatureError("");
+
+      // Валідуємо нову feature
+      await featureValidationSchema.validate({ feature: newFeature });
+
+      // Перевіряємо на дублікати
+      const normalizedNewFeature = newFeature.toLowerCase().trim();
+      const isDuplicate = features.some(
+        (feature) => feature.toLowerCase().trim() === normalizedNewFeature
+      );
+
+      if (isDuplicate) {
+        setFeatureError("This feature already exists");
+        return;
+      }
+
+      // Перевіряємо максимальну кількість features
+      if (features.length >= 20) {
+        setFeatureError("Cannot have more than 20 features");
+        return;
+      }
+
+      onAddFeature();
+    } catch (error: any) {
+      setFeatureError(error.message || "Invalid feature");
+    }
+  };
 
   return (
     <Grid container spacing={3}>
@@ -236,22 +274,43 @@ export const PropertyFormFields: React.FC<PropertyFormFieldsProps> = ({
 
       {/* Features */}
       <Grid item xs={12}>
-        <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
+        <Box sx={{ display: "flex", gap: 1, mb: 2, alignItems: "flex-start" }}>
           <TextField
             value={newFeature}
-            onChange={(e) => onNewFeatureChange(e.target.value)}
+            onChange={(e) => {
+              onNewFeatureChange(e.target.value);
+              setFeatureError(""); // Очищаємо помилку при зміні
+            }}
             placeholder="Add a feature (e.g., Pool, Garage)"
             size="small"
             sx={{ flexGrow: 1 }}
+            error={!!featureError}
+            helperText={featureError}
             onKeyPress={(e) => {
               if (e.key === "Enter") {
                 e.preventDefault();
-                onAddFeature();
+                handleAddFeature();
               }
+            }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={handleAddFeature}
+                    disabled={!newFeature.trim() || features.length >= 20}
+                    size="small"
+                    color="primary"
+                  >
+                    <AddIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
             }}
           />
         </Box>
-        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+
+        {/* Features Display */}
+        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 2 }}>
           {features.map((feature) => (
             <Chip
               key={feature}
@@ -259,8 +318,27 @@ export const PropertyFormFields: React.FC<PropertyFormFieldsProps> = ({
               onDelete={() => onRemoveFeature(feature)}
               color="primary"
               variant="outlined"
+              deleteIcon={<CloseIcon />}
             />
           ))}
+        </Box>
+
+        {/* Features Info */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Alert severity="info" sx={{ fontSize: "0.875rem", py: 0.5 }}>
+            Features: {features.length}/20
+          </Alert>
+          {features.length === 0 && (
+            <Alert severity="warning" sx={{ fontSize: "0.875rem", py: 0.5 }}>
+              At least one feature is recommended
+            </Alert>
+          )}
         </Box>
       </Grid>
     </Grid>

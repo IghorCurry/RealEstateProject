@@ -66,6 +66,13 @@ export const CreatePropertyForm: React.FC = () => {
   const onSubmit = async (data: PropertyFormData) => {
     setIsSubmitting(true);
     try {
+      // Валідація зображень
+      if (images.length === 0) {
+        toast.error("At least one image is required");
+        setIsSubmitting(false);
+        return;
+      }
+
       // Extract files from images
       const files = images
         .filter(
@@ -73,6 +80,12 @@ export const CreatePropertyForm: React.FC = () => {
             "file" in img && img.file !== undefined
         )
         .map((img) => img.file);
+
+      if (files.length === 0) {
+        toast.error("Please upload at least one image file");
+        setIsSubmitting(false);
+        return;
+      }
 
       await propertyService.create({
         title: data.title,
@@ -86,7 +99,7 @@ export const CreatePropertyForm: React.FC = () => {
         bathrooms: data.bathrooms,
         squareMeters: data.squareMeters,
         features: features,
-        images: files.length > 0 ? files : undefined,
+        images: files,
       });
 
       // Правильне оновлення кешу React Query - використовуємо refetchQueries
@@ -125,7 +138,7 @@ export const CreatePropertyForm: React.FC = () => {
 
           <Alert severity="info" sx={{ mb: 3 }}>
             Fill in the details below to create a new property listing. All
-            fields are required.
+            fields are required. Make sure to upload at least one image.
           </Alert>
 
           <FormProvider {...methods}>
@@ -162,7 +175,7 @@ export const CreatePropertyForm: React.FC = () => {
                   <Button
                     type="submit"
                     variant="contained"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || images.length === 0}
                     startIcon={
                       isSubmitting ? <CircularProgress size={20} /> : null
                     }

@@ -28,7 +28,17 @@ export const FavoriteCount: React.FC<FavoriteCountProps> = () => {
   if (!isAuthenticated) {
     return (
       <Tooltip title="Sign in to view favorites">
-        <IconButton onClick={handleClick} color="inherit">
+        <IconButton 
+          onClick={handleClick} 
+          color="inherit"
+          sx={{
+            color: "text.primary",
+            "&:hover": {
+              backgroundColor: "primary.light",
+              color: "white",
+            },
+          }}
+        >
           <FavoriteIcon />
         </IconButton>
       </Tooltip>
