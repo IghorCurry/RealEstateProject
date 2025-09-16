@@ -32,6 +32,9 @@ import { FavoriteCount } from "./FavoriteCount";
 export const ModernHero: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const prefersReducedMotion = useMediaQuery(
+    "(prefers-reduced-motion: reduce)"
+  );
   const [backgroundImage, setBackgroundImage] = useState("/hero-bg.jpg");
   const navigate = useNavigate();
   const { user, isAuthenticated, logout } = useAuth();
@@ -42,21 +45,15 @@ export const ModernHero: React.FC = () => {
   useEffect(() => {
     const supabaseUrl =
       "https://euvqeqtcazmsomxkiisi.supabase.co/storage/v1/object/public/real-estate-images/hero-bg.jpg";
-    console.log("Setting background image to:", supabaseUrl);
 
-    // Force immediate update
-    setBackgroundImage(supabaseUrl);
+    const preloadImage = () => {
+      const img = new Image();
+      img.onload = () => setBackgroundImage(supabaseUrl);
+      img.onerror = () => setBackgroundImage("/hero-bg.jpg");
+      img.src = supabaseUrl;
+    };
 
-    // Test if image loads
-    const testImg = new Image();
-    testImg.onload = () => {
-      console.log("Supabase image loaded successfully");
-      setBackgroundImage(supabaseUrl);
-    };
-    testImg.onerror = () => {
-      console.log("Supabase image failed to load");
-    };
-    testImg.src = supabaseUrl;
+    preloadImage();
   }, []);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -92,6 +89,24 @@ export const ModernHero: React.FC = () => {
     handleMenuClose();
     navigate(ROUTES.INQUIRIES);
   };
+
+  const getNavButtonStyles = () => ({
+    color: "white",
+    textTransform: "none",
+    fontWeight: 500,
+    fontSize: "1rem",
+    px: 3,
+    py: 1.5,
+    borderRadius: 2,
+    transition: "all 0.3s ease",
+    textShadow: "0 2px 8px rgba(0, 0, 0, 0.8), 0 1px 4px rgba(0, 0, 0, 0.6)",
+    "&:hover": {
+      color: "rgba(255, 255, 255, 0.9)",
+      backgroundColor: "rgba(255, 255, 255, 0.1)",
+      textShadow: "0 3px 12px rgba(0, 0, 0, 0.9), 0 1px 6px rgba(0, 0, 0, 0.7)",
+      transform: "translateY(-1px)",
+    },
+  });
 
   return (
     <Box
@@ -132,7 +147,6 @@ export const ModernHero: React.FC = () => {
         },
       }}
     >
-      {/* Navigation */}
       <Box
         sx={{
           position: "absolute",
@@ -156,11 +170,12 @@ export const ModernHero: React.FC = () => {
               alignItems: "center",
             }}
           >
-            {/* Logo */}
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
+              initial={prefersReducedMotion ? false : { opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={
+                prefersReducedMotion ? { duration: 0 } : { duration: 0.8 }
+              }
             >
               <Typography
                 variant="h4"
@@ -177,83 +192,32 @@ export const ModernHero: React.FC = () => {
               </Typography>
             </motion.div>
 
-            {/* Navigation Links */}
             {!isMobile && (
               <motion.div
-                initial={{ opacity: 0, y: -20 }}
+                initial={prefersReducedMotion ? false : { opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
+                transition={
+                  prefersReducedMotion
+                    ? { duration: 0 }
+                    : { duration: 0.8, delay: 0.2 }
+                }
               >
                 <Box sx={{ display: "flex", gap: 4 }}>
                   <Button
                     onClick={() => navigate(ROUTES.PROPERTIES)}
-                    sx={{
-                      color: "white",
-                      textTransform: "none",
-                      fontWeight: 500,
-                      fontSize: "1rem",
-                      px: 3,
-                      py: 1.5,
-                      borderRadius: 2,
-                      transition: "all 0.3s ease",
-                      textShadow:
-                        "0 2px 8px rgba(0, 0, 0, 0.8), 0 1px 4px rgba(0, 0, 0, 0.6)",
-                      "&:hover": {
-                        color: "rgba(255, 255, 255, 0.9)",
-                        backgroundColor: "rgba(255, 255, 255, 0.1)",
-                        textShadow:
-                          "0 3px 12px rgba(0, 0, 0, 0.9), 0 1px 6px rgba(0, 0, 0, 0.7)",
-                        transform: "translateY(-1px)",
-                      },
-                    }}
+                    sx={getNavButtonStyles()}
                   >
-                    Properties
+                    {t("home.hero.properties")}
                   </Button>
                   <Button
                     onClick={() => navigate(ROUTES.ABOUT)}
-                    sx={{
-                      color: "white",
-                      textTransform: "none",
-                      fontWeight: 500,
-                      fontSize: "1rem",
-                      px: 3,
-                      py: 1.5,
-                      borderRadius: 2,
-                      transition: "all 0.3s ease",
-                      textShadow:
-                        "0 2px 8px rgba(0, 0, 0, 0.8), 0 1px 4px rgba(0, 0, 0, 0.6)",
-                      "&:hover": {
-                        color: "rgba(255, 255, 255, 0.9)",
-                        backgroundColor: "rgba(255, 255, 255, 0.1)",
-                        textShadow:
-                          "0 3px 12px rgba(0, 0, 0, 0.9), 0 1px 6px rgba(0, 0, 0, 0.7)",
-                        transform: "translateY(-1px)",
-                      },
-                    }}
+                    sx={getNavButtonStyles()}
                   >
-                    About
+                    {t("home.hero.about")}
                   </Button>
                   <Button
                     onClick={() => navigate(ROUTES.DEVELOPER)}
-                    sx={{
-                      color: "white",
-                      textTransform: "none",
-                      fontWeight: 500,
-                      fontSize: "1rem",
-                      px: 3,
-                      py: 1.5,
-                      borderRadius: 2,
-                      transition: "all 0.3s ease",
-                      textShadow:
-                        "0 2px 8px rgba(0, 0, 0, 0.8), 0 1px 4px rgba(0, 0, 0, 0.6)",
-                      "&:hover": {
-                        color: "rgba(255, 255, 255, 0.9)",
-                        backgroundColor: "rgba(255, 255, 255, 0.1)",
-                        textShadow:
-                          "0 3px 12px rgba(0, 0, 0, 0.9), 0 1px 6px rgba(0, 0, 0, 0.7)",
-                        transform: "translateY(-1px)",
-                      },
-                    }}
+                    sx={getNavButtonStyles()}
                   >
                     {t("nav.developer")}
                   </Button>
@@ -261,15 +225,17 @@ export const ModernHero: React.FC = () => {
               </motion.div>
             )}
 
-            {/* User Profile or Login/Register Buttons */}
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
+              initial={prefersReducedMotion ? false : { opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
+              transition={
+                prefersReducedMotion
+                  ? { duration: 0 }
+                  : { duration: 0.8, delay: 0.4 }
+              }
             >
               {isAuthenticated ? (
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  {/* Admin Badge */}
                   {isAdmin && (
                     <Chip
                       label={t("Admin")}
@@ -284,10 +250,8 @@ export const ModernHero: React.FC = () => {
                     />
                   )}
 
-                  {/* Favorite Count */}
                   <FavoriteCount />
 
-                  {/* User Name */}
                   {user && (
                     <Typography
                       variant="body2"
@@ -304,7 +268,6 @@ export const ModernHero: React.FC = () => {
                     </Typography>
                   )}
 
-                  {/* Profile Avatar */}
                   <IconButton
                     onClick={handleProfileMenuOpen}
                     sx={{
@@ -333,7 +296,14 @@ export const ModernHero: React.FC = () => {
                   </IconButton>
                 </Box>
               ) : (
-                <Box sx={{ display: "flex", gap: 1 }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: 1,
+                    flexDirection: { xs: "column", sm: "row" },
+                    alignItems: { xs: "stretch", sm: "center" },
+                  }}
+                >
                   <Button
                     variant="outlined"
                     onClick={() => navigate(ROUTES.LOGIN)}
@@ -350,6 +320,7 @@ export const ModernHero: React.FC = () => {
                       textShadow:
                         "0 2px 8px rgba(0, 0, 0, 0.8), 0 1px 4px rgba(0, 0, 0, 0.6)",
                       boxShadow: "0 2px 8px rgba(0, 0, 0, 0.3)",
+                      width: { xs: "100%", sm: "auto" },
                       "&:hover": {
                         borderColor: "white",
                         background:
@@ -378,6 +349,7 @@ export const ModernHero: React.FC = () => {
                       fontSize: { xs: "0.875rem", md: "1rem" },
                       transition: "all 0.3s ease",
                       boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+                      width: { xs: "100%", sm: "auto" },
                       "&:hover": {
                         background:
                           "linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.9) 100%)",
@@ -396,24 +368,26 @@ export const ModernHero: React.FC = () => {
         </Container>
       </Box>
 
-      {/* Main Content */}
       <Container maxWidth="lg" sx={{ position: "relative", zIndex: 5 }}>
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
             minHeight: "100vh",
-            py: { xs: 6, md: 10 }, // Збільшені відступи для плавного переходу
-            pt: { xs: 8, md: 12 }, // Додатковий відступ зверху
+            py: { xs: 6, md: 10 },
+            pt: { xs: 8, md: 12 },
           }}
         >
           <Grid container spacing={{ xs: 2, md: 4 }} alignItems="center">
-            {/* Left Content */}
             <Grid item xs={12} md={8}>
               <motion.div
-                initial={{ opacity: 0, x: -50 }}
+                initial={prefersReducedMotion ? false : { opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 1, delay: 0.6 }}
+                transition={
+                  prefersReducedMotion
+                    ? { duration: 0 }
+                    : { duration: 1, delay: 0.6 }
+                }
               >
                 <Typography
                   variant="overline"
@@ -427,14 +401,17 @@ export const ModernHero: React.FC = () => {
                     textShadow:
                       "0 2px 8px rgba(0, 0, 0, 0.8), 0 1px 4px rgba(0, 0, 0, 0.6)",
                   }}
-                >
-                  REAL ESTATE
-                </Typography>
+                ></Typography>
 
                 <Typography
                   variant="h1"
                   sx={{
-                    fontSize: { xs: "2.5rem", md: "5rem", lg: "6rem" },
+                    fontSize: {
+                      xs: "2.5rem",
+                      sm: "3.5rem",
+                      md: "5rem",
+                      lg: "6rem",
+                    },
                     fontWeight: 700,
                     color: "white",
                     fontFamily: '"Playfair Display", serif',
@@ -445,9 +422,7 @@ export const ModernHero: React.FC = () => {
                       "0 5px 25px rgba(0, 0, 0, 0.9), 0 3px 15px rgba(0, 0, 0, 0.7), 0 1px 5px rgba(0, 0, 0, 0.5)",
                   }}
                 >
-                  New Way Of
-                  <br />
-                  Living
+                  {t("home.hero.title")}
                 </Typography>
 
                 <Typography
@@ -458,15 +433,14 @@ export const ModernHero: React.FC = () => {
                     lineHeight: 1.6,
                     mb: { xs: 4, md: 4 },
                     maxWidth: { xs: 350, md: 500 },
-                    fontSize: { xs: "1.1rem", md: "1.5rem" },
+                    fontSize: { xs: "1.1rem", sm: "1.3rem", md: "1.5rem" },
                     textShadow:
                       "0 3px 15px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.6), 0 1px 3px rgba(0, 0, 0, 0.4)",
                   }}
                 >
-                  Change the way you live life, closer to nature and luxury.
+                  {t("home.hero.subtitle")}
                 </Typography>
 
-                {/* Action Buttons */}
                 <Box
                   sx={{
                     display: "flex",
@@ -477,8 +451,8 @@ export const ModernHero: React.FC = () => {
                   }}
                 >
                   <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                    whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
+                    whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
                   >
                     <Button
                       variant="contained"
@@ -505,13 +479,13 @@ export const ModernHero: React.FC = () => {
                         },
                       }}
                     >
-                      Browse Properties
+                      {t("home.hero.browse")}
                     </Button>
                   </motion.div>
 
                   <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                    whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
+                    whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
                   >
                     <Button
                       variant="outlined"
@@ -541,7 +515,9 @@ export const ModernHero: React.FC = () => {
                         },
                       }}
                     >
-                      {isAuthenticated ? "List Property" : "Get Started"}
+                      {isAuthenticated
+                        ? t("home.hero.list")
+                        : t("home.hero.getStarted")}
                     </Button>
                   </motion.div>
                 </Box>
@@ -551,11 +527,12 @@ export const ModernHero: React.FC = () => {
         </Box>
       </Container>
 
-      {/* Side Text */}
       <motion.div
-        initial={{ opacity: 0, x: 50 }}
+        initial={prefersReducedMotion ? false : { opacity: 0, x: 50 }}
         animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 1, delay: 1 }}
+        transition={
+          prefersReducedMotion ? { duration: 0 } : { duration: 1, delay: 1 }
+        }
         style={{
           position: "absolute",
           right: 30,
@@ -576,11 +553,10 @@ export const ModernHero: React.FC = () => {
               "0 2px 8px rgba(0, 0, 0, 0.8), 0 1px 4px rgba(0, 0, 0, 0.6)",
           }}
         >
-          Luxury Real Estate From Ukraine
+          {t("home.hero.sideText")}
         </Typography>
       </motion.div>
 
-      {/* Profile Menu */}
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}

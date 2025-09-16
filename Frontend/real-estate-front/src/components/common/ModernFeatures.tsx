@@ -1,32 +1,36 @@
 import React from "react";
-import { Box, Container, Typography, Grid } from "@mui/material";
+import { Box, Container, Typography, Grid, useMediaQuery } from "@mui/material";
 import { motion } from "framer-motion";
+import { useLanguage } from "../../contexts/LanguageContext";
 
-const features = [
+const getFeatures = (t: (key: string) => string) => [
   {
     number: "01",
-    title: "PREMIUM PROPERTIES",
-    subtitle: "Luxury Real Estate",
-    description:
-      "Discover exclusive properties with stunning architecture, premium locations, and world-class amenities for the discerning buyer.",
+    title: t("home.features.premium.title"),
+    subtitle: t("home.features.premium.subtitle"),
+    description: t("home.features.premium.desc"),
   },
   {
     number: "02",
-    title: "EXPERT CONSULTATION",
-    subtitle: "Professional Guidance",
-    description:
-      "Get personalized advice from our experienced real estate professionals to find the perfect property that matches your lifestyle and investment goals.",
+    title: t("home.features.expert.title"),
+    subtitle: t("home.features.expert.subtitle"),
+    description: t("home.features.expert.desc"),
   },
   {
     number: "03",
-    title: "SEAMLESS TRANSACTION",
-    subtitle: "Complete Service",
-    description:
-      "From property search to closing, we handle every detail of your real estate transaction with transparency, efficiency, and peace of mind.",
+    title: t("home.features.seamless.title"),
+    subtitle: t("home.features.seamless.subtitle"),
+    description: t("home.features.seamless.desc"),
   },
 ];
 
 export const ModernFeatures: React.FC = () => {
+  const prefersReducedMotion = useMediaQuery(
+    "(prefers-reduced-motion: reduce)"
+  );
+  const { t } = useLanguage();
+  const features = getFeatures(t);
+  
   return (
     <Box
       sx={{
@@ -38,7 +42,6 @@ export const ModernFeatures: React.FC = () => {
         boxShadow: "0 -4px 20px rgba(0, 0, 0, 0.05)",
       }}
     >
-      {/* Background Pattern */}
       <Box
         sx={{
           position: "absolute",
@@ -60,10 +63,14 @@ export const ModernFeatures: React.FC = () => {
           {features.map((feature, index) => (
             <Grid item xs={12} md={4} key={index}>
               <motion.div
-                initial={{ opacity: 0, y: 50 }}
+                initial={prefersReducedMotion ? false : { opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: index * 0.2 }}
+                transition={
+                  prefersReducedMotion
+                    ? { duration: 0 }
+                    : { duration: 0.8, delay: index * 0.2 }
+                }
               >
                 <Box
                   sx={{
@@ -82,7 +89,6 @@ export const ModernFeatures: React.FC = () => {
                     },
                   }}
                 >
-                  {/* Number */}
                   <Typography
                     variant="h1"
                     sx={{
@@ -97,14 +103,13 @@ export const ModernFeatures: React.FC = () => {
                     {feature.number}
                   </Typography>
 
-                  {/* Title */}
                   <Typography
                     variant="h4"
                     sx={{
                       fontWeight: 600,
                       color: "primary.main",
                       mb: 1,
-                      fontSize: { xs: "1.5rem", md: "2rem" },
+                      fontSize: { xs: "1.5rem", sm: "1.75rem", md: "2rem" },
                       fontFamily: '"Inter", sans-serif',
                       letterSpacing: "0.05em",
                     }}
@@ -112,21 +117,19 @@ export const ModernFeatures: React.FC = () => {
                     {feature.title}
                   </Typography>
 
-                  {/* Subtitle */}
                   <Typography
                     variant="h6"
                     sx={{
                       fontWeight: 700,
                       color: "text.primary",
                       mb: 2,
-                      fontSize: { xs: "1.1rem", md: "1.25rem" },
+                      fontSize: { xs: "1.1rem", sm: "1.2rem", md: "1.25rem" },
                       fontFamily: '"Playfair Display", serif',
                     }}
                   >
                     {feature.subtitle}
                   </Typography>
 
-                  {/* Description */}
                   <Typography
                     variant="body1"
                     sx={{
@@ -139,7 +142,6 @@ export const ModernFeatures: React.FC = () => {
                     {feature.description}
                   </Typography>
 
-                  {/* Hover Effect Line */}
                   <motion.div
                     initial={{ width: 0 }}
                     whileHover={{ width: "100%" }}
@@ -159,12 +161,15 @@ export const ModernFeatures: React.FC = () => {
           ))}
         </Grid>
 
-        {/* Bottom CTA */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={prefersReducedMotion ? false : { opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.6 }}
+          transition={
+            prefersReducedMotion
+              ? { duration: 0 }
+              : { duration: 0.8, delay: 0.6 }
+          }
         >
           <Box
             sx={{
@@ -195,7 +200,7 @@ export const ModernFeatures: React.FC = () => {
                 fontFamily: '"Playfair Display", serif',
               }}
             >
-              Ready to Start Your Real Estate Journey?
+              {t("home.features.cta.title")}
             </Typography>
             <Typography
               variant="body1"
@@ -206,8 +211,7 @@ export const ModernFeatures: React.FC = () => {
                 lineHeight: 1.6,
               }}
             >
-              Browse our exclusive collection of premium properties and let our
-              experts guide you to your perfect investment or dream home.
+              {t("home.features.cta.desc")}
             </Typography>
           </Box>
         </motion.div>
