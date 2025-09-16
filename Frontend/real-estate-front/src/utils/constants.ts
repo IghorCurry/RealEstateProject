@@ -105,7 +105,7 @@ export const INQUIRY_STATUSES = {
 export const API_CONFIG = {
   TIMEOUT: 10000, // 10 seconds
   MAX_FILE_SIZE: 10 * 1024 * 1024, // 10MB
-  MAX_FILES_PER_PROPERTY: 20,
+  MAX_FILES_PER_PROPERTY: 10,
   SUPPORTED_IMAGE_TYPES: [
     "image/jpeg",
     "image/jpg",

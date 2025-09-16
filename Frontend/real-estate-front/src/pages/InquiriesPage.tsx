@@ -224,11 +224,11 @@ export const InquiriesPage: React.FC = () => {
                       <Box sx={{ mb: 2 }}>
                         <Chip
                           icon={<BusinessIcon />}
-                          label={getPropertyTitle(inquiry.propertyId)}
+                          label={getPropertyTitle(inquiry.propertyId || "")}
                           color="primary"
                           size="small"
                           onClick={() =>
-                            navigate(`/properties/${inquiry.propertyId}`)
+                            navigate(`/properties/${inquiry.propertyId || ""}`)
                           }
                           sx={{ cursor: "pointer" }}
                         />

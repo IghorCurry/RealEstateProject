@@ -46,11 +46,13 @@ export const PropertyFormFields: React.FC<PropertyFormFieldsProps> = ({
     try {
       setFeatureError("");
 
+      const cleanedFeature = newFeature.replace(/["'[\]]/g, "").trim();
+
       // Валідуємо нову feature
-      await featureValidationSchema.validate({ feature: newFeature });
+      await featureValidationSchema.validate({ feature: cleanedFeature });
 
       // Перевіряємо на дублікати
-      const normalizedNewFeature = newFeature.toLowerCase().trim();
+      const normalizedNewFeature = cleanedFeature.toLowerCase().trim();
       const isDuplicate = features.some(
         (feature) => feature.toLowerCase().trim() === normalizedNewFeature
       );
@@ -66,9 +68,13 @@ export const PropertyFormFields: React.FC<PropertyFormFieldsProps> = ({
         return;
       }
 
+      // Оновлюємо стан на нормалізоване значення перед додаванням
+      onNewFeatureChange(cleanedFeature);
       onAddFeature();
-    } catch (error: any) {
-      setFeatureError(error.message || "Invalid feature");
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "Invalid feature";
+      setFeatureError(message);
     }
   };
 
@@ -126,6 +132,10 @@ export const PropertyFormFields: React.FC<PropertyFormFieldsProps> = ({
               label={t("property.form.price")}
               type="number"
               fullWidth
+              onChange={(e) => {
+                const v = e.target.value;
+                field.onChange(v === "" ? "" : Number(v));
+              }}
               error={!!errors.price}
               helperText={errors.price?.message?.toString()}
             />
@@ -143,7 +153,7 @@ export const PropertyFormFields: React.FC<PropertyFormFieldsProps> = ({
               label="Address"
               fullWidth
               error={!!errors.address}
-              helperText={errors.address?.message}
+              helperText={errors.address?.message?.toString()}
             />
           )}
         />
@@ -157,7 +167,11 @@ export const PropertyFormFields: React.FC<PropertyFormFieldsProps> = ({
           render={({ field }) => (
             <FormControl fullWidth error={!!errors.location}>
               <InputLabel>Location</InputLabel>
-              <Select {...field} label="Location">
+              <Select
+                {...field}
+                label="Location"
+                onChange={(e) => field.onChange(Number(e.target.value))}
+              >
                 <MenuItem value={1}>Downtown</MenuItem>
                 <MenuItem value={2}>Suburban</MenuItem>
                 <MenuItem value={3}>Rural</MenuItem>
@@ -165,8 +179,10 @@ export const PropertyFormFields: React.FC<PropertyFormFieldsProps> = ({
                 <MenuItem value={5}>Mountain</MenuItem>
                 <MenuItem value={6}>Urban</MenuItem>
               </Select>
-              {errors.location && (
-                <FormHelperText>{errors.location.message}</FormHelperText>
+              {errors.location?.message && (
+                <FormHelperText>
+                  {String(errors.location.message)}
+                </FormHelperText>
               )}
             </FormControl>
           )}
@@ -180,7 +196,11 @@ export const PropertyFormFields: React.FC<PropertyFormFieldsProps> = ({
           render={({ field }) => (
             <FormControl fullWidth error={!!errors.propertyType}>
               <InputLabel>Property Type</InputLabel>
-              <Select {...field} label="Property Type">
+              <Select
+                {...field}
+                label="Property Type"
+                onChange={(e) => field.onChange(Number(e.target.value))}
+              >
                 <MenuItem value={1}>House</MenuItem>
                 <MenuItem value={2}>Apartment</MenuItem>
                 <MenuItem value={3}>Condo</MenuItem>
@@ -189,8 +209,10 @@ export const PropertyFormFields: React.FC<PropertyFormFieldsProps> = ({
                 <MenuItem value={6}>Land</MenuItem>
                 <MenuItem value={7}>Commercial</MenuItem>
               </Select>
-              {errors.propertyType && (
-                <FormHelperText>{errors.propertyType.message}</FormHelperText>
+              {errors.propertyType?.message && (
+                <FormHelperText>
+                  {String(errors.propertyType.message)}
+                </FormHelperText>
               )}
             </FormControl>
           )}
@@ -205,14 +227,18 @@ export const PropertyFormFields: React.FC<PropertyFormFieldsProps> = ({
           render={({ field }) => (
             <FormControl fullWidth error={!!errors.status}>
               <InputLabel>Status</InputLabel>
-              <Select {...field} label="Status">
+              <Select
+                {...field}
+                label="Status"
+                onChange={(e) => field.onChange(Number(e.target.value))}
+              >
                 <MenuItem value={1}>Available</MenuItem>
-                <MenuItem value={2}>Under Contract</MenuItem>
-                <MenuItem value={3}>Sold</MenuItem>
-                <MenuItem value={4}>Rented</MenuItem>
+                <MenuItem value={4}>Under Contract</MenuItem>
+                <MenuItem value={2}>Sold</MenuItem>
+                <MenuItem value={3}>Rented</MenuItem>
               </Select>
-              {errors.status && (
-                <FormHelperText>{errors.status.message}</FormHelperText>
+              {errors.status?.message && (
+                <FormHelperText>{String(errors.status.message)}</FormHelperText>
               )}
             </FormControl>
           )}
@@ -230,8 +256,12 @@ export const PropertyFormFields: React.FC<PropertyFormFieldsProps> = ({
               label="Bedrooms"
               type="number"
               fullWidth
+              onChange={(e) => {
+                const v = e.target.value;
+                field.onChange(v === "" ? "" : Number(v));
+              }}
               error={!!errors.bedrooms}
-              helperText={errors.bedrooms?.message}
+              helperText={errors.bedrooms?.message?.toString()}
             />
           )}
         />
@@ -247,8 +277,12 @@ export const PropertyFormFields: React.FC<PropertyFormFieldsProps> = ({
               label="Bathrooms"
               type="number"
               fullWidth
+              onChange={(e) => {
+                const v = e.target.value;
+                field.onChange(v === "" ? "" : Number(v));
+              }}
               error={!!errors.bathrooms}
-              helperText={errors.bathrooms?.message}
+              helperText={errors.bathrooms?.message?.toString()}
             />
           )}
         />
@@ -265,8 +299,12 @@ export const PropertyFormFields: React.FC<PropertyFormFieldsProps> = ({
               label="Square Meters"
               type="number"
               fullWidth
+              onChange={(e) => {
+                const v = e.target.value;
+                field.onChange(v === "" ? "" : Number(v));
+              }}
               error={!!errors.squareMeters}
-              helperText={errors.squareMeters?.message}
+              helperText={errors.squareMeters?.message?.toString()}
             />
           )}
         />
@@ -278,7 +316,9 @@ export const PropertyFormFields: React.FC<PropertyFormFieldsProps> = ({
           <TextField
             value={newFeature}
             onChange={(e) => {
-              onNewFeatureChange(e.target.value);
+              const raw = e.target.value;
+              const cleaned = raw.replace(/["'[\]]/g, "");
+              onNewFeatureChange(cleaned);
               setFeatureError(""); // Очищаємо помилку при зміні
             }}
             placeholder="Add a feature (e.g., Pool, Garage)"

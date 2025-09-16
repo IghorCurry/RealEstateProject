@@ -49,8 +49,14 @@ export const EditPropertyForm: React.FC<EditPropertyFormProps> = ({
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
+  const sanitizeFeature = (value: string) =>
+    value.replace(/["'[\]]/g, "").trim();
+  const initialFeatures = (property.features || [])
+    .map((f) => sanitizeFeature(String(f)))
+    .filter(Boolean);
+
   const { features, newFeature, setNewFeature, addFeature, removeFeature } =
-    usePropertyFeatures(property.features || []);
+    usePropertyFeatures(initialFeatures);
 
   const methods = useForm<PropertyFormData>({
     resolver: yupResolver(propertyFormSchema),
@@ -65,11 +71,14 @@ export const EditPropertyForm: React.FC<EditPropertyFormProps> = ({
       bedrooms: property.bedrooms,
       bathrooms: property.bathrooms,
       squareMeters: property.squareMeters,
-      features: property.features || [],
+      features: initialFeatures,
     },
   });
 
-  // Load existing images
+  useEffect(() => {
+    methods.setValue("features", features, { shouldValidate: true });
+  }, [features, methods]);
+
   useEffect(() => {
     const loadImages = async () => {
       try {
@@ -81,7 +90,6 @@ export const EditPropertyForm: React.FC<EditPropertyFormProps> = ({
         const validImages = filterValidImages(propertyImages);
         setImages(validImages);
       } catch {
-        // Fallback: використовуємо зображення з property з фільтрацією
         if (property.images && property.images.length > 0) {
           const validImages = filterValidImages(property.images);
           setImages(validImages);
@@ -92,7 +100,7 @@ export const EditPropertyForm: React.FC<EditPropertyFormProps> = ({
     };
 
     loadImages();
-  }, [property.id]);
+  }, [property.id, property.images]);
 
   const handleImagesChange = (newImages: PropertyImageWithFile[]) => {
     setImages(newImages);
@@ -106,8 +114,6 @@ export const EditPropertyForm: React.FC<EditPropertyFormProps> = ({
         files
       );
 
-      // Додаємо нові зображення до існуючих
-      // Перетворюємо PropertyImage[] в PropertyImageWithFile[]
       setImages((prevImages) => {
         const updatedImages = [
           ...prevImages,
@@ -118,25 +124,22 @@ export const EditPropertyForm: React.FC<EditPropertyFormProps> = ({
 
       toast.success(`${files.length} image(s) uploaded successfully`);
     } catch (error) {
-      // Покращена обробка помилок
       if (error instanceof Error) {
         toast.error(`Failed to upload images: ${error.message}`);
       } else {
         toast.error("Failed to upload images");
       }
 
-      throw error; // Re-throw to let ImageUpload handle it
+      throw error;
     }
   };
 
   const handleImagesDelete = async (imageIds: string[]) => {
     try {
-      // Миттєво видаляємо зображення через API
       for (const imageId of imageIds) {
         await propertyService.deleteImage(property.id, imageId);
       }
 
-      // Оновлюємо локальний стан
       setImages((prevImages) =>
         prevImages.filter((img) => !imageIds.includes(img.id))
       );
@@ -150,11 +153,9 @@ export const EditPropertyForm: React.FC<EditPropertyFormProps> = ({
   const onSubmit = async (data: PropertyFormData) => {
     setIsSubmitting(true);
     try {
-      // Отримуємо userId з поточного користувача
       const currentUser = storageService.getUser();
       const userId = currentUser?.id || property.userId;
 
-      // Оновлюємо тільки основні дані property (з пустими масивами для зображень)
       await propertyService.update(property.id, {
         id: property.id,
         userId: userId, // Використовуємо ID поточного користувача
@@ -169,22 +170,19 @@ export const EditPropertyForm: React.FC<EditPropertyFormProps> = ({
         bathrooms: data.bathrooms,
         squareMeters: data.squareMeters,
         features: features,
-        // Передаємо пусті масиви для зображень, щоб бекенд не скаржився
-        images: null, // null замість пустого масиву
-        imageUrls: null, // null замість пустого масиву
-        imagesToDelete: null, // null замість пустого масиву
+        images: null,
+        imageUrls: null,
+        imagesToDelete: null,
       });
 
       toast.success(t("property.edit.success"));
 
-      // Оновлюємо кеш перед навігацією
       queryClient.invalidateQueries({ queryKey: ["properties"] });
       queryClient.invalidateQueries({ queryKey: ["property", property.id] });
       queryClient.invalidateQueries({
         queryKey: ["property-images", property.id],
       });
 
-      // Перенаправляємо на сторінку деталей property замість списку
       navigate(`/properties/${property.id}`);
     } catch {
       toast.error(t("property.edit.error"));
@@ -206,7 +204,30 @@ export const EditPropertyForm: React.FC<EditPropertyFormProps> = ({
           </Alert>
 
           <FormProvider {...methods}>
-            <form onSubmit={methods.handleSubmit(onSubmit)}>
+            <form
+              onSubmit={methods.handleSubmit(onSubmit, (errors) => {
+                const firstKey = Object.keys(errors)[0];
+                const translated = t("form.validationError");
+                const fallbackMsg =
+                  translated === "form.validationError"
+                    ? "Please fix validation errors"
+                    : translated;
+                const firstMessage =
+                  (firstKey &&
+                    (errors as Record<string, { message?: unknown }>)[
+                      firstKey
+                    ]?.message?.toString()) ||
+                  fallbackMsg;
+                toast.error(firstMessage);
+                if (firstKey) {
+                  const el = document.querySelector(
+                    `[name="${firstKey}"]`
+                  ) as HTMLElement | null;
+                  el?.scrollIntoView({ behavior: "smooth", block: "center" });
+                  el?.focus();
+                }
+              })}
+            >
               <PropertyFormFields
                 features={features}
                 newFeature={newFeature}

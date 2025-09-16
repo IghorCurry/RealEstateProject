@@ -98,7 +98,7 @@ export const ProfilePage: React.FC = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   // Використовуємо useAuth замість authService для централізованого стану авторизації
-  const { user, logout } = useAuth();
+  const { user, logout, updateUser } = useAuth();
 
   // Використовуємо хук для улюблених
   const { favorites, isLoadingFavorites, refetchFavorites } = useFavorites();
@@ -138,11 +138,12 @@ export const ProfilePage: React.FC = () => {
       });
     },
     onSuccess: (updatedUser) => {
-      // Update stored user data
-      localStorage.setItem("user", JSON.stringify(updatedUser));
+      // Update global auth state + storage
+      updateUser(updatedUser);
+      // Refresh dependent data
       queryClient.invalidateQueries({ queryKey: ["user-properties"] });
       queryClient.invalidateQueries({ queryKey: ["user-inquiries"] });
-
+      // Close dialog and notify
       setEditDialogOpen(false);
       toast.success("Profile updated successfully!");
     },
@@ -411,7 +412,10 @@ export const ProfilePage: React.FC = () => {
                 {userProperties.map((property) => (
                   <Grid item xs={12} sm={6} md={4} key={property.id}>
                     <Box sx={{ height: "100%" }}>
-                      <PropertyCard property={property} showOwnerActions={true} />
+                      <PropertyCard
+                        property={property}
+                        showOwnerActions={true}
+                      />
                     </Box>
                   </Grid>
                 ))}

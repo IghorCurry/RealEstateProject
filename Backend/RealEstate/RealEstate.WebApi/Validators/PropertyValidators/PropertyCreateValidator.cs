@@ -10,12 +10,12 @@ namespace RealEstate.WebApi.Validators.PropertyValidators
         {
             RuleFor(x => x.Title)
                 .NotEmpty().WithMessage("Назва нерухомості є обов'язковим полем")
-                .MinimumLength(4).WithMessage("Назва повинна містити мінімум 4 символів")
+                .MinimumLength(3).WithMessage("Назва повинна містити мінімум 3 символи")
                 .MaximumLength(100).WithMessage("Назва не може перевищувати 100 символів");
 
             RuleFor(x => x.Description)
                 .NotEmpty().WithMessage("Опис є обов'язковим полем")
-                .MinimumLength(5).WithMessage("Опис повинен містити мінімум 5 символів")
+                .MinimumLength(3).WithMessage("Опис повинен містити мінімум 3 символи")
                 .MaximumLength(1000).WithMessage("Опис не може перевищувати 1000 символів");
 
             RuleFor(x => x.Price)
@@ -36,7 +36,7 @@ namespace RealEstate.WebApi.Validators.PropertyValidators
 
             RuleFor(x => x.Address)
                 .NotEmpty().WithMessage("Адреса є обов'язковим полем")
-                .MinimumLength(10).WithMessage("Адреса повинна містити мінімум 10 символів")
+                .MinimumLength(1).WithMessage("Адреса повинна містити мінімум 1 символ")
                 .MaximumLength(500).WithMessage("Адреса не може перевищувати 500 символів");
 
             RuleFor(x => x.PropertyType)

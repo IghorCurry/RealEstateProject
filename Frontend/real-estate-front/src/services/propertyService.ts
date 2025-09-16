@@ -75,7 +75,7 @@ export const propertyService = {
       const url = API_ENDPOINTS.PROPERTY.UPDATE;
 
       try {
-        return await apiClient.put<Property>(url, property);
+        return await apiClient.put<Property>(url, { ...property, id });
       } catch {
         const formData = new FormData();
         formData.append("Id", property.id);

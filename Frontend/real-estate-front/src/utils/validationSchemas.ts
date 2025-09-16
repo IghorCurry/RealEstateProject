@@ -16,8 +16,8 @@ export const propertyFormSchema = yup.object({
   description: yup
     .string()
     .required("Description is required")
-    .min(10, "Description must be at least 10 characters")
-    .max(2000, "Description cannot exceed 2000 characters")
+    .min(3, "Description must be at least 3 characters")
+    .max(1000, "Description cannot exceed 1000 characters")
     .trim(),
 
   price: yup
@@ -31,8 +31,8 @@ export const propertyFormSchema = yup.object({
   address: yup
     .string()
     .required("Address is required")
-    .min(5, "Address must be at least 5 characters")
-    .max(200, "Address cannot exceed 200 characters")
+    .min(1, "Address must be at least 1 character")
+    .max(500, "Address cannot exceed 500 characters")
     .matches(
       /^[a-zA-Z0-9\s\-.,#]+$/,
       "Address can only contain letters, numbers, spaces, hyphens, commas, periods, and #"
@@ -61,30 +61,22 @@ export const propertyFormSchema = yup.object({
     .number()
     .required("Number of bedrooms is required")
     .min(0, "Bedrooms cannot be negative")
-    .max(20, "Bedrooms cannot exceed 20")
+    .max(50, "Bedrooms cannot exceed 50")
     .integer("Bedrooms must be a whole number"),
 
   bathrooms: yup
     .number()
     .required("Number of bathrooms is required")
     .min(0, "Bathrooms cannot be negative")
-    .max(15, "Bathrooms cannot exceed 15")
-    .test(
-      "decimal-bathrooms",
-      "Bathrooms can have 0.5 increments (e.g., 1.5, 2.5)",
-      (value) => {
-        if (value === undefined || value === null) return true;
-        // Allow whole numbers and half numbers (0.5, 1.5, etc.)
-        return value % 0.5 === 0;
-      }
-    ),
+    .max(10, "Bathrooms cannot exceed 10")
+    .integer("Bathrooms must be a whole number"),
 
   squareMeters: yup
     .number()
     .required("Square meters is required")
     .positive("Square meters must be positive")
     .min(1, "Square meters must be at least 1")
-    .max(50000, "Square meters cannot exceed 50,000")
+    .max(10000, "Square meters cannot exceed 10,000")
     .integer("Square meters must be a whole number"),
 
   features: yup
@@ -93,7 +85,7 @@ export const propertyFormSchema = yup.object({
       yup
         .string()
         .min(1, "Feature cannot be empty")
-        .max(50, "Feature cannot exceed 50 characters")
+        .max(100, "Feature cannot exceed 100 characters")
         .matches(
           /^[a-zA-Z0-9\s-]+$/,
           "Feature can only contain letters, numbers, spaces, and hyphens"
