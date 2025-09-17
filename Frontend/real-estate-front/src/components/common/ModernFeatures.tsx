@@ -28,9 +28,10 @@ export const ModernFeatures: React.FC = () => {
   const prefersReducedMotion = useMediaQuery(
     "(prefers-reduced-motion: reduce)"
   );
+  const isMobile = useMediaQuery("(max-width:900px)");
   const { t } = useLanguage();
   const features = getFeatures(t);
-  
+
   return (
     <Box
       sx={{
@@ -41,6 +42,7 @@ export const ModernFeatures: React.FC = () => {
         overflow: "hidden",
         boxShadow: "0 -4px 20px rgba(0, 0, 0, 0.05)",
       }}
+      style={{ contentVisibility: "auto", containIntrinsicSize: "1200px" }}
     >
       <Box
         sx={{
@@ -49,11 +51,11 @@ export const ModernFeatures: React.FC = () => {
           left: 0,
           right: 0,
           bottom: 0,
-          background: `
+          background: isMobile
+            ? "none"
+            : `
             radial-gradient(circle at 20% 50%, rgba(26, 54, 93, 0.03) 0%, transparent 50%),
-            radial-gradient(circle at 80% 20%, rgba(139, 21, 56, 0.03) 0%, transparent 50%),
-            radial-gradient(circle at 40% 80%, rgba(26, 54, 93, 0.02) 0%, transparent 50%),
-            linear-gradient(45deg, rgba(26, 54, 93, 0.01) 0%, transparent 50%, rgba(139, 21, 56, 0.01) 100%)
+            radial-gradient(circle at 80% 20%, rgba(139, 21, 56, 0.03) 0%, transparent 50%)
           `,
         }}
       />
@@ -180,7 +182,8 @@ export const ModernFeatures: React.FC = () => {
               borderRadius: 3,
               background:
                 "linear-gradient(135deg, rgba(26, 54, 93, 0.05) 0%, rgba(139, 21, 56, 0.02) 100%)",
-              backdropFilter: "blur(10px)",
+              // Легший фон без дорогого blur на мобільних
+              ...(isMobile ? {} : { backdropFilter: "blur(4px)" }),
               boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
               transition: "all 0.3s ease",
               "&:hover": {

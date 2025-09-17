@@ -1,7 +1,11 @@
 import React from "react";
 import { Box } from "@mui/material";
 import { ModernHero } from "../components/common/ModernHero";
-import { ModernFeatures } from "../components/common/ModernFeatures";
+const ModernFeatures = React.lazy(() =>
+  import("../components/common/ModernFeatures").then((m) => ({
+    default: m.ModernFeatures,
+  }))
+);
 
 export const HomePage: React.FC = () => {
   return (
@@ -10,7 +14,9 @@ export const HomePage: React.FC = () => {
       <ModernHero />
 
       {/* Modern Features Section */}
-      <ModernFeatures />
+      <React.Suspense fallback={null}>
+        <ModernFeatures />
+      </React.Suspense>
     </Box>
   );
 };

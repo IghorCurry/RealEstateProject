@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Container,
@@ -35,26 +35,12 @@ export const ModernHero: React.FC = () => {
   const prefersReducedMotion = useMediaQuery(
     "(prefers-reduced-motion: reduce)"
   );
-  const [backgroundImage, setBackgroundImage] = useState("/hero-bg.jpg");
   const navigate = useNavigate();
   const { user, isAuthenticated, logout } = useAuth();
   const { t } = useLanguage();
   const isAdmin = user?.role === "Admin";
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
-  useEffect(() => {
-    const supabaseUrl =
-      "https://euvqeqtcazmsomxkiisi.supabase.co/storage/v1/object/public/real-estate-images/hero-bg.jpg";
-
-    const preloadImage = () => {
-      const img = new Image();
-      img.onload = () => setBackgroundImage(supabaseUrl);
-      img.onerror = () => setBackgroundImage("/hero-bg.jpg");
-      img.src = supabaseUrl;
-    };
-
-    preloadImage();
-  }, []);
+  const [readyToAnimate] = useState(true);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -118,6 +104,7 @@ export const ModernHero: React.FC = () => {
         alignItems: "center",
         width: "100%",
         maxWidth: "100vw",
+        backgroundColor: "#0e0f13",
         "&::before": {
           content: '""',
           position: "absolute",
@@ -125,11 +112,15 @@ export const ModernHero: React.FC = () => {
           left: 0,
           right: 0,
           bottom: 0,
-          background: `url("${backgroundImage}")`,
+          background: `image-set(
+            url('/hero-bg.avif') type('image/avif'),
+            url('/hero-bg.webp') type('image/webp'),
+            url('/hero-bg.jpg') type('image/jpeg')
+          )`,
           backgroundSize: "cover",
           backgroundPosition: "center",
-          backgroundAttachment: isMobile ? "scroll" : "fixed",
-          transition: "all 0.3s ease",
+          backgroundAttachment: "scroll",
+          willChange: "transform",
         },
         "&::after": {
           content: '""',
@@ -139,9 +130,8 @@ export const ModernHero: React.FC = () => {
           right: 0,
           bottom: 0,
           background: `
-            radial-gradient(circle at 20% 50%, rgba(26, 54, 93, 0.1) 0%, transparent 50%),
-            radial-gradient(circle at 80% 20%, rgba(139, 21, 56, 0.1) 0%, transparent 50%),
-            radial-gradient(circle at 40% 80%, rgba(26, 54, 93, 0.05) 0%, transparent 50%)
+            radial-gradient(circle at 20% 50%, rgba(26, 54, 93, 0.08) 0%, transparent 45%),
+            radial-gradient(circle at 75% 25%, rgba(139, 21, 56, 0.08) 0%, transparent 45%)
           `,
           pointerEvents: "none",
         },
@@ -158,8 +148,8 @@ export const ModernHero: React.FC = () => {
           pt: { xs: 4, md: 6 },
           pb: { xs: 3, md: 4 },
           background:
-            "linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.1) 50%, transparent 100%)",
-          backdropFilter: "blur(15px)",
+            "linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.1) 50%, transparent 100%)",
+          ...(isMobile ? {} : { backdropFilter: "blur(6px)" }),
         }}
       >
         <Container maxWidth="lg">
@@ -171,11 +161,21 @@ export const ModernHero: React.FC = () => {
             }}
           >
             <motion.div
-              initial={prefersReducedMotion ? false : { opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={
-                prefersReducedMotion ? { duration: 0 } : { duration: 0.8 }
+              key={`logo-${String(readyToAnimate)}`}
+              initial={
+                prefersReducedMotion || !readyToAnimate
+                  ? false
+                  : { opacity: 0, x: -30 }
               }
+              animate={
+                prefersReducedMotion || !readyToAnimate
+                  ? undefined
+                  : { opacity: 1, x: 0 }
+              }
+              transition={
+                prefersReducedMotion ? { duration: 0 } : { duration: 0.6 }
+              }
+              style={{ willChange: "opacity, transform" }}
             >
               <Typography
                 variant="h4"
@@ -194,13 +194,23 @@ export const ModernHero: React.FC = () => {
 
             {!isMobile && (
               <motion.div
-                initial={prefersReducedMotion ? false : { opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
+                key={`nav-${String(readyToAnimate)}`}
+                initial={
+                  prefersReducedMotion || !readyToAnimate
+                    ? false
+                    : { opacity: 0, y: -20 }
+                }
+                animate={
+                  prefersReducedMotion || !readyToAnimate
+                    ? undefined
+                    : { opacity: 1, y: 0 }
+                }
                 transition={
                   prefersReducedMotion
                     ? { duration: 0 }
-                    : { duration: 0.8, delay: 0.2 }
+                    : { duration: 0.6, delay: 0.15 }
                 }
+                style={{ willChange: "opacity, transform" }}
               >
                 <Box sx={{ display: "flex", gap: 4 }}>
                   <Button
@@ -226,13 +236,23 @@ export const ModernHero: React.FC = () => {
             )}
 
             <motion.div
-              initial={prefersReducedMotion ? false : { opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
+              key={`actions-${String(readyToAnimate)}`}
+              initial={
+                prefersReducedMotion || !readyToAnimate
+                  ? false
+                  : { opacity: 0, x: 30 }
+              }
+              animate={
+                prefersReducedMotion || !readyToAnimate
+                  ? undefined
+                  : { opacity: 1, x: 0 }
+              }
               transition={
                 prefersReducedMotion
                   ? { duration: 0 }
-                  : { duration: 0.8, delay: 0.4 }
+                  : { duration: 0.6, delay: 0.3 }
               }
+              style={{ willChange: "opacity, transform" }}
             >
               {isAuthenticated ? (
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -381,13 +401,23 @@ export const ModernHero: React.FC = () => {
           <Grid container spacing={{ xs: 2, md: 4 }} alignItems="center">
             <Grid item xs={12} md={8}>
               <motion.div
-                initial={prefersReducedMotion ? false : { opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
+                key={`headline-${String(readyToAnimate)}`}
+                initial={
+                  prefersReducedMotion || !readyToAnimate
+                    ? false
+                    : { opacity: 0, x: -50 }
+                }
+                animate={
+                  prefersReducedMotion || !readyToAnimate
+                    ? undefined
+                    : { opacity: 1, x: 0 }
+                }
                 transition={
                   prefersReducedMotion
                     ? { duration: 0 }
-                    : { duration: 1, delay: 0.6 }
+                    : { duration: 0.6, delay: 0.3 }
                 }
+                style={{ willChange: "opacity, transform" }}
               >
                 <Typography
                   variant="overline"
@@ -451,8 +481,9 @@ export const ModernHero: React.FC = () => {
                   }}
                 >
                   <motion.div
-                    whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
-                    whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
+                    whileHover={prefersReducedMotion ? {} : { scale: 1.03 }}
+                    whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
+                    style={{ willChange: "transform" }}
                   >
                     <Button
                       variant="contained"
@@ -484,8 +515,9 @@ export const ModernHero: React.FC = () => {
                   </motion.div>
 
                   <motion.div
-                    whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
-                    whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
+                    whileHover={prefersReducedMotion ? {} : { scale: 1.03 }}
+                    whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
+                    style={{ willChange: "transform" }}
                   >
                     <Button
                       variant="outlined"
@@ -528,10 +560,21 @@ export const ModernHero: React.FC = () => {
       </Container>
 
       <motion.div
-        initial={prefersReducedMotion ? false : { opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
+        key={`side-${String(readyToAnimate)}`}
+        initial={
+          prefersReducedMotion || !readyToAnimate
+            ? false
+            : { opacity: 0, x: 50 }
+        }
+        animate={
+          prefersReducedMotion || !readyToAnimate
+            ? undefined
+            : { opacity: 1, x: 0 }
+        }
         transition={
-          prefersReducedMotion ? { duration: 0 } : { duration: 1, delay: 1 }
+          prefersReducedMotion
+            ? { duration: 0 }
+            : { duration: 0.6, delay: 0.45 }
         }
         style={{
           position: "absolute",
@@ -540,6 +583,7 @@ export const ModernHero: React.FC = () => {
           transform: "translateY(-50%)",
           writingMode: "vertical-rl",
           textOrientation: "mixed",
+          willChange: "opacity, transform",
         }}
       >
         <Typography

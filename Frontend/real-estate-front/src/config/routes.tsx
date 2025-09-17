@@ -3,10 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import { CircularProgress, Box } from "@mui/material";
 import { ProtectedRoute } from "../components/common";
 
-// Lazy loading для всіх сторінок - оптимізація bundle size
-const HomePage = React.lazy(() =>
-  import("../pages/HomePage").then((module) => ({ default: module.HomePage }))
-);
+import { HomePage } from "../pages/HomePage";
 const LoginPage = React.lazy(() =>
   import("../pages/LoginPage").then((module) => ({ default: module.LoginPage }))
 );
@@ -77,7 +74,7 @@ const PageLoader: React.FC = () => (
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
-      minHeight: "200px",
+      minHeight: "100vh",
     }}
   >
     <CircularProgress />

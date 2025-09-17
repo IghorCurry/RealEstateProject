@@ -10,7 +10,9 @@
     "build:azure": "vite build --mode production",
     "lint": "eslint .",
     "preview": "vite preview",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist",
+    "lhci": "lhci autorun",
+    "audit:perf": "pnpm build && pnpm lhci"
   },
   "dependencies": {
     "@emotion/react": "^11.11.3",
@@ -42,6 +44,7 @@
     "typescript": "^5.6.3",
     "typescript-eslint": "^8.17.0",
     "vite": "^5.3.4",
-    "webpack-bundle-analyzer": "^4.10.2"
+    "webpack-bundle-analyzer": "^4.10.2",
+    "@lhci/cli": "^0.14.0"
   }
 }
