@@ -125,16 +125,23 @@ export const isValidEmail = (email: string): boolean => {
 };
 
 export const isValidPhone = (phone: string): boolean => {
-  const phoneRegex = /^\+?[0-9\s\-()]{10,}$/;
+  // Backend requires strict +380XXXXXXXXX (UA) format
+  const phoneRegex = /^\+380\d{9}$/;
   return phoneRegex.test(phone);
 };
 
 // User name utilities
-export const getUserFullName = (user: { firstName: string; lastName: string }): string => {
+export const getUserFullName = (user: {
+  firstName: string;
+  lastName: string;
+}): string => {
   return `${user.firstName} ${user.lastName}`.trim();
 };
 
-export const getInitials = (user: { firstName: string; lastName: string }): string => {
+export const getInitials = (user: {
+  firstName: string;
+  lastName: string;
+}): string => {
   const firstName = user.firstName?.charAt(0) || "";
   const lastName = user.lastName?.charAt(0) || "";
   return `${firstName}${lastName}`.toUpperCase();

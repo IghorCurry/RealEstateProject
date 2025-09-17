@@ -20,6 +20,7 @@ interface PropertyHeaderProps {
   property: PropertyDetailed;
   isAuthenticated: boolean;
   canModify: boolean;
+  canFavorite: boolean;
   onShare: () => void;
   onFavoriteToggle: () => void;
   onEditClick: () => void;
@@ -30,6 +31,7 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({
   property,
   isAuthenticated,
   canModify,
+  canFavorite,
   onShare,
   onFavoriteToggle,
   onEditClick,
@@ -67,8 +69,12 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({
           </IconButton>
 
           {/* Favorite Button */}
-          {isAuthenticated && (
-            <IconButton onClick={onFavoriteToggle} color="primary">
+          {canFavorite && (
+            <IconButton
+              onClick={onFavoriteToggle}
+              color="primary"
+              aria-pressed={!!property.isFavoritedByCurrentUser}
+            >
               {property.isFavoritedByCurrentUser ? (
                 <FavoriteIcon color="error" />
               ) : (
@@ -80,10 +86,22 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({
           {/* Edit/Delete Buttons */}
           {canModify && isAuthenticated && (
             <>
-              <IconButton onClick={onEditClick} color="primary">
+              <IconButton
+                onClick={(e) => {
+                  e.currentTarget.blur();
+                  onEditClick();
+                }}
+                color="primary"
+              >
                 <EditIcon />
               </IconButton>
-              <IconButton onClick={onDeleteClick} color="error">
+              <IconButton
+                onClick={(e) => {
+                  e.currentTarget.blur();
+                  onDeleteClick();
+                }}
+                color="error"
+              >
                 <DeleteIcon />
               </IconButton>
             </>

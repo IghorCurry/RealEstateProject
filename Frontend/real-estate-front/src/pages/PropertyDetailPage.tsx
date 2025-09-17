@@ -18,12 +18,12 @@ import {
   Close as CloseIcon,
 } from "@mui/icons-material";
 import { useParams, useNavigate } from "react-router-dom";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 
 import { propertyService } from "../services/propertyService";
-import { favoriteService } from "../services/favoriteService";
 import { useAuth } from "../contexts/AuthContext";
+import { useFavorites } from "../hooks/useFavorites";
 import { InquiryForm } from "../components/inquiry/InquiryForm";
 import { filterValidImages } from "../utils/imageHelpers";
 import {
@@ -41,8 +41,8 @@ import { ROUTES } from "../utils/constants";
 export const PropertyDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const { user: currentUser, isAuthenticated, isAdmin } = useAuth();
+  const { toggleFavorite, refetchFavorites } = useFavorites();
 
   // State
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -78,31 +78,23 @@ export const PropertyDetailPage: React.FC = () => {
     gcTime: 10 * 60 * 1000, // 10 хвилин
   });
 
-  // Favorite mutation
-  const favoriteMutation = useMutation({
-    mutationFn: (propertyId: string) =>
-      favoriteService.toggleFavorite(propertyId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["property", id] });
-      toast.success("Favorite updated successfully");
-    },
-    onError: () => {
-      toast.error("Failed to update favorite");
-    },
-  });
-
   // Handlers
   const showAuthRequiredMessage = () => {
     toast.error("Please sign in to perform this action.");
   };
 
-  const handleFavoriteToggle = () => {
+  const handleFavoriteToggle = async () => {
     if (!isAuthenticated) {
       showAuthRequiredMessage();
       return;
     }
-    if (property) {
-      favoriteMutation.mutate(property.id);
+    if (!property) return;
+    try {
+      await toggleFavorite(property.id);
+      await refetchFavorites();
+    } catch (e) {
+      // useFavorites already shows toasts
+      console.error("Favorite toggle failed", e);
     }
   };
 
@@ -182,12 +174,14 @@ export const PropertyDetailPage: React.FC = () => {
     toast.success("Schedule viewing feature coming soon!");
   };
 
-  const handleRelatedPropertyFavorite = (propertyId: string) => {
+  const handleRelatedPropertyFavorite = async (_propertyId: string) => {
     if (!isAuthenticated) {
       showAuthRequiredMessage();
       return;
     }
-    favoriteMutation.mutate(propertyId);
+    // PropertyCard inside RelatedPropertiesSection already toggles via useFavorites.
+    // We can refetch to ensure header count is up-to-date immediately.
+    await refetchFavorites();
   };
 
   // Loading state
@@ -220,8 +214,9 @@ export const PropertyDetailPage: React.FC = () => {
   }
 
   // Check permissions
-  const isOwner = currentUser?.id === property?.userId;
+  const isOwner = currentUser?.id === (property?.userId || property?.user?.id);
   const canModify = (isOwner || isAdmin) && !!property;
+  const canFavorite = isAuthenticated && !isOwner;
 
   // Фільтруємо тільки валідні зображення використовуючи уніфіковану функцію
   const validImages = filterValidImages(property.images || []);
@@ -254,6 +249,7 @@ export const PropertyDetailPage: React.FC = () => {
           property={property}
           isAuthenticated={isAuthenticated}
           canModify={canModify}
+          canFavorite={canFavorite}
           onShare={handleShare}
           onFavoriteToggle={handleFavoriteToggle}
           onEditClick={handleEditClick}

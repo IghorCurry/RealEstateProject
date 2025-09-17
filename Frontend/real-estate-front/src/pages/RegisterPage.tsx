@@ -32,31 +32,37 @@ const registerSchema = yup.object({
   firstName: yup
     .string()
     .required("First name is required")
-    .min(2, "First name must be at least 2 characters"),
+    .min(2, "First name must be at least 2 characters")
+    .max(50, "First name must be at most 50 characters")
+    .matches(/^[\p{L}\s]+$/u, "First name can contain only letters and spaces"),
   lastName: yup
     .string()
     .required("Last name is required")
-    .min(2, "Last name must be at least 2 characters"),
+    .min(2, "Last name must be at least 2 characters")
+    .max(50, "Last name must be at most 50 characters")
+    .matches(/^[\p{L}\s]+$/u, "Last name can contain only letters and spaces"),
   email: yup
     .string()
     .required("Email is required")
     .email("Please enter a valid email")
+    .max(50, "Email must be at most 50 characters")
     .test("is-valid-email", "Please enter a valid email", (value) =>
       value ? isValidEmail(value) : false
     ),
   phone: yup
     .string()
     .required("Phone number is required")
-    .test("is-valid-phone", "Please enter a valid phone number", (value) =>
+    .test("is-valid-phone", "Phone must be in format +380XXXXXXXXX", (value) =>
       value ? isValidPhone(value) : false
     ),
   password: yup
     .string()
     .required("Password is required")
     .min(8, "Password must be at least 8 characters")
+    .max(50, "Password must be at most 50 characters")
     .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-      "Password must contain at least one uppercase letter, one lowercase letter, and one number"
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9])/,
+      "Password must include uppercase, lowercase, number and special character"
     ),
   confirmPassword: yup
     .string()
@@ -104,9 +110,29 @@ export const RegisterPage: React.FC = () => {
       navigate(ROUTES.HOME);
     },
     onError: (error: unknown) => {
+      const apiMessage = (
+        error as {
+          response?: {
+            data?: { message?: string; errors?: Record<string, string[]> };
+          };
+        }
+      )?.response?.data?.message;
+      const fieldErrors = (
+        error as { response?: { data?: { errors?: Record<string, string[]> } } }
+      )?.response?.data?.errors;
+
+      if (fieldErrors) {
+        const firstField = Object.keys(fieldErrors)[0];
+        const firstMsg = fieldErrors[firstField]?.[0];
+        toast.error(
+          firstMsg || "Registration failed. Please check your input."
+        );
+        return;
+      }
+
       const message =
-        (error as { response?: { data?: { message?: string } } })?.response
-          ?.data?.message || "Registration failed. Please try again later.";
+        apiMessage ||
+        "Registration failed. Ensure: unique email, +380XXXXXXXXX phone, and strong password.";
       toast.error(message);
     },
   });
