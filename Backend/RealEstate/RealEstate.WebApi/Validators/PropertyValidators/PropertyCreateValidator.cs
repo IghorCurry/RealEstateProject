@@ -10,7 +10,7 @@ namespace RealEstate.WebApi.Validators.PropertyValidators
         {
             RuleFor(x => x.Title)
                 .NotEmpty().WithMessage("Назва нерухомості є обов'язковим полем")
-                .MinimumLength(3).WithMessage("Назва повинна містити мінімум 3 символи")
+                .MinimumLength(2).WithMessage("Назва повинна містити мінімум 2 символи")
                 .MaximumLength(100).WithMessage("Назва не може перевищувати 100 символів");
 
             RuleFor(x => x.Description)

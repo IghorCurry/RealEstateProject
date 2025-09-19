@@ -5,11 +5,11 @@ export const propertyFormSchema = yup.object({
   title: yup
     .string()
     .required("Title is required")
-    .min(3, "Title must be at least 3 characters")
+    .min(2, "Title must be at least 2 characters")
     .max(100, "Title cannot exceed 100 characters")
     .matches(
-      /^[a-zA-Z0-9\s\-.,()]+$/,
-      "Title can only contain letters, numbers, spaces, hyphens, commas, periods, and parentheses"
+      /^[\p{L}\p{M}\p{N}\s'’‘ʼ\-.,()!?:;#№]+$/u,
+      "Use letters (incl. Ukrainian), numbers and basic punctuation"
     )
     .trim(),
 
@@ -34,8 +34,8 @@ export const propertyFormSchema = yup.object({
     .min(1, "Address must be at least 1 character")
     .max(500, "Address cannot exceed 500 characters")
     .matches(
-      /^[a-zA-Z0-9\s\-.,#]+$/,
-      "Address can only contain letters, numbers, spaces, hyphens, commas, periods, and #"
+      /^[\p{L}\p{M}\p{N}\s'’‘ʼ\-.,/\\#№]+$/u,
+      "Use letters (incl. Ukrainian), numbers and basic punctuation"
     )
     .trim(),
 
@@ -87,9 +87,10 @@ export const propertyFormSchema = yup.object({
         .min(1, "Feature cannot be empty")
         .max(100, "Feature cannot exceed 100 characters")
         .matches(
-          /^[a-zA-Z0-9\s-]+$/,
-          "Feature can only contain letters, numbers, spaces, and hyphens"
+          /^[\p{L}\p{M}\p{N}\s-]+$/u,
+          "Use letters (incl. Ukrainian), numbers and hyphen"
         )
+        .trim()
     )
     .max(20, "Cannot have more than 20 features")
     .test("unique-features", "Features must be unique", (features) => {
@@ -158,8 +159,8 @@ export const featureValidationSchema = yup.object({
     .min(1, "Feature cannot be empty")
     .max(50, "Feature cannot exceed 50 characters")
     .matches(
-      /^[a-zA-Z0-9\s-]+$/,
-      "Feature can only contain letters, numbers, spaces, and hyphens"
+      /^[\p{L}\p{M}\p{N}\s-]+$/u,
+      "Use letters (incl. Ukrainian), numbers and hyphen"
     )
     .trim(),
 });
