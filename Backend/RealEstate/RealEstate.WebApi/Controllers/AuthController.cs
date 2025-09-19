@@ -80,7 +80,22 @@ namespace RealEstate.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Registration failed for user: {Email}", model.Email);
+                var message = ex.Message ?? "Registration failed";
+                _logger.LogWarning(ex, "Registration business error for user: {Email}", model.Email);
+
+                if (message.Contains("already exists", StringComparison.OrdinalIgnoreCase))
+                {
+                    return Conflict(new { message });
+                }
+
+                if (message.Contains("Invalid phone", StringComparison.OrdinalIgnoreCase) ||
+                    message.Contains("password", StringComparison.OrdinalIgnoreCase) ||
+                    message.Contains("Failed to create user", StringComparison.OrdinalIgnoreCase))
+                {
+                    return BadRequest(new { message });
+                }
+
+                _logger.LogError(ex, "Registration unexpected error for user: {Email}", model.Email);
                 return StatusCode(500, "Internal server error");
             }
         }

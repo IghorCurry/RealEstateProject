@@ -125,8 +125,8 @@ export const isValidEmail = (email: string): boolean => {
 };
 
 export const isValidPhone = (phone: string): boolean => {
-  // Backend requires strict +380XXXXXXXXX (UA) format
-  const phoneRegex = /^\+380\d{9}$/;
+  // Backend accepts E.164-like: + followed by 10-15 digits
+  const phoneRegex = /^\+\d{10,15}$/;
   return phoneRegex.test(phone);
 };
 

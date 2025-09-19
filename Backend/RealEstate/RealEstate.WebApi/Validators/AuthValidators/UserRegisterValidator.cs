@@ -11,18 +11,18 @@ namespace RealEstate.WebApi.Validators.AuthValidators
                 .NotEmpty().WithMessage("Ім'я є обов'язковим полем")
                 .MinimumLength(2).WithMessage("Ім'я повинно містити мінімум 2 символи")
                 .MaximumLength(50).WithMessage("Ім'я не може перевищувати 50 символів")
-                .Matches(@"^[а-яА-Яa-zA-Z\s]+$").WithMessage("Ім'я може містити тільки літери та пробіли");
+                .Matches(@"^[\p{L}\p{M}\s'\u2019\u2018\u02BC-]+$").WithMessage("Ім'я може містити літери, пробіли, дефіс і апостроф");
 
             RuleFor(x => x.LastName)
                 .NotEmpty().WithMessage("Прізвище є обов'язковим полем")
                 .MinimumLength(2).WithMessage("Прізвище повинно містити мінімум 2 символи")
                 .MaximumLength(50).WithMessage("Прізвище не може перевищувати 50 символів")
-                .Matches(@"^[а-яА-Яa-zA-Z\s]+$").WithMessage("Прізвище може містити тільки літери та пробіли");
+                .Matches(@"^[\p{L}\p{M}\s'\u2019\u2018\u02BC-]+$").WithMessage("Прізвище може містити літери, пробіли, дефіс і апостроф");
 
             RuleFor(x => x.Email)
                 .NotEmpty().WithMessage("Email є обов'язковим полем")
                 .EmailAddress().WithMessage("Некоректний формат email")
-                .MaximumLength(50).WithMessage("Email не може перевищувати 50 символів");
+                .MaximumLength(100).WithMessage("Email не може перевищувати 100 символів");
 
             RuleFor(x => x.Password)
                 .NotEmpty().WithMessage("Пароль є обов'язковим полем")
@@ -32,7 +32,7 @@ namespace RealEstate.WebApi.Validators.AuthValidators
 
             RuleFor(x => x.PhoneNumber)
                 .NotEmpty().WithMessage("Номер телефону є обов'язковим полем")
-                .Matches(@"^\+380\d{9}$").WithMessage("Некоректний формат номера телефону. Використовуйте формат: +380XXXXXXXXX");
+                .Matches(@"^\+\d{10,15}$").WithMessage("Некоректний формат номера телефону. Приклад: +380XXXXXXXXX");
         }
     }
 } 

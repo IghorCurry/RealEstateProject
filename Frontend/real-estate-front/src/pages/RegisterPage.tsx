@@ -27,6 +27,16 @@ import { isValidEmail, isValidPhone, getUserFullName } from "../utils/helpers";
 import { FormField, PageContainer } from "../components";
 import { useAuth } from "../contexts/AuthContext";
 
+const normalizePhoneE164Like = (input: string) => {
+  if (!input) return input;
+  const trimmed = input.trim();
+  let digits = trimmed.replace(/[^0-9]/g, "");
+  if (trimmed.startsWith("00")) {
+    digits = digits.substring(2);
+  }
+  return `+${digits}`;
+};
+
 // Validation schema
 const registerSchema = yup.object({
   firstName: yup
@@ -34,26 +44,35 @@ const registerSchema = yup.object({
     .required("First name is required")
     .min(2, "First name must be at least 2 characters")
     .max(50, "First name must be at most 50 characters")
-    .matches(/^[\p{L}\s]+$/u, "First name can contain only letters and spaces"),
+    .matches(
+      /^[\p{L}\p{M}\s'\u2019\u2018\u02BC-]+$/u,
+      "Use letters, spaces, hyphen or apostrophe"
+    ),
   lastName: yup
     .string()
     .required("Last name is required")
     .min(2, "Last name must be at least 2 characters")
     .max(50, "Last name must be at most 50 characters")
-    .matches(/^[\p{L}\s]+$/u, "Last name can contain only letters and spaces"),
+    .matches(
+      /^[\p{L}\p{M}\s'\u2019\u2018\u02BC-]+$/u,
+      "Use letters, spaces, hyphen or apostrophe"
+    ),
   email: yup
     .string()
     .required("Email is required")
     .email("Please enter a valid email")
-    .max(50, "Email must be at most 50 characters")
+    .max(100, "Email must be at most 100 characters")
     .test("is-valid-email", "Please enter a valid email", (value) =>
       value ? isValidEmail(value) : false
     ),
   phone: yup
     .string()
     .required("Phone number is required")
-    .test("is-valid-phone", "Phone must be in format +380XXXXXXXXX", (value) =>
-      value ? isValidPhone(value) : false
+    .transform((value) => normalizePhoneE164Like(value))
+    .test(
+      "is-valid-phone",
+      "Phone must be in E.164 format (e.g. +380*********)",
+      (value) => (value ? isValidPhone(value) : false)
     ),
   password: yup
     .string()
@@ -87,7 +106,6 @@ export const RegisterPage: React.FC = () => {
     confirmPassword: "",
   });
 
-  // Register mutation
   const registerMutation = useMutation({
     mutationFn: (data: RegisterFormData) =>
       authService.register({
@@ -98,9 +116,7 @@ export const RegisterPage: React.FC = () => {
         password: data.password,
       }),
     onSuccess: (response) => {
-      // Використовуємо дані з API відповіді для встановлення користувача
       authService.setAuthData(response);
-      // Оновлюємо контекст аутентифікації
       setUser(response.user);
       toast.success(
         `Registration successful! Welcome to Real Estate, ${getUserFullName(
@@ -110,59 +126,93 @@ export const RegisterPage: React.FC = () => {
       navigate(ROUTES.HOME);
     },
     onError: (error: unknown) => {
-      const apiMessage = (
-        error as {
-          response?: {
-            data?: { message?: string; errors?: Record<string, string[]> };
-          };
-        }
-      )?.response?.data?.message;
-      const fieldErrors = (
-        error as { response?: { data?: { errors?: Record<string, string[]> } } }
-      )?.response?.data?.errors;
+      const apiErr = error as import("../types/api").ApiError & {
+        response?: {
+          status?: number;
+          data?: { message?: string; errors?: Record<string, string[]> };
+        };
+      };
 
-      if (fieldErrors) {
+      const status = apiErr?.statusCode ?? apiErr?.response?.status;
+      const apiMessage = apiErr?.message ?? apiErr?.response?.data?.message;
+      const fieldErrors =
+        (apiErr?.errors as Record<string, string[]>) ??
+        apiErr?.response?.data?.errors;
+
+      if (
+        fieldErrors &&
+        typeof fieldErrors === "object" &&
+        !Array.isArray(fieldErrors)
+      ) {
         const firstField = Object.keys(fieldErrors)[0];
         const firstMsg = fieldErrors[firstField]?.[0];
+        if (firstField?.toLowerCase().includes("email")) {
+          setErrors((prev) => ({
+            ...prev,
+            email: firstMsg || "Email already exists",
+          }));
+        } else if (firstField?.toLowerCase().includes("phone")) {
+          setErrors((prev) => ({
+            ...prev,
+            phone: firstMsg || "Phone number already exists",
+          }));
+        }
         toast.error(
           firstMsg || "Registration failed. Please check your input."
         );
         return;
       }
 
-      const message =
+      if (status === 409) {
+        const lower = (apiMessage || "").toLowerCase();
+        if (lower.includes("email")) {
+          setErrors((prev) => ({ ...prev, email: "Email already exists" }));
+        }
+        if (lower.includes("phone")) {
+          setErrors((prev) => ({
+            ...prev,
+            phone: "Phone number already exists",
+          }));
+        }
+        toast.error(apiMessage || "Already exists");
+        return;
+      }
+
+      toast.error(
         apiMessage ||
-        "Registration failed. Ensure: unique email, +380XXXXXXXXX phone, and strong password.";
-      toast.error(message);
+          "Registration failed. Ensure: unique email/phone and a strong password."
+      );
     },
   });
 
-  // Handle form field changes
   const handleInputChange =
     (field: keyof RegisterFormData) =>
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
       setFormData((prev) => ({ ...prev, [field]: value }));
 
-      // Clear error for this field when user starts typing
       if (errors[field]) {
         setErrors((prev) => ({ ...prev, [field]: "" }));
       }
     };
 
-  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      // Validate form data
       await registerSchema.validate(formData, { abortEarly: false });
 
-      // Clear any existing errors
       setErrors({});
 
-      // Submit registration
-      registerMutation.mutate(formData);
+      const email = formData.email.trim().toLowerCase();
+      const phoneRaw = formData.phone.trim();
+      let phoneDigits = phoneRaw.replace(/[^0-9]/g, "");
+      if (phoneRaw.startsWith("00")) {
+        phoneDigits = phoneDigits.substring(2);
+      }
+      const phoneE164 = `+${phoneDigits}`;
+
+      registerMutation.mutate({ ...formData, email, phone: phoneE164 });
     } catch (validationError) {
       if (validationError instanceof yup.ValidationError) {
         const newErrors: Record<string, string> = {};
@@ -176,7 +226,6 @@ export const RegisterPage: React.FC = () => {
     }
   };
 
-  // Toggle password visibility
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
   const toggleConfirmPasswordVisibility = () =>
     setShowConfirmPassword(!showConfirmPassword);

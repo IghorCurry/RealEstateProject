@@ -9,6 +9,8 @@ using RealEstate.DAL.Entities;
 using RealEstate.BLL.Models.AuthModels;
 using RealEstate.BLL.Models.UserModels;
 using RealEstate.DAL.Persistance.Settings;
+using RealEstate.BLL.Utils;
+using System.Linq;
 
 namespace RealEstate.BLL.Managers
 {
@@ -44,19 +46,33 @@ namespace RealEstate.BLL.Managers
 
         public async Task<TokenPairModel> RegisterAsync(UserRegisterModel model)
         {
-            var existingUser = await _userManager.FindByEmailAsync(model.Email);
+            var email = (model.Email ?? string.Empty).Trim().ToLowerInvariant();
+            var phoneNormalized = PhoneUtils.NormalizeToE164Basic(model.PhoneNumber);
+
+            if (!PhoneUtils.IsLikelyE164(phoneNormalized))
+            {
+                throw new Exception("Invalid phone number format");
+            }
+
+            var existingUser = await _userManager.FindByEmailAsync(email);
             if (existingUser != null)
             {
                 throw new Exception("User with this email already exists");
             }
 
+            var phoneExists = _userManager.Users.Any(u => u.PhoneNumber == phoneNormalized);
+            if (phoneExists)
+            {
+                throw new Exception("Phone number already exists");
+            }
+
             var user = new User
             {
-                UserName = model.Email,
-                Email = model.Email,
+                UserName = email,
+                Email = email,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                PhoneNumber = model.PhoneNumber
+                PhoneNumber = phoneNormalized
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);

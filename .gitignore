@@ -1,3 +1,8 @@
+Education/
+Documentation/**
+!Documentation/API_DOCUMENTATION.md
+!Documentation/PROJECT_OVERVIEW.md
+!Documentation/USER_GUIDE.md
 # .NET
 bin/
 obj/
