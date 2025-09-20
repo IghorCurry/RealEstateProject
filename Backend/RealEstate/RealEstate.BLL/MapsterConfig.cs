@@ -26,6 +26,16 @@ namespace RealEstate.BLL
             TypeAdapterConfig<PropertyImage, PropertyImageViewModel>
                 .NewConfig();
 
+            TypeAdapterConfig<Inquiry, InquiryViewModel>
+                .NewConfig()
+                .Map(dest => dest.PropertyTitle, src => src.Property != null ? src.Property.Title : "")
+                .Map(dest => dest.PropertyOwnerId, src => src.Property != null ? src.Property.UserId : (Guid?)null)
+                .Map(dest => dest.PropertyOwnerName,
+                     src => src.Property != null && src.Property.User != null ?
+                        ($"{(src.Property.User.FirstName ?? "")} {(src.Property.User.LastName ?? "")} ").Trim() : "")
+                .Map(dest => dest.SenderName,
+                     src => src.User != null ? ($"{(src.User.FirstName ?? "")} {(src.User.LastName ?? "")} ").Trim() : (src.Name ?? ""));
+
             TypeAdapterConfig<User, UserViewModel>
                 .NewConfig()
                 .Map(dest => dest.FirstName, src => src.FirstName != null ? src.FirstName : "")

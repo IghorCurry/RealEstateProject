@@ -62,6 +62,7 @@ import { PropertyCard } from "../components/property/PropertyCard";
 
 import type { User } from "../types/user";
 import type { Property } from "../types/property";
+import type { Inquiry } from "../types/inquiry";
 
 // Validation schema for profile update
 const profileUpdateSchema = yup.object({
@@ -114,12 +115,25 @@ export const ProfilePage: React.FC = () => {
     enabled: !!user,
   });
 
-  // Fetch user's inquiries
-  const { data: userInquiries = [], isLoading: inquiriesLoading } = useQuery({
-    queryKey: ["user-inquiries", user?.id],
-    queryFn: () => inquiryService.getUserInquiries(),
-    enabled: !!user,
+  // Role helper
+  const isAdmin = user?.role === "Admin";
+
+  // Fetch inquiries (align with InquiriesPage)
+  const { data: myInquiries, isLoading: inquiriesLoading } = useQuery<
+    { sent: Inquiry[]; received: Inquiry[] } | Inquiry[]
+  >({
+    queryKey: ["inquiries", "my", user?.id],
+    queryFn: () =>
+      isAdmin ? inquiryService.getAll() : inquiryService.getMyInquiries(),
+    enabled: !!user?.id,
   });
+
+  const inquiriesCount = isAdmin
+    ? (myInquiries as Inquiry[])?.length || 0
+    : ((myInquiries as { sent?: Inquiry[]; received?: Inquiry[] })?.sent
+        ?.length || 0) +
+      ((myInquiries as { sent?: Inquiry[]; received?: Inquiry[] })?.received
+        ?.length || 0);
 
   // Profile update mutation
   const updateProfileMutation = useMutation({
@@ -271,7 +285,7 @@ export const ProfilePage: React.FC = () => {
                   <Chip
                     icon={<MessageIcon />}
                     label={t("profile.chips.inquiries", {
-                      count: userInquiries.length,
+                      count: inquiriesCount,
                     })}
                     variant="outlined"
                   />
@@ -400,7 +414,7 @@ export const ProfilePage: React.FC = () => {
                         <MessageIcon sx={{ mr: 1, color: "text.secondary" }} />
                         <Typography variant="body2">
                           {t("profile.stats.inquiriesSent", {
-                            count: userInquiries.length,
+                            count: inquiriesCount,
                           })}
                         </Typography>
                       </Box>
@@ -448,9 +462,99 @@ export const ProfilePage: React.FC = () => {
           <TabPanel value={tabValue} index={2}>
             {inquiriesLoading ? (
               <LoadingState type="properties" count={5} />
-            ) : userInquiries.length > 0 ? (
+            ) : isAdmin ? (
+              ((myInquiries as Inquiry[]) || []).length > 0 ? (
+                <List sx={{ p: 0 }}>
+                  {(myInquiries as Inquiry[]).map((inquiry) => (
+                    <React.Fragment key={inquiry.id}>
+                      <ListItem>
+                        <ListItemAvatar>
+                          <Avatar sx={{ bgcolor: "primary.main" }}>
+                            <MessageIcon />
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={inquiry.message}
+                          secondary={t("profile.inquiries.sentOn", {
+                            date: formatDate(inquiry.createdAt),
+                          })}
+                        />
+                        {(user?.role === "Admin" ||
+                          inquiry.userId === user?.id ||
+                          inquiry.propertyOwnerId === user?.id) && (
+                          <Chip
+                            label={t("inquiries.direction.received")}
+                            size="small"
+                            color="info"
+                          />
+                        )}
+                      </ListItem>
+                      <Divider />
+                    </React.Fragment>
+                  ))}
+                </List>
+              ) : (
+                <EmptyState
+                  title={t("profile.empty.inquiries.title")}
+                  description={t("profile.empty.inquiries.description")}
+                  actionLabel={t("profile.empty.inquiries.action")}
+                  onAction={() => navigate(ROUTES.PROPERTIES)}
+                />
+              )
+            ) : ((myInquiries as { sent?: Inquiry[]; received?: Inquiry[] })
+                ?.sent?.length || 0) +
+                ((myInquiries as { sent?: Inquiry[]; received?: Inquiry[] })
+                  ?.received?.length || 0) >
+              0 ? (
               <List sx={{ p: 0 }}>
-                {userInquiries.map((inquiry) => (
+                {((myInquiries as { sent?: Inquiry[] })?.sent || []).map(
+                  (inquiry) => (
+                    <React.Fragment key={inquiry.id}>
+                      <ListItem>
+                        <ListItemAvatar>
+                          <Avatar sx={{ bgcolor: "primary.main" }}>
+                            <MessageIcon />
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={inquiry.message}
+                          secondary={t("profile.inquiries.sentOn", {
+                            date: formatDate(inquiry.createdAt),
+                          })}
+                        />
+                        <Chip
+                          label={t("profile.inquiries.sent")}
+                          color="success"
+                          size="small"
+                        />
+                        {(user?.role === "Admin" ||
+                          inquiry.userId === user?.id ||
+                          (inquiry as Inquiry).propertyOwnerId ===
+                            user?.id) && (
+                          <IconButton
+                            size="small"
+                            color="error"
+                            onClick={() =>
+                              inquiryService
+                                .deleteInquiry(inquiry.id)
+                                .then(() => {
+                                  queryClient.invalidateQueries({
+                                    queryKey: ["inquiries", "my", user?.id],
+                                  });
+                                })
+                            }
+                          >
+                            <LogoutIcon sx={{ display: "none" }} />
+                          </IconButton>
+                        )}
+                      </ListItem>
+                      <Divider />
+                    </React.Fragment>
+                  )
+                )}
+                {(
+                  (myInquiries as { received?: Inquiry[] })?.received || []
+                ).map((inquiry) => (
                   <React.Fragment key={inquiry.id}>
                     <ListItem>
                       <ListItemAvatar>
@@ -465,10 +569,29 @@ export const ProfilePage: React.FC = () => {
                         })}
                       />
                       <Chip
-                        label={t("profile.inquiries.sent")}
-                        color="success"
+                        label={t("inquiries.direction.received")}
+                        color="info"
                         size="small"
                       />
+                      {(user?.role === "Admin" ||
+                        (inquiry as Inquiry).userId === user?.id ||
+                        (inquiry as Inquiry).propertyOwnerId === user?.id) && (
+                        <IconButton
+                          size="small"
+                          color="error"
+                          onClick={() =>
+                            inquiryService
+                              .deleteInquiry(inquiry.id)
+                              .then(() => {
+                                queryClient.invalidateQueries({
+                                  queryKey: ["inquiries", "my", user?.id],
+                                });
+                              })
+                          }
+                        >
+                          <LogoutIcon sx={{ display: "none" }} />
+                        </IconButton>
+                      )}
                     </ListItem>
                     <Divider />
                   </React.Fragment>

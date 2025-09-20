@@ -32,6 +32,7 @@ import { useLanguage } from "../../contexts/LanguageContext";
 import { ROUTES } from "../../utils/constants";
 import { getUserFullName, getInitials } from "../../utils/helpers";
 import { FavoriteCount } from "./FavoriteCount";
+import { InquiryReceivedCount } from "./InquiryReceivedCount";
 
 export const Header = React.memo(() => {
   const theme = useTheme();
@@ -321,6 +322,8 @@ export const Header = React.memo(() => {
 
               {/* Favorite Count */}
               <FavoriteCount />
+              {/* Inquiry Count */}
+              <InquiryReceivedCount />
 
               {/* Profile Menu */}
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>

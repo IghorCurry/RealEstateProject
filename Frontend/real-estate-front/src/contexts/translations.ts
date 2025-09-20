@@ -330,6 +330,8 @@ export const translations = {
       "Start browsing properties and sending inquiries to see them here.",
     "inquiries.empty.browse": "Browse Properties",
     "inquiries.count": "You have {count} inquiries",
+    "inquiries.direction.sent": "Sent",
+    "inquiries.direction.received": "Received",
     "inquiries.reply": "Reply",
     "inquiries.delete": "Delete",
     "inquiries.send": "Send Inquiry",
@@ -337,12 +339,14 @@ export const translations = {
     "inquiries.reply_sent": "Reply sent successfully!",
     "inquiries.load.failed": "Failed to load inquiries. Please try again.",
     "inquiries.auth.required": "Please sign in to view your inquiries.",
+    "inquiries.badge.tooltip": "Received Inquiries: {count}",
     "inquiries.dialog.replyTo": "Reply to {name}",
     "inquiries.dialog.contact": "Contact:",
     "inquiries.dialog.messageLabel": "Reply Message",
     "inquiries.dialog.messagePlaceholder": "Type your reply message...",
     "inquiries.dialog.cancel": "Cancel",
     "inquiries.dialog.send": "Send Reply",
+    "inquiries.anonymous": "Anonymous",
 
     // Footer
     "footer.language": "Language",
@@ -494,6 +498,12 @@ export const translations = {
     "inquiries.toasts.reply.empty": "Please enter a reply message",
     "inquiries.toasts.reply.sent": "Reply sent successfully!",
     "inquiries.confirm.delete": "Are you sure you want to delete this inquiry?",
+
+    // Generic dialogs
+    "dialogs.confirm.title": "Confirm action",
+    "dialogs.confirm.delete": "Are you sure you want to delete this inquiry?",
+    "dialogs.cancel": "Cancel",
+    "dialogs.delete": "Delete",
 
     // Profile
     "profile.toasts.update.success": "Profile updated successfully!",
@@ -952,6 +962,8 @@ export const translations = {
       "Почніть переглядати нерухомість та надсилати запити, щоб бачити їх тут.",
     "inquiries.empty.browse": "Переглянути нерухомість",
     "inquiries.count": "У вас {count} запитів",
+    "inquiries.direction.sent": "Надіслані",
+    "inquiries.direction.received": "Отримані",
     "inquiries.reply": "Відповісти",
     "inquiries.delete": "Видалити",
     "inquiries.send": "Надіслати запит",
@@ -960,12 +972,14 @@ export const translations = {
     "inquiries.load.failed": "Не вдалося завантажити запити. Спробуйте ще раз.",
     "inquiries.auth.required":
       "Будь ласка, увійдіть, щоб переглянути свої запити.",
+    "inquiries.badge.tooltip": "Отриманих запитів: {count}",
     "inquiries.dialog.replyTo": "Відповідь для {name}",
     "inquiries.dialog.contact": "Контакти:",
     "inquiries.dialog.messageLabel": "Повідомлення відповіді",
     "inquiries.dialog.messagePlaceholder": "Введіть текст відповіді...",
     "inquiries.dialog.cancel": "Скасувати",
     "inquiries.dialog.send": "Надіслати відповідь",
+    "inquiries.anonymous": "Анонімний",
 
     // Footer
     "footer.language": "Мова",
@@ -1123,6 +1137,12 @@ export const translations = {
     "inquiries.toasts.reply.empty": "Будь ласка, введіть текст відповіді",
     "inquiries.toasts.reply.sent": "Відповідь надіслано!",
     "inquiries.confirm.delete": "Ви впевнені, що хочете видалити цей запит?",
+
+    // Generic dialogs
+    "dialogs.confirm.title": "Підтвердьте дію",
+    "dialogs.confirm.delete": "Ви впевнені, що хочете видалити цей запит?",
+    "dialogs.cancel": "Скасувати",
+    "dialogs.delete": "Видалити",
 
     // Profile
     "profile.toasts.update.success": "Профіль успішно оновлено!",

@@ -351,6 +351,38 @@ Authorization: Bearer {token}
 }
 ```
 
+### Мої запити (надіслані та отримані)
+
+```http
+GET /api/Inquiry/my
+Authorization: Bearer {token}
+```
+
+**Відповідь:**
+
+```json
+{
+  "sent": [
+    {
+      "id": "guid",
+      "propertyId": "guid",
+      "userId": "guid",
+      "message": "Цікавить огляд",
+      "createdAt": "2025-08-15T19:28:24.048Z"
+    }
+  ],
+  "received": [
+    {
+      "id": "guid",
+      "propertyId": "guid",
+      "userId": "guid",
+      "message": "Чи доступно на вихідних?",
+      "createdAt": "2025-08-16T11:12:00.000Z"
+    }
+  ]
+}
+```
+
 ### Отримання запитів користувача
 
 ```http

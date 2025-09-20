@@ -7,6 +7,7 @@ import {
 } from "@mui/icons-material";
 import type { PropertyDetailed } from "../../types/property";
 import { useLanguage } from "../../contexts/LanguageContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 interface PropertyContactCardProps {
   property: PropertyDetailed;
@@ -24,6 +25,8 @@ export const PropertyContactCard: React.FC<PropertyContactCardProps> = ({
   onAuthRequired,
 }) => {
   const { t } = useLanguage();
+  const { user } = useAuth();
+  const isOwner = user?.id === (property?.userId || property?.user?.id);
   return (
     <Card sx={{ mb: 4 }}>
       <CardContent>
@@ -46,26 +49,31 @@ export const PropertyContactCard: React.FC<PropertyContactCardProps> = ({
           <Typography variant="body1">agent@realestate.com</Typography>
         </Box>
 
-        {/* Send Inquiry Button */}
-        <Button
-          variant="contained"
-          fullWidth
-          size="large"
-          onClick={isAuthenticated ? onSendInquiry : onAuthRequired}
-          sx={{ mb: 2 }}
-        >
-          {t("inquiries.send")}
-        </Button>
+        {/* Hide actions for owner */}
+        {!isOwner && (
+          <>
+            {/* Send Inquiry Button */}
+            <Button
+              variant="contained"
+              fullWidth
+              size="large"
+              onClick={isAuthenticated ? onSendInquiry : onAuthRequired}
+              sx={{ mb: 2 }}
+            >
+              {t("inquiries.send")}
+            </Button>
 
-        {/* Schedule Viewing Button */}
-        <Button
-          variant="outlined"
-          fullWidth
-          size="large"
-          onClick={isAuthenticated ? onScheduleViewing : onAuthRequired}
-        >
-          {t("propertyDetail.toasts.scheduleSoon")}
-        </Button>
+            {/* Schedule Viewing Button */}
+            <Button
+              variant="outlined"
+              fullWidth
+              size="large"
+              onClick={isAuthenticated ? onScheduleViewing : onAuthRequired}
+            >
+              {t("propertyDetail.toasts.scheduleSoon")}
+            </Button>
+          </>
+        )}
       </CardContent>
     </Card>
   );

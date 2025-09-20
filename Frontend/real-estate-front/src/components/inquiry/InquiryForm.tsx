@@ -19,7 +19,7 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { inquiryService } from "../../services/inquiryService";
 import { useAuth } from "../../contexts/AuthContext";
@@ -64,6 +64,7 @@ export const InquiryForm: React.FC<InquiryFormProps> = ({
   const { isAuthenticated, user } = useAuth();
   const { t } = useLanguage();
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const queryClient = useQueryClient();
 
   // Форм-значення не включають propertyId (він передається окремо)
   type InquiryFormValues = Omit<InquiryCreate, "propertyId">;
@@ -88,8 +89,27 @@ export const InquiryForm: React.FC<InquiryFormProps> = ({
 
   const createInquiryMutation = useMutation({
     mutationFn: (data: InquiryCreate) => inquiryService.createInquiry(data),
-    onSuccess: () => {
+    onSuccess: (created) => {
       toast.success(t("inquiries.reply_sent"));
+      // Optimistic cache update for "sent" list
+      if (user?.id) {
+        queryClient.setQueryData(
+          ["inquiries", "my", user.id],
+          (
+            old:
+              | { sent?: InquiryCreate[]; received?: InquiryCreate[] }
+              | undefined
+          ) => {
+            if (!old) return old;
+            return {
+              sent: [created, ...(old.sent || [])],
+              received: old.received || [],
+            };
+          }
+        );
+        // Also trigger server refetch when available
+        queryClient.invalidateQueries({ queryKey: ["inquiries", "my"] });
+      }
       setIsSubmitted(true);
       reset();
       onSuccess?.();

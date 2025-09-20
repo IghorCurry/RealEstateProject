@@ -28,6 +28,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useLanguage } from "../../contexts/LanguageContext";
 import { getUserFullName, getInitials } from "../../utils/helpers";
 import { FavoriteCount } from "./FavoriteCount";
+import { InquiryReceivedCount } from "./InquiryReceivedCount";
 
 export const ModernHero: React.FC = () => {
   const theme = useTheme();
@@ -271,6 +272,7 @@ export const ModernHero: React.FC = () => {
                   )}
 
                   <FavoriteCount />
+                  <InquiryReceivedCount />
 
                   {user && (
                     <Typography

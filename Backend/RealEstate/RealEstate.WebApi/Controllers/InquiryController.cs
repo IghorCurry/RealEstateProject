@@ -18,6 +18,29 @@ namespace RealEstate.WebApi.Controllers
             _manager = manager;
             _logger = logger;
         }
+        [HttpGet("my")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetMyInquiries()
+        {
+            try
+            {
+                var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+                if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out var currentUserId))
+                {
+                    return Unauthorized();
+                }
+
+                var data = await _manager.GetMyInquiriesAsync(currentUserId);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to get current user's inquiries");
+                return StatusCode(500, "Internal server error");
+            }
+        }
 
         [HttpGet]
         [Authorize(Policy = "RequireAdmin")]
@@ -129,7 +152,24 @@ namespace RealEstate.WebApi.Controllers
 
             try
             {
-                var entity = await _manager.CreateAsync(model);
+                // Ensure UserId is always set from the authenticated user
+                var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+                if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out var currentUserId))
+                {
+                    return Unauthorized();
+                }
+
+                var createModel = new InquiryCreateModel
+                {
+                    Message = model.Message,
+                    PropertyId = model.PropertyId,
+                    UserId = currentUserId,
+                    Name = model.Name,
+                    Email = model.Email,
+                    Phone = model.Phone
+                };
+
+                var entity = await _manager.CreateAsync(createModel);
                 _logger.LogInformation("Inquiry created successfully: {InquiryId} for property {PropertyId}", entity.Id, entity.PropertyId);
                 return Ok(entity);
             }
@@ -175,7 +215,7 @@ namespace RealEstate.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Policy = "RequireAdmin")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -192,7 +232,23 @@ namespace RealEstate.WebApi.Controllers
 
             try
             {
-                var result = await _manager.DeleteAsync(id);
+                var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+                var roleClaim = User.FindFirst(System.Security.Claims.ClaimTypes.Role);
+                if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out var currentUserId))
+                {
+                    return Unauthorized();
+                }
+
+                var isAdmin = roleClaim != null && roleClaim.Value == "Admin";
+                var currentUserEmail = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
+
+                var result = await _manager.DeleteAsync(id, currentUserId, isAdmin, currentUserEmail);
+                if (!result)
+                {
+                    _logger.LogWarning("Forbidden delete attempt for inquiry {InquiryId} by user {UserId}", id, currentUserId);
+                    return Forbid();
+                }
+
                 _logger.LogInformation("Inquiry deleted successfully: {InquiryId}", id);
                 return Ok(result);
             }
