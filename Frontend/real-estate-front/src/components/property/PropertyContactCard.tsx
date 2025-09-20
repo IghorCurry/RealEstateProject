@@ -6,6 +6,7 @@ import {
   Email as EmailIcon,
 } from "@mui/icons-material";
 import type { PropertyDetailed } from "../../types/property";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 interface PropertyContactCardProps {
   property: PropertyDetailed;
@@ -22,11 +23,12 @@ export const PropertyContactCard: React.FC<PropertyContactCardProps> = ({
   onScheduleViewing,
   onAuthRequired,
 }) => {
+  const { t } = useLanguage();
   return (
     <Card sx={{ mb: 4 }}>
       <CardContent>
         <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
-          Contact Agent
+          {t("property.details.contact")}
         </Typography>
 
         <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
@@ -52,7 +54,7 @@ export const PropertyContactCard: React.FC<PropertyContactCardProps> = ({
           onClick={isAuthenticated ? onSendInquiry : onAuthRequired}
           sx={{ mb: 2 }}
         >
-          Send Inquiry
+          {t("inquiries.send")}
         </Button>
 
         {/* Schedule Viewing Button */}
@@ -62,7 +64,7 @@ export const PropertyContactCard: React.FC<PropertyContactCardProps> = ({
           size="large"
           onClick={isAuthenticated ? onScheduleViewing : onAuthRequired}
         >
-          Schedule Viewing
+          {t("propertyDetail.toasts.scheduleSoon")}
         </Button>
       </CardContent>
     </Card>

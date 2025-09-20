@@ -110,7 +110,7 @@ export const Footer: React.FC = () => {
                 fontFamily: '"Playfair Display", serif',
               }}
             >
-              Real Estate Platform
+              {t("footer.brand")}
             </Typography>
             <Typography
               variant="body2"
@@ -120,8 +120,7 @@ export const Footer: React.FC = () => {
                 color: "text.secondary",
               }}
             >
-              Your trusted partner in real estate. Find your dream property or
-              list your own with confidence.
+              {t("footer.tagline")}
             </Typography>
 
             {/* Language Switcher */}
@@ -155,7 +154,7 @@ export const Footer: React.FC = () => {
                   },
                 }}
               >
-                {language === "en" ? "EN" : "UK"}
+                {language === "en" ? t("lang.en") : t("lang.uk")}
               </Button>
             </Box>
 
@@ -230,7 +229,7 @@ export const Footer: React.FC = () => {
                 textAlign: "center",
               }}
             >
-              Quick Links
+              {t("footer.quickLinks")}
             </Typography>
             <Box
               sx={{
@@ -275,7 +274,7 @@ export const Footer: React.FC = () => {
                 fontFamily: '"Playfair Display", serif',
               }}
             >
-              Contact Info
+              {t("footer.contact")}
             </Typography>
             <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
               {contactInfo.map((contact, index) => (
@@ -336,7 +335,7 @@ export const Footer: React.FC = () => {
               color: "text.secondary",
             }}
           >
-            © 2025 Real Estate Platform. All rights reserved.
+            {t("footer.copyright", { year: new Date().getFullYear() })}
           </Typography>
 
           {!isMobile && (
@@ -347,7 +346,7 @@ export const Footer: React.FC = () => {
                 color: "text.secondary",
               }}
             >
-              Built with ❤️ by{" "}
+              {t("footer.builtWith")}{" "}
               <Button
                 onClick={() => navigate(ROUTES.DEVELOPER)}
                 sx={{

@@ -18,6 +18,7 @@ import { useNavigate, Link as RouterLink, useLocation } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import * as yup from "yup";
+import { useLanguage } from "../contexts/LanguageContext";
 
 import { authService } from "../services/authService";
 import { ROUTES } from "../utils/constants";
@@ -26,7 +27,7 @@ import { FormField, PageContainer } from "../components";
 import { useAuth } from "../contexts/AuthContext";
 
 // Validation schema
-const loginSchema = yup.object({
+let loginSchema = yup.object({
   email: yup
     .string()
     .required("Email is required")
@@ -46,6 +47,7 @@ export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { login } = useAuth();
+  const { t } = useLanguage();
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState<LoginFormData>({
@@ -60,7 +62,7 @@ export const LoginPage: React.FC = () => {
       // Use AuthContext login function with original credentials
       login(variables.email, variables.password);
       toast.success(
-        `Login successful! Welcome back, ${getUserFullName(response.user)}!`
+        t("auth.login.success", { name: getUserFullName(response.user) })
       );
 
       // Navigate to intended destination or home
@@ -70,7 +72,7 @@ export const LoginPage: React.FC = () => {
     onError: (error: unknown) => {
       const message =
         (error as { response?: { data?: { message?: string } } })?.response
-          ?.data?.message || "Login failed. Please check your credentials.";
+          ?.data?.message || t("auth.login.failed");
       toast.error(message);
     },
   });
@@ -94,6 +96,21 @@ export const LoginPage: React.FC = () => {
 
     try {
       // Validate form data
+      // Rebuild localized validation schema (не змінюючи логіку коду)
+      loginSchema = yup.object({
+        email: yup
+          .string()
+          .required(t("validation.auth.email.required"))
+          .email(t("validation.auth.email.format"))
+          .test("is-valid-email", t("validation.auth.email.format"), (value) =>
+            value ? isValidEmail(value) : false
+          ),
+        password: yup
+          .string()
+          .required(t("validation.auth.password.required"))
+          .min(1, t("validation.auth.password.required")),
+      });
+
       await loginSchema.validate(formData, { abortEarly: false });
 
       // Clear any existing errors
@@ -176,10 +193,10 @@ export const LoginPage: React.FC = () => {
               component="h1"
               sx={{ fontWeight: 600, mb: 1 }}
             >
-              Welcome Back
+              {t("auth.login.title")}
             </Typography>
             <Typography variant="body1" color="text.secondary">
-              Sign in to your account to continue
+              {t("auth.login.subtitle")}
             </Typography>
           </Box>
 
@@ -188,7 +205,7 @@ export const LoginPage: React.FC = () => {
             <Box sx={{ mb: 3 }}>
               {/* Email Field */}
               <FormField
-                label="Email Address"
+                label={t("auth.login.email")}
                 type="email"
                 value={formData.email}
                 onChange={handleInputChange("email")}
@@ -200,7 +217,7 @@ export const LoginPage: React.FC = () => {
 
               {/* Password Field */}
               <FormField
-                label="Password"
+                label={t("auth.login.password")}
                 type={showPassword ? "text" : "password"}
                 value={formData.password}
                 onChange={handleInputChange("password")}
@@ -232,7 +249,7 @@ export const LoginPage: React.FC = () => {
               {loginMutation.isPending ? (
                 <CircularProgress size={24} color="inherit" />
               ) : (
-                "Sign In"
+                t("auth.login.submit")
               )}
             </Button>
 
@@ -246,7 +263,7 @@ export const LoginPage: React.FC = () => {
                 disabled={loginMutation.isPending}
                 sx={{ flex: 1 }}
               >
-                Demo Admin
+                {t("auth.login.demoAdmin")}
               </Button>
               <Button
                 fullWidth
@@ -256,7 +273,7 @@ export const LoginPage: React.FC = () => {
                 disabled={loginMutation.isPending}
                 sx={{ flex: 1 }}
               >
-                Demo User
+                {t("auth.login.demoUser")}
               </Button>
             </Box>
 
@@ -270,13 +287,13 @@ export const LoginPage: React.FC = () => {
             {/* Register Link */}
             <Box sx={{ textAlign: "center" }}>
               <Typography variant="body2" color="text.secondary">
-                Don't have an account?{" "}
+                {t("auth.login.no.account")}{" "}
                 <Link
                   component={RouterLink}
                   to={ROUTES.REGISTER}
                   sx={{ textDecoration: "none", fontWeight: 600 }}
                 >
-                  Sign Up
+                  {t("auth.register.title")}
                 </Link>
               </Typography>
             </Box>
@@ -288,10 +305,10 @@ export const LoginPage: React.FC = () => {
                 sx={{ textDecoration: "none", fontWeight: 500 }}
                 onClick={(e) => {
                   e.preventDefault();
-                  toast.success("Password reset functionality coming soon!");
+                  toast.success(t("toasts.login.resetSoon"));
                 }}
               >
-                Forgot your password?
+                {t("auth.login.forgot")}
               </Link>
             </Box>
           </form>
@@ -301,16 +318,6 @@ export const LoginPage: React.FC = () => {
         <Box
           sx={{ textAlign: "center", mt: 3, position: "absolute", bottom: 20 }}
         >
-          <Typography
-            variant="caption"
-            color="text.secondary"
-            sx={{ display: "block", mb: 1 }}
-          >
-            Demo Admin: admin@gmail.com / AyA(U8=Fs8h7
-          </Typography>
-          <Typography variant="caption" color="text.secondary">
-            Demo User: user1@gmail.com / PassUser1
-          </Typography>
         </Box>
       </Box>
     </PageContainer>

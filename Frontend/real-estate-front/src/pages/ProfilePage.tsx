@@ -42,6 +42,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
+import { useLanguage } from "../contexts/LanguageContext";
 import * as yup from "yup";
 import { useAuth } from "../contexts/AuthContext";
 import { propertyService } from "../services/propertyService";
@@ -82,6 +83,7 @@ const profileUpdateSchema = yup.object({
 type ProfileUpdateData = yup.InferType<typeof profileUpdateSchema>;
 
 export const ProfilePage: React.FC = () => {
+  const { t } = useLanguage();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();
@@ -145,10 +147,10 @@ export const ProfilePage: React.FC = () => {
       queryClient.invalidateQueries({ queryKey: ["user-inquiries"] });
       // Close dialog and notify
       setEditDialogOpen(false);
-      toast.success("Profile updated successfully!");
+      toast.success(t("profile.toasts.update.success"));
     },
     onError: () => {
-      toast.error("Failed to update profile");
+      toast.error(t("profile.toasts.update.failed"));
     },
   });
 
@@ -205,7 +207,7 @@ export const ProfilePage: React.FC = () => {
   if (!user) {
     return (
       <PageContainer>
-        <Alert severity="error">User not found</Alert>
+        <Alert severity="error">{t("profile.userNotFound")}</Alert>
       </PageContainer>
     );
   }
@@ -248,7 +250,9 @@ export const ProfilePage: React.FC = () => {
                   color="text.secondary"
                   sx={{ mb: 2 }}
                 >
-                  Member since {formatDate(user.createdAt)}
+                  {t("profile.memberSince", {
+                    date: formatDate(user.createdAt),
+                  })}
                 </Typography>
                 <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
                   <Chip
@@ -259,12 +263,16 @@ export const ProfilePage: React.FC = () => {
                   />
                   <Chip
                     icon={<HomeIcon />}
-                    label={`${userProperties.length} Properties`}
+                    label={t("profile.chips.properties", {
+                      count: userProperties.length,
+                    })}
                     variant="outlined"
                   />
                   <Chip
                     icon={<MessageIcon />}
-                    label={`${userInquiries.length} Inquiries`}
+                    label={t("profile.chips.inquiries", {
+                      count: userInquiries.length,
+                    })}
                     variant="outlined"
                   />
                 </Box>
@@ -282,7 +290,7 @@ export const ProfilePage: React.FC = () => {
                     startIcon={<EditIcon />}
                     onClick={handleEditToggle}
                   >
-                    Edit Profile
+                    {t("profile.buttons.edit")}
                   </Button>
                   <Button
                     variant="outlined"
@@ -290,7 +298,7 @@ export const ProfilePage: React.FC = () => {
                     startIcon={<LogoutIcon />}
                     onClick={handleLogout}
                   >
-                    Logout
+                    {t("profile.buttons.logout")}
                   </Button>
                 </Box>
               </Grid>
@@ -308,27 +316,27 @@ export const ProfilePage: React.FC = () => {
               scrollButtons={isMobile ? "auto" : false}
             >
               <Tab
-                label="Overview"
+                label={t("profile.tabs.overview")}
                 icon={<PersonIcon />}
                 iconPosition="start"
               />
               <Tab
-                label="My Properties"
+                label={t("profile.tabs.myProperties")}
                 icon={<HomeIcon />}
                 iconPosition="start"
               />
               <Tab
-                label="My Inquiries"
+                label={t("profile.tabs.myInquiries")}
                 icon={<MessageIcon />}
                 iconPosition="start"
               />
               <Tab
-                label="Favorites"
+                label={t("profile.tabs.favorites")}
                 icon={<FavoriteIcon />}
                 iconPosition="start"
               />
               <Tab
-                label="Settings"
+                label={t("profile.tabs.settings")}
                 icon={<SettingsIcon />}
                 iconPosition="start"
               />
@@ -343,7 +351,7 @@ export const ProfilePage: React.FC = () => {
                   <Card variant="outlined">
                     <CardContent>
                       <Typography variant="h6" gutterBottom>
-                        Personal Information
+                        {t("profile.info.personal")}
                       </Typography>
                       <Box
                         sx={{ display: "flex", alignItems: "center", mb: 2 }}
@@ -362,7 +370,9 @@ export const ProfilePage: React.FC = () => {
                       <Box sx={{ display: "flex", alignItems: "center" }}>
                         <CalendarIcon sx={{ mr: 1, color: "text.secondary" }} />
                         <Typography variant="body2">
-                          Joined {formatDate(user.createdAt)}
+                          {t("profile.memberSince", {
+                            date: formatDate(user.createdAt),
+                          })}
                         </Typography>
                       </Box>
                     </CardContent>
@@ -372,14 +382,16 @@ export const ProfilePage: React.FC = () => {
                   <Card variant="outlined">
                     <CardContent>
                       <Typography variant="h6" gutterBottom>
-                        Account Statistics
+                        {t("profile.info.stats")}
                       </Typography>
                       <Box
                         sx={{ display: "flex", alignItems: "center", mb: 2 }}
                       >
                         <HomeIcon sx={{ mr: 1, color: "text.secondary" }} />
                         <Typography variant="body2">
-                          {userProperties.length} Properties Listed
+                          {t("profile.stats.propertiesListed", {
+                            count: userProperties.length,
+                          })}
                         </Typography>
                       </Box>
                       <Box
@@ -387,13 +399,15 @@ export const ProfilePage: React.FC = () => {
                       >
                         <MessageIcon sx={{ mr: 1, color: "text.secondary" }} />
                         <Typography variant="body2">
-                          {userInquiries.length} Inquiries Sent
+                          {t("profile.stats.inquiriesSent", {
+                            count: userInquiries.length,
+                          })}
                         </Typography>
                       </Box>
                       <Box sx={{ display: "flex", alignItems: "center" }}>
                         <PersonIcon sx={{ mr: 1, color: "text.secondary" }} />
                         <Typography variant="body2">
-                          Role: {user.role}
+                          {t("profile.role", { role: user.role })}
                         </Typography>
                       </Box>
                     </CardContent>
@@ -422,9 +436,9 @@ export const ProfilePage: React.FC = () => {
               </Grid>
             ) : (
               <EmptyState
-                title="No properties listed yet"
-                description="Start by creating your first property listing."
-                actionLabel="Add Property"
+                title={t("profile.empty.properties.title")}
+                description={t("profile.empty.properties.description")}
+                actionLabel={t("profile.empty.properties.action")}
                 onAction={() => navigate(ROUTES.CREATE_PROPERTY)}
               />
             )}
@@ -446,9 +460,15 @@ export const ProfilePage: React.FC = () => {
                       </ListItemAvatar>
                       <ListItemText
                         primary={inquiry.message}
-                        secondary={`Sent on ${formatDate(inquiry.createdAt)}`}
+                        secondary={t("profile.inquiries.sentOn", {
+                          date: formatDate(inquiry.createdAt),
+                        })}
                       />
-                      <Chip label="Sent" color="success" size="small" />
+                      <Chip
+                        label={t("profile.inquiries.sent")}
+                        color="success"
+                        size="small"
+                      />
                     </ListItem>
                     <Divider />
                   </React.Fragment>
@@ -456,9 +476,9 @@ export const ProfilePage: React.FC = () => {
               </List>
             ) : (
               <EmptyState
-                title="No inquiries sent yet"
-                description="Start by browsing properties and sending inquiries to property owners."
-                actionLabel="Browse Properties"
+                title={t("profile.empty.inquiries.title")}
+                description={t("profile.empty.inquiries.description")}
+                actionLabel={t("profile.empty.inquiries.action")}
                 onAction={() => navigate(ROUTES.PROPERTIES)}
               />
             )}
@@ -484,9 +504,9 @@ export const ProfilePage: React.FC = () => {
               </Grid>
             ) : (
               <EmptyState
-                title="No favorites yet"
-                description="Start browsing properties and add them to your favorites to see them here."
-                actionLabel="Browse Properties"
+                title={t("profile.empty.properties.title")}
+                description={t("profile.empty.inquiries.description")}
+                actionLabel={t("profile.empty.inquiries.action")}
                 onAction={() => navigate(ROUTES.PROPERTIES)}
               />
             )}
@@ -495,9 +515,9 @@ export const ProfilePage: React.FC = () => {
           {/* Settings Tab */}
           <TabPanel value={tabValue} index={4}>
             <EmptyState
-              title="Account settings functionality coming soon!"
-              description="You'll be able to manage your account settings and preferences here."
-              actionLabel="Edit Profile"
+              title={t("profile.settings.soon.title")}
+              description={t("profile.settings.soon.description")}
+              actionLabel={t("profile.settings.soon.action")}
               onAction={handleEditToggle}
             />
           </TabPanel>
@@ -511,7 +531,7 @@ export const ProfilePage: React.FC = () => {
           fullWidth
         >
           <DialogTitle>
-            Edit Profile
+            {t("profile.dialog.editTitle")}
             <IconButton
               aria-label="close"
               onClick={() => setEditDialogOpen(false)}
@@ -529,7 +549,7 @@ export const ProfilePage: React.FC = () => {
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <FormField
-                    label="First Name"
+                    label={t("profile.form.firstName")}
                     value={editForm.firstName}
                     onChange={(e) =>
                       setEditForm((prev) => ({
@@ -544,7 +564,7 @@ export const ProfilePage: React.FC = () => {
                 </Grid>
                 <Grid item xs={12}>
                   <FormField
-                    label="Last Name"
+                    label={t("profile.form.lastName")}
                     value={editForm.lastName}
                     onChange={(e) =>
                       setEditForm((prev) => ({
@@ -559,7 +579,7 @@ export const ProfilePage: React.FC = () => {
                 </Grid>
                 <Grid item xs={12}>
                   <FormField
-                    label="Email"
+                    label={t("profile.form.email")}
                     type="email"
                     value={editForm.email}
                     onChange={(e) =>
@@ -575,7 +595,7 @@ export const ProfilePage: React.FC = () => {
                 </Grid>
                 <Grid item xs={12}>
                   <FormField
-                    label="Phone Number"
+                    label={t("profile.form.phone")}
                     value={editForm.phoneNumber}
                     onChange={(e) =>
                       setEditForm((prev) => ({
@@ -591,7 +611,9 @@ export const ProfilePage: React.FC = () => {
               </Grid>
             </DialogContent>
             <DialogActions>
-              <Button onClick={() => setEditDialogOpen(false)}>Cancel</Button>
+              <Button onClick={() => setEditDialogOpen(false)}>
+                {t("profile.dialog.cancel")}
+              </Button>
               <Button
                 type="submit"
                 variant="contained"
@@ -604,7 +626,9 @@ export const ProfilePage: React.FC = () => {
                 }
                 disabled={updateProfileMutation.isPending}
               >
-                {updateProfileMutation.isPending ? "Saving..." : "Save Changes"}
+                {updateProfileMutation.isPending
+                  ? t("profile.dialog.saving")
+                  : t("profile.dialog.save")}
               </Button>
             </DialogActions>
           </form>

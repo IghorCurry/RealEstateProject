@@ -29,6 +29,7 @@ import {
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import { useLanguage } from "../contexts/LanguageContext";
 import { useAuth } from "../contexts/AuthContext";
 import { inquiryService } from "../services/inquiryService";
 import { propertyService } from "../services/propertyService";
@@ -41,6 +42,7 @@ export const InquiriesPage: React.FC = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { isAuthenticated, isAdmin } = useAuth();
+  const { t } = useLanguage();
   const [selectedInquiry, setSelectedInquiry] = useState<Inquiry | null>(null);
   const [replyDialogOpen, setReplyDialogOpen] = useState(false);
   const [replyMessage, setReplyMessage] = useState("");
@@ -66,15 +68,15 @@ export const InquiriesPage: React.FC = () => {
     mutationFn: (inquiryId: string) => inquiryService.deleteInquiry(inquiryId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["inquiries"] });
-      toast.success("Inquiry deleted successfully");
+      toast.success(t("inquiries.toasts.delete.success"));
     },
     onError: () => {
-      toast.error("Failed to delete inquiry");
+      toast.error(t("inquiries.toasts.delete.failed"));
     },
   });
 
   const handleDeleteInquiry = (inquiryId: string) => {
-    if (window.confirm("Are you sure you want to delete this inquiry?")) {
+    if (window.confirm(t("inquiries.confirm.delete"))) {
       deleteInquiryMutation.mutate(inquiryId);
     }
   };
@@ -86,11 +88,11 @@ export const InquiriesPage: React.FC = () => {
 
   const handleSendReply = () => {
     if (!replyMessage.trim()) {
-      toast.error("Please enter a reply message");
+      toast.error(t("inquiries.toasts.reply.empty"));
       return;
     }
 
-    toast.success("Reply sent successfully!");
+    toast.success(t("inquiries.toasts.reply.sent"));
     setReplyDialogOpen(false);
     setReplyMessage("");
     setSelectedInquiry(null);
@@ -113,10 +115,10 @@ export const InquiriesPage: React.FC = () => {
     return (
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Alert severity="error" sx={{ mb: 3 }}>
-          Failed to load inquiries. Please try again.
+          {t("inquiries.load.failed")}
         </Alert>
         <Button variant="contained" onClick={() => navigate(ROUTES.HOME)}>
-          Back to Home
+          {t("notFound.actions.home")}
         </Button>
       </Container>
     );
@@ -126,10 +128,10 @@ export const InquiriesPage: React.FC = () => {
     return (
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Alert severity="info" sx={{ mb: 3 }}>
-          Please sign in to view your inquiries.
+          {t("inquiries.auth.required")}
         </Alert>
         <Button variant="contained" onClick={() => navigate(ROUTES.LOGIN)}>
-          Sign In
+          {t("auth.login.submit")}
         </Button>
       </Container>
     );
@@ -139,11 +141,9 @@ export const InquiriesPage: React.FC = () => {
     <Box sx={{ minHeight: "100vh", py: 4, overflow: "hidden" }}>
       <Container maxWidth="lg" sx={{ overflow: "hidden" }}>
         <SectionHeader
-          title={isAdmin ? "All Inquiries" : "My Inquiries"}
+          title={isAdmin ? t("inquiries.admin.title") : t("inquiries.title")}
           subtitle={
-            isAdmin
-              ? "Manage property inquiries from users"
-              : "Track your property inquiries"
+            isAdmin ? t("inquiries.admin.subtitle") : t("inquiries.subtitle")
           }
         />
 
@@ -153,18 +153,20 @@ export const InquiriesPage: React.FC = () => {
               sx={{ fontSize: 64, color: "text.secondary", mb: 2 }}
             />
             <Typography variant="h6" color="text.secondary" gutterBottom>
-              {isAdmin ? "No inquiries yet" : "No inquiries sent yet"}
+              {isAdmin
+                ? t("inquiries.empty.title")
+                : t("inquiries.empty.title")}
             </Typography>
             <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
               {isAdmin
-                ? "When users send inquiries about properties, they will appear here."
-                : "Start browsing properties and send inquiries to see them here."}
+                ? t("inquiries.subtitle")
+                : t("inquiries.empty.description")}
             </Typography>
             <Button
               variant="contained"
               onClick={() => navigate(ROUTES.PROPERTIES)}
             >
-              Browse Properties
+              {t("inquiries.empty.browse")}
             </Button>
           </Card>
         ) : (
@@ -276,31 +278,38 @@ export const InquiriesPage: React.FC = () => {
           maxWidth="sm"
           fullWidth
         >
-          <DialogTitle>Reply to {selectedInquiry?.name}</DialogTitle>
+          <DialogTitle>
+            {t("inquiries.dialog.replyTo", {
+              name: selectedInquiry?.name || "",
+            })}
+          </DialogTitle>
           <DialogContent>
             <Box sx={{ mb: 2 }}>
               <Typography variant="body2" color="text.secondary">
-                Contact: {selectedInquiry?.email} | {selectedInquiry?.phone}
+                {t("inquiries.dialog.contact")} {selectedInquiry?.email} |{" "}
+                {selectedInquiry?.phone}
               </Typography>
             </Box>
             <TextField
-              label="Reply Message"
+              label={t("inquiries.dialog.messageLabel")}
               multiline
               rows={4}
               fullWidth
               value={replyMessage}
               onChange={(e) => setReplyMessage(e.target.value)}
-              placeholder="Type your reply message..."
+              placeholder={t("inquiries.dialog.messagePlaceholder")}
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setReplyDialogOpen(false)}>Cancel</Button>
+            <Button onClick={() => setReplyDialogOpen(false)}>
+              {t("inquiries.dialog.cancel")}
+            </Button>
             <Button
               onClick={handleSendReply}
               variant="contained"
               startIcon={<ReplyIcon />}
             >
-              Send Reply
+              {t("inquiries.dialog.send")}
             </Button>
           </DialogActions>
         </Dialog>

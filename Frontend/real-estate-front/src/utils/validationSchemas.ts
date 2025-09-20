@@ -1,170 +1,183 @@
 import * as yup from "yup";
 import { API_CONFIG } from "./constants";
 
-export const propertyFormSchema = yup.object({
-  title: yup
-    .string()
-    .required("Title is required")
-    .min(2, "Title must be at least 2 characters")
-    .max(100, "Title cannot exceed 100 characters")
-    .matches(
-      /^[\p{L}\p{M}\p{N}\s'’‘ʼ\-.,()!?:;#№]+$/u,
-      "Use letters (incl. Ukrainian), numbers and basic punctuation"
-    )
-    .trim(),
+export type TranslateFn = (
+  key: string,
+  params?: Record<string, string | number>
+) => string;
 
-  description: yup
-    .string()
-    .required("Description is required")
-    .min(3, "Description must be at least 3 characters")
-    .max(1000, "Description cannot exceed 1000 characters")
-    .trim(),
+export interface PropertyFormData {
+  title: string;
+  description: string;
+  price: number;
+  address: string;
+  location: number;
+  propertyType: number;
+  status: number;
+  bedrooms: number;
+  bathrooms: number;
+  squareMeters: number;
+  features: string[];
+}
 
-  price: yup
-    .number()
-    .required("Price is required")
-    .positive("Price must be positive")
-    .min(1, "Price must be at least $1")
-    .max(100000000, "Price cannot exceed $100,000,000")
-    .integer("Price must be a whole number"),
+export interface ImageValidationData {
+  images: File[];
+}
 
-  address: yup
-    .string()
-    .required("Address is required")
-    .min(1, "Address must be at least 1 character")
-    .max(500, "Address cannot exceed 500 characters")
-    .matches(
-      /^[\p{L}\p{M}\p{N}\s'’‘ʼ\-.,/\\#№]+$/u,
-      "Use letters (incl. Ukrainian), numbers and basic punctuation"
-    )
-    .trim(),
+export interface FeatureValidationData {
+  feature: string;
+}
 
-  location: yup
-    .number()
-    .required("Location is required")
-    .min(1, "Please select a valid location")
-    .max(6, "Please select a valid location"),
+export const createPropertyFormSchema = (t: TranslateFn) =>
+  yup.object({
+    title: yup
+      .string()
+      .required(t("validation.title.required"))
+      .min(2, t("validation.title.min"))
+      .max(100, t("validation.title.max"))
+      .matches(
+        /^[\p{L}\p{M}\p{N}\s'’‘ʼ\-.,()!?:;#№]+$/u,
+        t("validation.title.pattern")
+      )
+      .trim(),
 
-  propertyType: yup
-    .number()
-    .required("Property type is required")
-    .min(1, "Please select a valid property type")
-    .max(7, "Please select a valid property type"),
+    description: yup
+      .string()
+      .required(t("validation.description.required"))
+      .min(3, t("validation.description.min"))
+      .max(1000, t("validation.description.max"))
+      .trim(),
 
-  status: yup
-    .number()
-    .required("Property status is required")
-    .min(1, "Please select a valid status")
-    .max(4, "Please select a valid status"),
+    price: yup
+      .number()
+      .required(t("validation.price.required"))
+      .positive(t("validation.price.positive"))
+      .min(1, t("validation.price.min"))
+      .max(100000000, t("validation.price.max"))
+      .integer(t("validation.price.integer")),
 
-  bedrooms: yup
-    .number()
-    .required("Number of bedrooms is required")
-    .min(0, "Bedrooms cannot be negative")
-    .max(50, "Bedrooms cannot exceed 50")
-    .integer("Bedrooms must be a whole number"),
+    address: yup
+      .string()
+      .required(t("validation.address.required"))
+      .min(1, t("validation.address.min"))
+      .max(500, t("validation.address.max"))
+      .matches(
+        /^[\p{L}\p{M}\p{N}\s'’‘ʼ\-.,/\\#№]+$/u,
+        t("validation.address.pattern")
+      )
+      .trim(),
 
-  bathrooms: yup
-    .number()
-    .required("Number of bathrooms is required")
-    .min(0, "Bathrooms cannot be negative")
-    .max(10, "Bathrooms cannot exceed 10")
-    .integer("Bathrooms must be a whole number"),
+    location: yup
+      .number()
+      .required(t("validation.location.required"))
+      .min(1, t("validation.location.invalid"))
+      .max(6, t("validation.location.invalid")),
 
-  squareMeters: yup
-    .number()
-    .required("Square meters is required")
-    .positive("Square meters must be positive")
-    .min(1, "Square meters must be at least 1")
-    .max(10000, "Square meters cannot exceed 10,000")
-    .integer("Square meters must be a whole number"),
+    propertyType: yup
+      .number()
+      .required(t("validation.propertyType.required"))
+      .min(1, t("validation.propertyType.invalid"))
+      .max(7, t("validation.propertyType.invalid")),
 
-  features: yup
-    .array()
-    .of(
-      yup
-        .string()
-        .min(1, "Feature cannot be empty")
-        .max(100, "Feature cannot exceed 100 characters")
-        .matches(
-          /^[\p{L}\p{M}\p{N}\s-]+$/u,
-          "Use letters (incl. Ukrainian), numbers and hyphen"
-        )
-        .trim()
-    )
-    .max(20, "Cannot have more than 20 features")
-    .test("unique-features", "Features must be unique", (features) => {
-      if (!features) return true;
-      const uniqueFeatures = new Set(
-        features.map((f) => f?.toLowerCase().trim()).filter(Boolean)
-      );
-      return uniqueFeatures.size === features.length;
-    }),
-});
+    status: yup
+      .number()
+      .required(t("validation.status.required"))
+      .min(1, t("validation.status.invalid"))
+      .max(4, t("validation.status.invalid")),
 
-export type PropertyFormData = yup.InferType<typeof propertyFormSchema>;
+    bedrooms: yup
+      .number()
+      .required(t("validation.bedrooms.required"))
+      .min(0, t("validation.bedrooms.nonNegative"))
+      .max(50, t("validation.bedrooms.max"))
+      .integer(t("validation.bedrooms.integer")),
 
-/**
- * Схема валідації для зображень property
- */
-export const imageValidationSchema = yup.object({
-  images: yup
-    .array()
-    .of(yup.mixed<File>())
-    .test("file-size", "File size validation", (files) => {
-      if (!files || files.length === 0) return true;
+    bathrooms: yup
+      .number()
+      .required(t("validation.bathrooms.required"))
+      .min(0, t("validation.bathrooms.nonNegative"))
+      .max(10, t("validation.bathrooms.max"))
+      .integer(t("validation.bathrooms.integer")),
 
-      for (const file of files) {
-        if (file && file.size > API_CONFIG.MAX_FILE_SIZE) {
-          return false;
+    squareMeters: yup
+      .number()
+      .required(t("validation.squareMeters.required"))
+      .positive(t("validation.squareMeters.positive"))
+      .min(1, t("validation.squareMeters.min"))
+      .max(10000, t("validation.squareMeters.max"))
+      .integer(t("validation.squareMeters.integer")),
+
+    features: yup
+      .array()
+      .of(
+        yup
+          .string()
+          .min(1, t("validation.feature.empty"))
+          .max(100, t("validation.feature.max"))
+          .matches(/^[\p{L}\p{M}\p{N}\s-]+$/u, t("validation.feature.pattern"))
+          .trim()
+      )
+      .max(20, t("validation.features.max"))
+      .test("unique-features", t("validation.features.unique"), (features) => {
+        if (!features) return true;
+        const uniqueFeatures = new Set(
+          features.map((f) => f?.toLowerCase().trim()).filter(Boolean)
+        );
+        return uniqueFeatures.size === features.length;
+      }),
+  });
+
+export const createImageValidationSchema = (t: TranslateFn) =>
+  yup.object({
+    images: yup
+      .array()
+      .of(yup.mixed<File>())
+      .test("file-size", t("validation.images.size"), (files) => {
+        if (!files || files.length === 0) return true;
+        for (const file of files) {
+          if (file && file.size > API_CONFIG.MAX_FILE_SIZE) {
+            return false;
+          }
         }
-      }
-      return true;
-    })
-    .test("file-type", "File type validation", (files) => {
-      if (!files || files.length === 0) return true;
-
-      for (const file of files) {
-        if (
-          file &&
-          !API_CONFIG.SUPPORTED_IMAGE_TYPES.includes(
-            file.type as (typeof API_CONFIG.SUPPORTED_IMAGE_TYPES)[number]
-          )
-        ) {
-          return false;
+        return true;
+      })
+      .test("file-type", t("validation.images.type"), (files) => {
+        if (!files || files.length === 0) return true;
+        for (const file of files) {
+          if (
+            file &&
+            !API_CONFIG.SUPPORTED_IMAGE_TYPES.includes(
+              file.type as (typeof API_CONFIG.SUPPORTED_IMAGE_TYPES)[number]
+            )
+          ) {
+            return false;
+          }
         }
-      }
-      return true;
-    })
-    .test(
-      "max-files",
-      `Cannot upload more than ${API_CONFIG.MAX_FILES_PER_PROPERTY} images`,
-      (files) => {
-        if (!files) return true;
-        return files.length <= API_CONFIG.MAX_FILES_PER_PROPERTY;
-      }
-    )
-    .test("min-files", "At least one image is required", (files) => {
-      if (!files) return false;
-      return files.length > 0;
-    }),
-});
+        return true;
+      })
+      .test(
+        "max-files",
+        t("validation.images.max", {
+          count: API_CONFIG.MAX_FILES_PER_PROPERTY,
+        }),
+        (files) => {
+          if (!files) return true;
+          return files.length <= API_CONFIG.MAX_FILES_PER_PROPERTY;
+        }
+      )
+      .test("min-files", t("validation.images.min"), (files) => {
+        if (!files) return false;
+        return files.length > 0;
+      }),
+  });
 
-export type ImageValidationData = yup.InferType<typeof imageValidationSchema>;
-
-export const featureValidationSchema = yup.object({
-  feature: yup
-    .string()
-    .required("Feature is required")
-    .min(1, "Feature cannot be empty")
-    .max(50, "Feature cannot exceed 50 characters")
-    .matches(
-      /^[\p{L}\p{M}\p{N}\s-]+$/u,
-      "Use letters (incl. Ukrainian), numbers and hyphen"
-    )
-    .trim(),
-});
-
-export type FeatureValidationData = yup.InferType<
-  typeof featureValidationSchema
->;
+export const createFeatureValidationSchema = (t: TranslateFn) =>
+  yup.object({
+    feature: yup
+      .string()
+      .required(t("validation.feature.required"))
+      .min(1, t("validation.feature.empty"))
+      .max(50, t("validation.feature.maxShort"))
+      .matches(/^[\p{L}\p{M}\p{N}\s-]+$/u, t("validation.feature.pattern"))
+      .trim(),
+  });

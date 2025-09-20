@@ -8,10 +8,12 @@ import { Breadcrumbs } from "../components/common/Breadcrumbs";
 import { useBreadcrumbs } from "../hooks/useBreadcrumbs";
 import { ROUTES } from "../utils/constants";
 import { toast } from "react-hot-toast";
+import { useLanguage } from "../contexts/LanguageContext";
 import type { Property } from "../types/property";
 
 export const EditPropertyPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const { t } = useLanguage();
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -23,7 +25,7 @@ export const EditPropertyPage: React.FC = () => {
   useEffect(() => {
     const loadProperty = async () => {
       if (!id) {
-        setError("Property ID is required");
+        setError(t("editProperty.errors.idRequired"));
         setLoading(false);
         return;
       }
@@ -35,20 +37,20 @@ export const EditPropertyPage: React.FC = () => {
         const isOwner = currentUser?.id === propertyData.user?.id;
 
         if (!isOwner && !isAdmin) {
-          setError("You don't have permission to edit this property");
-          toast.error("Access denied. You can only edit your own properties.");
+          setError(t("editProperty.errors.permission"));
+          toast.error(t("editProperty.toasts.accessDenied"));
         }
       } catch (error) {
         console.error("Error loading property:", error);
-        setError("Failed to load property");
-        toast.error("Failed to load property. Please try again.");
+        setError(t("editProperty.errors.loadFailed"));
+        toast.error(t("editProperty.toasts.loadFailed"));
       } finally {
         setLoading(false);
       }
     };
 
     loadProperty();
-  }, [id, currentUser, isAdmin]);
+  }, [id, currentUser, isAdmin, t]);
 
   if (loading) {
     return (
@@ -76,7 +78,7 @@ export const EditPropertyPage: React.FC = () => {
             href={ROUTES.PROPERTIES}
             style={{ color: "inherit", textDecoration: "underline" }}
           >
-            Back to Properties
+            {t("editProperty.back")}
           </a>
         </Alert>
       </Box>
@@ -88,13 +90,13 @@ export const EditPropertyPage: React.FC = () => {
       <Box sx={{ maxWidth: 800, mx: "auto", p: 3 }}>
         <Breadcrumbs items={breadcrumbItems} />
         <Alert severity="error">
-          Property not found.
+          {t("editProperty.errors.notFound")}
           <br />
           <a
             href={ROUTES.PROPERTIES}
             style={{ color: "inherit", textDecoration: "underline" }}
           >
-            Back to Properties
+            {t("editProperty.back")}
           </a>
         </Alert>
       </Box>

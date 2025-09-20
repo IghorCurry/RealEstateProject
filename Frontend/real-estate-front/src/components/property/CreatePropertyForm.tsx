@@ -10,19 +10,18 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useForm, FormProvider } from "react-hook-form";
+import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
+import { useLanguage } from "../../contexts/LanguageContext";
 import { propertyService } from "../../services/propertyService";
 import { ROUTES } from "../../utils/constants";
 import { ImageUpload } from "./ImageUpload";
 import { PropertyFormFields } from "./PropertyFormFields";
 import { usePropertyFeatures } from "../../hooks/usePropertyFeatures";
-import {
-  propertyFormSchema,
-  type PropertyFormData,
-} from "../../utils/validationSchemas";
+import { createPropertyFormSchema } from "../../utils/validationSchemas";
 import type {
   PropertyImage,
   Location,
@@ -38,12 +37,16 @@ export const CreatePropertyForm: React.FC = () => {
   const [images, setImages] = useState<PropertyImageWithFile[]>([]);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { t } = useLanguage();
 
   const { features, newFeature, setNewFeature, addFeature, removeFeature } =
     usePropertyFeatures();
 
+  const schema = createPropertyFormSchema(t);
+  type PropertyFormData = yup.InferType<typeof schema>;
+
   const methods = useForm<PropertyFormData>({
-    resolver: yupResolver(propertyFormSchema),
+    resolver: yupResolver(schema),
     defaultValues: {
       title: "",
       description: "",
@@ -68,7 +71,7 @@ export const CreatePropertyForm: React.FC = () => {
     try {
       // Валідація зображень
       if (images.length === 0) {
-        toast.error("At least one image is required");
+        toast.error(t("toasts.createProperty.noImages"));
         setIsSubmitting(false);
         return;
       }
@@ -82,7 +85,7 @@ export const CreatePropertyForm: React.FC = () => {
         .map((img) => img.file);
 
       if (files.length === 0) {
-        toast.error("Please upload at least one image file");
+        toast.error(t("toasts.createProperty.noFiles"));
         setIsSubmitting(false);
         return;
       }
@@ -106,22 +109,26 @@ export const CreatePropertyForm: React.FC = () => {
       await queryClient.refetchQueries({ queryKey: ["properties"] });
       await queryClient.refetchQueries({ queryKey: ["user-properties"] });
 
-      toast.success("Property created successfully!");
+      toast.success(t("toasts.createProperty.success"));
       navigate(ROUTES.PROPERTIES);
     } catch (error) {
       // More specific error messages
       if (error instanceof Error) {
         if (error.message.includes("413")) {
-          toast.error("Images are too large. Please use smaller images.");
+          toast.error(t("toasts.createProperty.imagesTooLarge"));
         } else if (error.message.includes("400")) {
-          toast.error("Invalid data. Please check your input.");
+          toast.error(t("toasts.createProperty.invalidData"));
         } else if (error.message.includes("401")) {
-          toast.error("Please log in to create a property.");
+          toast.error(t("toasts.createProperty.loginRequired"));
         } else {
-          toast.error(`Failed to create property: ${error.message}`);
+          toast.error(
+            t("toasts.createProperty.failedWithMessage", {
+              message: error.message,
+            })
+          );
         }
       } else {
-        toast.error("Failed to create property. Please try again.");
+        toast.error(t("toasts.createProperty.failed"));
       }
     } finally {
       setIsSubmitting(false);
@@ -133,12 +140,11 @@ export const CreatePropertyForm: React.FC = () => {
       <Card sx={{ overflow: "hidden" }}>
         <CardContent sx={{ overflow: "hidden" }}>
           <Typography variant="h4" component="h1" gutterBottom>
-            Create New Property
+            {t("createProperty.header.title")}
           </Typography>
 
           <Alert severity="info" sx={{ mb: 3 }}>
-            Fill in the details below to create a new property listing. All
-            fields are required. Make sure to upload at least one image.
+            {t("createProperty.header.subtitle")}
           </Alert>
 
           <FormProvider {...methods}>
@@ -170,7 +176,7 @@ export const CreatePropertyForm: React.FC = () => {
                     onClick={() => navigate(ROUTES.PROPERTIES)}
                     disabled={isSubmitting}
                   >
-                    Cancel
+                    {t("common.cancel")}
                   </Button>
                   <Button
                     type="submit"
@@ -180,7 +186,9 @@ export const CreatePropertyForm: React.FC = () => {
                       isSubmitting ? <CircularProgress size={20} /> : null
                     }
                   >
-                    {isSubmitting ? "Creating..." : "Create Property"}
+                    {isSubmitting
+                      ? t("common.updating")
+                      : t("property.create.add")}
                   </Button>
                 </Box>
               </Grid>

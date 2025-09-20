@@ -313,7 +313,7 @@ export const DeveloperPage: React.FC = () => {
                     fontSize: { xs: "1.75rem", md: "2.5rem" },
                   }}
                 >
-                  Real Estate Platform
+                  {t("developer.project.title")}
                 </Typography>
                 <Typography
                   variant="h6"
@@ -324,15 +324,12 @@ export const DeveloperPage: React.FC = () => {
                     mb: 4,
                   }}
                 >
-                  A full-stack real estate platform built with modern
-                  technologies. Features include user authentication, property
-                  management, search and filtering, image uploads, and
-                  responsive design.
+                  {t("developer.project.description")}
                 </Typography>
                 <Grid container spacing={2} justifyContent="center">
                   <Grid item>
                     <Chip
-                      label="React + TypeScript"
+                      label={t("developer.project.stack.reactTs")}
                       sx={{
                         bgcolor: "rgba(255,255,255,0.2)",
                         color: "white",
@@ -342,7 +339,7 @@ export const DeveloperPage: React.FC = () => {
                   </Grid>
                   <Grid item>
                     <Chip
-                      label=".NET Core + C#"
+                      label={t("developer.project.stack.dotnet")}
                       sx={{
                         bgcolor: "rgba(255,255,255,0.2)",
                         color: "white",
@@ -352,7 +349,7 @@ export const DeveloperPage: React.FC = () => {
                   </Grid>
                   <Grid item>
                     <Chip
-                      label="PostgreSQL"
+                      label={t("developer.project.stack.postgres")}
                       sx={{
                         bgcolor: "rgba(255,255,255,0.2)",
                         color: "white",
@@ -362,7 +359,7 @@ export const DeveloperPage: React.FC = () => {
                   </Grid>
                   <Grid item>
                     <Chip
-                      label="Material-UI"
+                      label={t("developer.project.stack.mui")}
                       sx={{
                         bgcolor: "rgba(255,255,255,0.2)",
                         color: "white",

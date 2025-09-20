@@ -14,10 +14,12 @@ import {
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../utils/constants";
+import { useLanguage } from "../contexts/LanguageContext";
 
 export const NotFoundPage: React.FC = () => {
   const navigate = useNavigate();
   const theme = useTheme();
+  const { t } = useLanguage();
 
   const handleGoHome = () => {
     navigate(ROUTES.HOME);
@@ -77,7 +79,7 @@ export const NotFoundPage: React.FC = () => {
               color: "text.primary",
             }}
           >
-            Page Not Found
+            {t("notFound.title")}
           </Typography>
 
           <Typography
@@ -90,8 +92,7 @@ export const NotFoundPage: React.FC = () => {
               mx: "auto",
             }}
           >
-            The page you're looking for doesn't exist or has been moved. Don't
-            worry, we'll help you find what you're looking for.
+            {t("notFound.description")}
           </Typography>
 
           {/* Action Buttons */}
@@ -117,7 +118,7 @@ export const NotFoundPage: React.FC = () => {
                 borderRadius: 2,
               }}
             >
-              Go to Home
+              {t("notFound.actions.home")}
             </Button>
 
             <Button
@@ -132,7 +133,7 @@ export const NotFoundPage: React.FC = () => {
                 borderRadius: 2,
               }}
             >
-              Browse Properties
+              {t("notFound.actions.browse")}
             </Button>
 
             <Button
@@ -147,7 +148,7 @@ export const NotFoundPage: React.FC = () => {
                 borderRadius: 2,
               }}
             >
-              Go Back
+              {t("notFound.actions.back")}
             </Button>
           </Box>
 
@@ -160,7 +161,7 @@ export const NotFoundPage: React.FC = () => {
             }}
           >
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Popular pages you might be looking for:
+              {t("notFound.popular")}
             </Typography>
 
             <Box
@@ -172,10 +173,13 @@ export const NotFoundPage: React.FC = () => {
               }}
             >
               {[
-                { label: "Properties", path: ROUTES.PROPERTIES },
-                { label: "About", path: ROUTES.ABOUT },
-                { label: "FAQ", path: ROUTES.FAQ },
-                { label: "Contact", path: ROUTES.DEVELOPER },
+                {
+                  label: t("notFound.link.properties"),
+                  path: ROUTES.PROPERTIES,
+                },
+                { label: t("notFound.link.about"), path: ROUTES.ABOUT },
+                { label: t("notFound.link.faq"), path: ROUTES.FAQ },
+                { label: t("notFound.link.contact"), path: ROUTES.DEVELOPER },
               ].map((link) => (
                 <Button
                   key={link.path}

@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import { Box, Typography, Alert, CircularProgress } from "@mui/material";
 import { CloudUpload as CloudUploadIcon } from "@mui/icons-material";
 import { toast } from "react-hot-toast";
+import { useLanguage } from "../../contexts/LanguageContext";
 import { ImageGrid } from "./ImageGrid";
 import { validateImageFiles } from "../../utils/imageValidation";
 import type { PropertyImage } from "../../types/property";
@@ -25,6 +26,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   maxImages = 10,
   disabled = false,
 }) => {
+  const { t } = useLanguage();
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -42,7 +44,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
 
     if (selectedFiles.length > availableSlots) {
       toast.error(
-        `Too many files selected. You can add up to ${availableSlots} more images.`
+        t("toasts.imageUpload.tooManySelected", { available: availableSlots })
       );
       return;
     }
@@ -72,13 +74,19 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
         );
 
         onImagesChange([...images, ...newImages]);
-        toast.success(`${selectedFiles.length} image(s) added successfully`);
+        toast.success(
+          t("toasts.imageUpload.added.success", { count: selectedFiles.length })
+        );
       }
     } catch (error) {
       if (error instanceof Error) {
-        toast.error(`Failed to process images: ${error.message}`);
+        toast.error(
+          t("toasts.imageUpload.process.failedWithMessage", {
+            message: error.message,
+          })
+        );
       } else {
-        toast.error("Failed to process images");
+        toast.error(t("toasts.imageUpload.process.failed"));
       }
     } finally {
       setIsUploading(false);

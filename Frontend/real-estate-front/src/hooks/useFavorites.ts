@@ -6,7 +6,7 @@ import { useLanguage } from "../contexts/LanguageContext";
 import type { Property } from "../types/property";
 
 export const useFavorites = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const { t } = useLanguage();
   const queryClient = useQueryClient();
 
@@ -17,26 +17,32 @@ export const useFavorites = () => {
     error: favoritesError,
     refetch: refetchFavorites,
   } = useQuery<Property[]>({
-    queryKey: ["user-favorites"],
+    queryKey: ["favorites", "list", user?.id],
     queryFn: () => favoriteService.getUserFavorites(),
-    enabled: isAuthenticated,
+    enabled: isAuthenticated && !!user?.id,
     staleTime: 5 * 60 * 1000, // 5 хвилин
     cacheTime: 10 * 60 * 1000, // 10 хвилин
   });
 
   // Мутація для додавання в улюблені
   const addToFavoritesMutation = useMutation({
-    mutationFn: (propertyId: string) => favoriteService.addToFavorites(propertyId),
+    mutationFn: (propertyId: string) =>
+      favoriteService.addToFavorites(propertyId),
     onSuccess: (_, propertyId) => {
       // Оновлюємо кеш улюблених
-      queryClient.setQueryData(["user-favorites"], (old: any[] = []) => {
-        // Додаємо property до favorites (якщо його там немає)
-        const property = queryClient.getQueryData(["properties"])?.find((p: any) => p.id === propertyId);
-        if (property && !old.find(fav => fav.id === propertyId)) {
-          return [...old, property];
+      queryClient.setQueryData(
+        ["favorites", "list", user?.id],
+        (old: any[] = []) => {
+          // Додаємо property до favorites (якщо його там немає)
+          const property = queryClient
+            .getQueryData(["properties"])
+            ?.find((p: any) => p.id === propertyId);
+          if (property && !old.find((fav) => fav.id === propertyId)) {
+            return [...old, property];
+          }
+          return old;
         }
-        return old;
-      });
+      );
 
       // Оновлюємо статус улюблених для конкретного property
       queryClient.setQueryData(["property", propertyId], (old: any) => {
@@ -55,12 +61,16 @@ export const useFavorites = () => {
 
   // Мутація для видалення з улюблених
   const removeFromFavoritesMutation = useMutation({
-    mutationFn: (propertyId: string) => favoriteService.removeFromFavorites(propertyId),
+    mutationFn: (propertyId: string) =>
+      favoriteService.removeFromFavorites(propertyId),
     onSuccess: (_, propertyId) => {
       // Оновлюємо кеш улюблених
-      queryClient.setQueryData(["user-favorites"], (old: any[] = []) => {
-        return old.filter(fav => fav.id !== propertyId);
-      });
+      queryClient.setQueryData(
+        ["favorites", "list", user?.id],
+        (old: any[] = []) => {
+          return old.filter((fav) => fav.id !== propertyId);
+        }
+      );
 
       // Оновлюємо статус улюблених для конкретного property
       queryClient.setQueryData(["property", propertyId], (old: any) => {
@@ -79,8 +89,8 @@ export const useFavorites = () => {
 
   // Функція для перемикання стану улюблених
   const toggleFavorite = async (propertyId: string) => {
-    const isCurrentlyFavorite = favorites.some(fav => fav.id === propertyId);
-    
+    const isCurrentlyFavorite = favorites.some((fav) => fav.id === propertyId);
+
     if (isCurrentlyFavorite) {
       await removeFromFavoritesMutation.mutateAsync(propertyId);
     } else {
@@ -90,7 +100,7 @@ export const useFavorites = () => {
 
   // Функція для перевірки чи property в улюблених
   const isFavorite = (propertyId: string) => {
-    return favorites.some(fav => fav.id === propertyId);
+    return favorites.some((fav) => fav.id === propertyId);
   };
 
   return {

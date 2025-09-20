@@ -20,6 +20,7 @@ import {
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
+import { useLanguage } from "../contexts/LanguageContext";
 
 import { propertyService } from "../services/propertyService";
 import { useAuth } from "../contexts/AuthContext";
@@ -39,6 +40,7 @@ import type { PropertyDetailed } from "../types/property";
 import { ROUTES } from "../utils/constants";
 
 export const PropertyDetailPage: React.FC = () => {
+  const { t } = useLanguage();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user: currentUser, isAuthenticated, isAdmin } = useAuth();
@@ -80,7 +82,7 @@ export const PropertyDetailPage: React.FC = () => {
 
   // Handlers
   const showAuthRequiredMessage = () => {
-    toast.error("Please sign in to perform this action.");
+    toast.error(t("propertyDetail.toasts.signInRequired"));
   };
 
   const handleFavoriteToggle = async () => {
@@ -122,11 +124,11 @@ export const PropertyDetailPage: React.FC = () => {
     setIsDeleting(true);
     try {
       await propertyService.delete(property.id);
-      toast.success("Property deleted successfully!");
+      toast.success(t("propertyDetail.toasts.delete.success"));
       navigate(ROUTES.PROPERTIES);
     } catch (error) {
       console.error("Error deleting property:", error);
-      toast.error("Failed to delete property. Please try again.");
+      toast.error(t("propertyDetail.toasts.delete.failed"));
     } finally {
       setIsDeleting(false);
       setDeleteDialogOpen(false);
@@ -142,7 +144,7 @@ export const PropertyDetailPage: React.FC = () => {
       });
     } else {
       navigator.clipboard.writeText(window.location.href);
-      toast.success("Link copied to clipboard!");
+      toast.success(t("propertyDetail.toasts.linkCopied"));
     }
   };
 
@@ -171,10 +173,10 @@ export const PropertyDetailPage: React.FC = () => {
   };
 
   const handleScheduleViewing = () => {
-    toast.success("Schedule viewing feature coming soon!");
+    toast.success(t("propertyDetail.toasts.scheduleSoon"));
   };
 
-  const handleRelatedPropertyFavorite = async (_propertyId: string) => {
+  const handleRelatedPropertyFavorite = async () => {
     if (!isAuthenticated) {
       showAuthRequiredMessage();
       return;
@@ -199,15 +201,17 @@ export const PropertyDetailPage: React.FC = () => {
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Alert severity="error" sx={{ mb: 3 }}>
           {error instanceof Error
-            ? `Failed to load property details: ${error.message}`
-            : "Failed to load property details. Please try again."}
+            ? t("propertyDetail.loadError.withMessage", {
+                message: error.message,
+              })
+            : t("propertyDetail.loadError.generic")}
         </Alert>
         <Button
           variant="contained"
           onClick={() => navigate(ROUTES.PROPERTIES)}
           startIcon={<ArrowBackIcon />}
         >
-          Back to Properties
+          {t("propertyDetail.back")}
         </Button>
       </Container>
     );
@@ -301,9 +305,9 @@ export const PropertyDetailPage: React.FC = () => {
         fullWidth
       >
         <DialogTitle>
-          Contact Property Owner
+          {t("property.details.contact")}
           <IconButton
-            aria-label="close"
+            aria-label={t("common.close")}
             onClick={() => setInquiryDialogOpen(false)}
             sx={{
               position: "absolute",
@@ -330,22 +334,25 @@ export const PropertyDetailPage: React.FC = () => {
         maxWidth="sm"
         fullWidth
       >
-        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogTitle>{t("propertyDetail.dialog.delete.title")}</DialogTitle>
         <DialogContent>
           <Typography variant="body1">
-            Are you sure you want to delete this property? This action cannot be
-            undone.
+            {t("propertyDetail.dialog.delete.message")}
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
+          <Button onClick={() => setDeleteDialogOpen(false)}>
+            {t("propertyDetail.dialog.delete.cancel")}
+          </Button>
           <Button
             variant="contained"
             color="error"
             onClick={handleConfirmDelete}
             disabled={isDeleting}
           >
-            {isDeleting ? "Deleting..." : "Delete Property"}
+            {isDeleting
+              ? t("propertyDetail.dialog.delete.deleting")
+              : t("propertyDetail.dialog.delete.submit")}
           </Button>
         </DialogActions>
       </Dialog>

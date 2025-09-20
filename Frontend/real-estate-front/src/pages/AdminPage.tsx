@@ -30,6 +30,7 @@ import { EmptyState } from "../components/common/EmptyState";
 import { formatDate, getUserFullName, getInitials } from "../utils/helpers";
 import { ROUTES } from "../utils/constants";
 import { SectionHeader } from "../components";
+import { useLanguage } from "../contexts/LanguageContext";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -58,6 +59,7 @@ export const AdminPage: React.FC = () => {
   const { user } = useAuth();
   const isAdmin = user?.role === "Admin";
   const [tabValue, setTabValue] = useState(0);
+  const { t } = useLanguage();
 
   const {
     data: users = [],
@@ -72,9 +74,7 @@ export const AdminPage: React.FC = () => {
   if (!isAdmin) {
     return (
       <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Alert severity="error">
-          Access denied. Admin privileges required.
-        </Alert>
+        <Alert severity="error">{t("adminPage.accessDenied")}</Alert>
       </Container>
     );
   }
@@ -85,14 +85,14 @@ export const AdminPage: React.FC = () => {
 
   const adminFeatures = [
     {
-      title: "Manage Properties",
-      description: "View, edit, and manage all properties in the system",
+      title: t("adminPage.features.manageProperties.title"),
+      description: t("adminPage.features.manageProperties.description"),
       icon: <BusinessIcon sx={{ fontSize: 40, color: "primary.main" }} />,
       action: () => navigate(ROUTES.PROPERTIES),
     },
     {
-      title: "Manage Inquiries",
-      description: "View and respond to property inquiries",
+      title: t("adminPage.features.manageInquiries.title"),
+      description: t("adminPage.features.manageInquiries.description"),
       icon: <MessageIcon sx={{ fontSize: 40, color: "primary.main" }} />,
       action: () => navigate(ROUTES.INQUIRIES),
     },
@@ -102,8 +102,8 @@ export const AdminPage: React.FC = () => {
     <Box sx={{ minHeight: "100vh", py: 4, overflow: "hidden" }}>
       <Container maxWidth="lg" sx={{ overflow: "hidden" }}>
         <SectionHeader
-          title="Admin Dashboard"
-          subtitle="Manage your real estate platform"
+          title={t("adminPage.header.title")}
+          subtitle={t("adminPage.header.subtitle")}
         />
 
         {/* Tabs */}
@@ -113,8 +113,8 @@ export const AdminPage: React.FC = () => {
             onChange={handleTabChange}
             aria-label="admin tabs"
           >
-            <Tab label="Dashboard" />
-            <Tab label="Users" />
+            <Tab label={t("adminPage.tabs.dashboard")} />
+            <Tab label={t("adminPage.tabs.users")} />
           </Tabs>
         </Box>
 
@@ -147,7 +147,7 @@ export const AdminPage: React.FC = () => {
                       {feature.description}
                     </Typography>
                     <Button variant="outlined" size="small">
-                      Access
+                      {t("adminPage.actions.access")}
                     </Button>
                   </CardContent>
                 </Card>
@@ -161,7 +161,7 @@ export const AdminPage: React.FC = () => {
               startIcon={<HomeIcon />}
               onClick={() => navigate(ROUTES.HOME)}
             >
-              Back to Home
+              {t("adminPage.actions.backHome")}
             </Button>
           </Box>
         </TabPanel>
@@ -170,23 +170,21 @@ export const AdminPage: React.FC = () => {
         <TabPanel value={tabValue} index={1}>
           <Box sx={{ mb: 3 }}>
             <Typography variant="h5" sx={{ fontWeight: 600, mb: 1 }}>
-              User Management
+              {t("adminPage.users.title")}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              View and manage user accounts ({users.length} users total)
+              {t("adminPage.users.subtitle", { count: users.length })}
             </Typography>
           </Box>
 
           {usersLoading ? (
             <LoadingState type="properties" count={6} />
           ) : usersError ? (
-            <Alert severity="error">
-              Failed to load users. Please try again later.
-            </Alert>
+            <Alert severity="error">{t("adminPage.users.loadError")}</Alert>
           ) : users.length === 0 ? (
             <EmptyState
-              title="No users found"
-              description="There are no users in the system."
+              title={t("adminPage.users.empty.title")}
+              description={t("adminPage.users.empty.description")}
               variant="properties"
             />
           ) : (
@@ -254,7 +252,7 @@ export const AdminPage: React.FC = () => {
                           />
                           {userItem.id === user?.id && (
                             <Chip
-                              label="Current User"
+                              label={t("adminPage.userCard.current")}
                               color="success"
                               size="small"
                               variant="outlined"
@@ -267,10 +265,13 @@ export const AdminPage: React.FC = () => {
                           color="text.secondary"
                           sx={{ mb: 1 }}
                         >
-                          Phone: {userItem.phoneNumber || "Not provided"}
+                          {t("adminPage.userCard.phone")}{" "}
+                          {userItem.phoneNumber ||
+                            t("adminPage.userCard.notProvided")}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
-                          Joined: {formatDate(userItem.createdAt)}
+                          {t("adminPage.userCard.joined")}{" "}
+                          {formatDate(userItem.createdAt)}
                         </Typography>
                       </CardContent>
                     </Card>

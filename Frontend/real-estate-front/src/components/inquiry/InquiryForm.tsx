@@ -25,6 +25,7 @@ import { inquiryService } from "../../services/inquiryService";
 import { useAuth } from "../../contexts/AuthContext";
 import type { InquiryCreate } from "../../types/inquiry";
 import { getUserFullName } from "../../utils/helpers";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 interface InquiryFormProps {
   propertyId: string;
@@ -61,15 +62,18 @@ export const InquiryForm: React.FC<InquiryFormProps> = ({
   onSuccess,
 }) => {
   const { isAuthenticated, user } = useAuth();
-  // const { t } = useLanguage(); // Not used currently
+  const { t } = useLanguage();
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // Форм-значення не включають propertyId (він передається окремо)
+  type InquiryFormValues = Omit<InquiryCreate, "propertyId">;
 
   const {
     control,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<InquiryCreate>({
+  } = useForm<InquiryFormValues>({
     resolver: yupResolver(schema),
     context: { isAuthenticated }, // Контекст для умовної валідації
     defaultValues: {
@@ -85,19 +89,20 @@ export const InquiryForm: React.FC<InquiryFormProps> = ({
   const createInquiryMutation = useMutation({
     mutationFn: (data: InquiryCreate) => inquiryService.createInquiry(data),
     onSuccess: () => {
-      toast.success("Inquiry sent successfully!");
+      toast.success(t("inquiries.reply_sent"));
       setIsSubmitted(true);
       reset();
       onSuccess?.();
     },
     onError: (error: unknown) => {
       const message =
-        error?.response?.data?.message || "Failed to send inquiry";
+        (error as { response?: { data?: { message?: string } } })?.response
+          ?.data?.message || t("inquiries.load.failed");
       toast.error(message);
     },
   });
 
-  const onSubmit = (data: InquiryCreate) => {
+  const onSubmit = (data: InquiryFormValues) => {
     const inquiryData: InquiryCreate = {
       propertyId,
       message: data.message,
@@ -120,14 +125,13 @@ export const InquiryForm: React.FC<InquiryFormProps> = ({
         <Box sx={{ textAlign: "center" }}>
           <SendIcon sx={{ fontSize: 48, color: "success.main", mb: 2 }} />
           <Typography variant="h6" color="success.main" gutterBottom>
-            Inquiry Sent Successfully!
+            {t("inquiries.form.sent.title")}
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-            Thank you for your interest. The property owner will contact you
-            soon.
+            {t("inquiries.form.sent.desc")}
           </Typography>
           <Button variant="outlined" onClick={() => setIsSubmitted(false)}>
-            Send Another Inquiry
+            {t("inquiries.form.sent.again")}
           </Button>
         </Box>
       </Card>
@@ -138,7 +142,7 @@ export const InquiryForm: React.FC<InquiryFormProps> = ({
     <Card sx={{ p: 3 }}>
       <Box sx={{ mb: 3 }}>
         <Typography variant="h6" gutterBottom>
-          Contact Property Owner
+          {t("inquiries.form.title")}
         </Typography>
         <Chip
           label={propertyTitle}
@@ -147,15 +151,13 @@ export const InquiryForm: React.FC<InquiryFormProps> = ({
           sx={{ mb: 2 }}
         />
         <Typography variant="body2" color="text.secondary">
-          Send a message to the property owner to express your interest or ask
-          questions.
+          {t("inquiries.form.description")}
         </Typography>
       </Box>
 
       {!isAuthenticated && (
         <Alert severity="info" sx={{ mb: 3 }}>
-          You can send inquiries without an account, but creating an account
-          will help you track your inquiries.
+          {t("inquiries.form.info.anonymous")}
         </Alert>
       )}
 
@@ -171,7 +173,7 @@ export const InquiryForm: React.FC<InquiryFormProps> = ({
                   render={({ field }) => (
                     <TextField
                       {...field}
-                      label="Full Name"
+                      label={t("inquiries.form.name")}
                       fullWidth
                       error={!!errors.name}
                       helperText={errors.name?.message}
@@ -191,7 +193,7 @@ export const InquiryForm: React.FC<InquiryFormProps> = ({
                   render={({ field }) => (
                     <TextField
                       {...field}
-                      label="Email"
+                      label={t("inquiries.form.email")}
                       type="email"
                       fullWidth
                       error={!!errors.email}
@@ -212,7 +214,7 @@ export const InquiryForm: React.FC<InquiryFormProps> = ({
                   render={({ field }) => (
                     <TextField
                       {...field}
-                      label="Phone Number"
+                      label={t("inquiries.form.phone")}
                       fullWidth
                       error={!!errors.phone}
                       helperText={errors.phone?.message}
@@ -235,13 +237,13 @@ export const InquiryForm: React.FC<InquiryFormProps> = ({
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="Message"
+                  label={t("inquiries.form.message")}
                   multiline
                   rows={4}
                   fullWidth
                   error={!!errors.message}
                   helperText={errors.message?.message}
-                  placeholder="Tell the owner about your interest in this property..."
+                  placeholder={t("inquiries.form.placeholder")}
                 />
               )}
             />
@@ -268,7 +270,9 @@ export const InquiryForm: React.FC<InquiryFormProps> = ({
                 },
               }}
             >
-              {createInquiryMutation.isPending ? "Sending..." : "Send Inquiry"}
+              {createInquiryMutation.isPending
+                ? t("inquiries.form.sending")
+                : t("inquiries.send")}
             </Button>
           </Grid>
         </Grid>
