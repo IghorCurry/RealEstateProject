@@ -48,7 +48,9 @@ builder.Services.AddCors(options =>
                    origin.StartsWith("http://127.0.0.1:") ||
                    origin.StartsWith("https://real-estate-front-") ||
                    origin.StartsWith("https://white-desert-") ||
-                   origin.StartsWith("https://witty-mushroom-"); // New Static Web App
+                   origin.StartsWith("https://witty-mushroom-") || // Azure Static Web App
+                   origin == "https://codebyig.dev" ||            // Custom domain (root)
+                   origin == "https://www.codebyig.dev";          // Custom domain (www)
         })
         .AllowAnyHeader()
         .AllowAnyMethod()

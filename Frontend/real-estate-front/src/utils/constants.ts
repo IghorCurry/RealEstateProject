@@ -7,7 +7,7 @@ const getApiUrl = () => {
     return "http://localhost:5158/api";
   }
 
-  return "https://real-estate-api-ig25-eahbg3dwgwemfjej.northeurope-01.azurewebsites.net/api";
+  return "https://api.codebyig.dev/api";
 };
 
 export const API_BASE_URL = getApiUrl();
