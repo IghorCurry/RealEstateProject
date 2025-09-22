@@ -22,7 +22,7 @@ import {
 } from "@mui/icons-material";
 import { SectionHeader } from "../components/common/SectionHeader";
 import { useLanguage } from "../contexts/LanguageContext";
-import "./DeveloperPage.css";
+import "../styles/developer.css";
 const Silk = React.lazy(() => import("../components/backgrounds/Silk"));
 
 const skillCategories = [

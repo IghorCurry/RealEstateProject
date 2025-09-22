@@ -1,5 +1,5 @@
 import React from "react";
-import { useApiHealth } from "../../hooks/useApiHealth";
+import { useApiHealth } from "../../hooks";
 
 /**
  * API Health Status Component
