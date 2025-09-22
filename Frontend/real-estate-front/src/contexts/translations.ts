@@ -279,6 +279,7 @@ export const translations = {
     "developer.backend.title": "Backend",
     "developer.database.title": "Database",
     "developer.tools.title": "Tools & DevOps",
+    "developer.ai.title": "AI Tools",
     "developer.soft.title": "Soft Skills",
     "developer.linkedin": "Connect on LinkedIn",
 
@@ -908,6 +909,7 @@ export const translations = {
     "developer.backend.title": "Backend",
     "developer.database.title": "База даних",
     "developer.tools.title": "Інструменти та DevOps",
+    "developer.ai.title": "AI інструменти",
     "developer.soft.title": "Soft Skills",
     "developer.linkedin": "З'єднатися в LinkedIn",
 

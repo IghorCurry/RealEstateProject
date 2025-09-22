@@ -91,6 +91,11 @@
   backdrop-filter: blur(3px);
 }
 
+/* keep text white on hover regardless of bg */
+.developer-chip:hover {
+  color: #ffffff !important;
+}
+
 /* Icons inside developer cards */
 .route-developer .developer-card .MuiSvgIcon-root {
   color: #cbd5ff !important;

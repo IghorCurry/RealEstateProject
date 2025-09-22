@@ -18,6 +18,7 @@ import {
   Storage as StorageIcon,
   Build as BuildIcon,
   Psychology as PsychologyIcon,
+  SmartToy as SmartToyIcon,
   Person as PersonIcon,
 } from "@mui/icons-material";
 import { SectionHeader } from "../components/common/SectionHeader";
@@ -41,6 +42,8 @@ const skillCategories = [
       "Vite",
       "ESLint",
       "Prettier",
+      "SEO & OpenGraph",
+      "Routing: Lazy+Boundaries",
     ],
     color: "primary",
   },
@@ -56,6 +59,8 @@ const skillCategories = [
       "REST API",
       "JWT Authentication",
       "Dependency Injection",
+      "IMemoryCache + Worker",
+      "SignalR Notifications",
     ],
     color: "secondary",
   },
@@ -69,6 +74,9 @@ const skillCategories = [
       "Migrations",
       "Seeding",
       "Relationships",
+      "MongoDB (local)",
+      "Azure DB",
+      "Supabase",
     ],
     color: "success",
   },
@@ -84,8 +92,28 @@ const skillCategories = [
       "VS Code",
       "Azure",
       "CI/CD",
+      "App Insights + Serilog",
+      "Cloudflare CDN & Analytics",
     ],
     color: "info",
+  },
+  {
+    titleKey: "developer.ai.title",
+    icon: <SmartToyIcon />,
+    skills: [
+      "Cursor",
+      "MCP Servers",
+      "OpenAI GPT",
+      "Google Gemini",
+      "NotebookLM",
+      "Claude",
+      "Perplexity",
+      "LangChain",
+      "OpenAI API",
+      "Agents",
+      "Prompt Engineering",
+    ],
+    color: "error",
   },
   {
     titleKey: "developer.soft.title",
@@ -97,6 +125,7 @@ const skillCategories = [
       "Time Management",
       "Adaptability",
       "Continuous Learning",
+      "System Design",
     ],
     color: "warning",
   },
@@ -145,8 +174,8 @@ export const DeveloperPage: React.FC = () => {
             </Box>
 
             {/* Developer Info */}
-            <Grid container spacing={4} sx={{ mb: 4 }}>
-              <Grid item xs={12} md={4}>
+            <Grid container spacing={4} sx={{ mb: 4 }} alignItems="stretch">
+              <Grid item xs={12} md={4} sx={{ display: "flex" }}>
                 <Fade in={true} timeout={800}>
                   <Card
                     className="developer-card"
@@ -156,6 +185,7 @@ export const DeveloperPage: React.FC = () => {
                       borderRadius: 3,
                       transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                       "&::before": { content: "none" },
+                      height: "100%",
                       "&:hover": {
                         transform: "translateY(-4px)",
                         boxShadow: theme.shadows[8],
@@ -222,7 +252,7 @@ export const DeveloperPage: React.FC = () => {
                 </Fade>
               </Grid>
 
-              <Grid item xs={12} md={8}>
+              <Grid item xs={12} md={8} sx={{ display: "flex" }}>
                 <Fade in={true} timeout={1000}>
                   <Card
                     className="developer-card"
@@ -294,8 +324,8 @@ export const DeveloperPage: React.FC = () => {
                                   borderColor: `${category.color}.main`,
                                   color: `${category.color}.main`,
                                   "&:hover": {
-                                    bgcolor: `${category.color}.light`,
-                                    color: `${category.color}.dark`,
+                                    bgcolor: `${category.color}.main`,
+                                    color: "#ffffff",
                                   },
                                 }}
                               />
