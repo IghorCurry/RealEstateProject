@@ -155,6 +155,7 @@ export const DeveloperPage: React.FC = () => {
                       textAlign: "center",
                       borderRadius: 3,
                       transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                      "&::before": { content: "none" },
                       "&:hover": {
                         transform: "translateY(-4px)",
                         boxShadow: theme.shadows[8],
@@ -230,6 +231,7 @@ export const DeveloperPage: React.FC = () => {
                       borderRadius: 3,
                       height: "100%",
                       transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                      "&::before": { content: "none" },
                       "&:hover": {
                         transform: "translateY(-4px)",
                         boxShadow: theme.shadows[8],
