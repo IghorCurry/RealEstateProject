@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Box, Alert, Button, Typography } from "@mui/material";
 import {
   WifiOff as WifiOffIcon,
@@ -18,29 +18,25 @@ export const NetworkErrorBoundary: React.FC<NetworkErrorBoundaryProps> = ({
   const [lastCheck, setLastCheck] = useState<Date | null>(null);
   const [errorCount, setErrorCount] = useState(0);
 
-  const checkNetworkHealth = async () => {
+  const checkNetworkHealth = useCallback(async () => {
     setIsChecking(true);
     try {
       const healthReport = await performHealthCheck();
-
-      if (!healthReport.overall.isOnline) {
-        setHasNetworkError(true);
-        setErrorCount((prev) => prev + 1);
-      } else {
-        setHasNetworkError(false);
-        setErrorCount(0);
-      }
+      const online = healthReport.overall.isOnline;
+      setHasNetworkError(!online);
+      setErrorCount((prev) => (online ? 0 : prev + 1));
       setLastCheck(new Date());
     } catch {
-      setErrorCount((prev) => prev + 1);
-      if (errorCount >= 2) {
-        setHasNetworkError(true);
-      }
+      setErrorCount((prev) => {
+        const next = prev + 1;
+        if (next >= 2) setHasNetworkError(true);
+        return next;
+      });
       setLastCheck(new Date());
     } finally {
       setIsChecking(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     const initialCheck = setTimeout(() => {
@@ -53,7 +49,7 @@ export const NetworkErrorBoundary: React.FC<NetworkErrorBoundaryProps> = ({
       clearTimeout(initialCheck);
       clearInterval(interval);
     };
-  }, []);
+  }, [checkNetworkHealth]);
 
   if (hasNetworkError && errorCount >= 2) {
     return (

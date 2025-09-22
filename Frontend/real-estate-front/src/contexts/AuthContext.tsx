@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { authService } from "../services/authService";
 import type { User, AuthResponse, UserCreate } from "../types/user";
@@ -63,7 +64,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
             }
           }
         }
-      } catch (error) {
+      } catch {
         authService.logout();
         setUser(null);
       } finally {
@@ -75,27 +76,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   const login = async (email: string, password: string) => {
-    try {
-      const response: AuthResponse = await authService.login({
-        email,
-        password,
-      });
-      authService.setAuthData(response);
-      setUser(response.user);
-    } catch {
-      throw error;
-    }
+    const response: AuthResponse = await authService.login({ email, password });
+    authService.setAuthData(response);
+    setUser(response.user);
   };
 
   const register = async (userData: UserCreate) => {
-    try {
-      const response: AuthResponse = await authService.register(userData);
-      authService.setAuthData(response);
-      setUser(response.user);
-    } catch (error) {
-      console.error("Registration error:", error);
-      throw error;
-    }
+    const response: AuthResponse = await authService.register(userData);
+    authService.setAuthData(response);
+    setUser(response.user);
   };
 
   const logout = () => {

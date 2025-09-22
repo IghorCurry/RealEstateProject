@@ -1,35 +1,5 @@
-import React, { useState, useEffect } from "react";
-import {
-  subscribeToHealthCheck,
-  performHealthCheck,
-  type ApiHealthReport,
-} from "../../utils/apiHealthCheck";
-
-/**
- * React hook for API health status
- */
-export const useApiHealth = () => {
-  const [healthReport, setHealthReport] = useState<ApiHealthReport | null>(null);
-
-  useEffect(() => {
-    // Subscribe to health updates
-    const unsubscribe = subscribeToHealthCheck(setHealthReport);
-
-    // Perform initial check if no report exists
-    performHealthCheck();
-
-    return unsubscribe;
-  }, []);
-
-  return {
-    healthReport,
-    isOnline: healthReport?.overall.isOnline ?? false,
-    responseTime: healthReport?.overall.responseTime ?? 0,
-    lastChecked: healthReport?.overall.lastChecked,
-    error: healthReport?.overall.error,
-    refresh: performHealthCheck,
-  };
-};
+import React from "react";
+import { useApiHealth } from "../../hooks/useApiHealth";
 
 /**
  * API Health Status Component
@@ -38,7 +8,8 @@ export const ApiStatusIndicator: React.FC<{
   showDetails?: boolean;
   className?: string;
 }> = ({ showDetails = false, className = "" }) => {
-  const { isOnline, responseTime, lastChecked, error, refresh } = useApiHealth();
+  const { isOnline, responseTime, lastChecked, error, refresh } =
+    useApiHealth();
 
   const statusColor = isOnline ? "green" : "red";
   const statusText = isOnline ? "Online" : "Offline";
@@ -73,7 +44,7 @@ export const ApiStatusIndicator: React.FC<{
           </button>
         )}
       </div>
-      
+
       {showDetails && (
         <div style={{ fontSize: "10px", color: "#888", marginTop: "4px" }}>
           {isOnline ? (

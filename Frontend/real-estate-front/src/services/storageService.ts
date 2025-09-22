@@ -72,7 +72,7 @@ export const storageService = {
   /**
    * Отримує дані користувача
    */
-  getUser: (): any => {
+  getUser: (): { id?: string; email?: string } | null => {
     try {
       const userStr = storageService.getItem("user");
       return userStr ? JSON.parse(userStr) : null;
@@ -85,7 +85,7 @@ export const storageService = {
   /**
    * Зберігає дані користувача
    */
-  setUser: (user: any): boolean => {
+  setUser: (user: unknown): boolean => {
     try {
       return storageService.setItem("user", JSON.stringify(user));
     } catch (error) {
