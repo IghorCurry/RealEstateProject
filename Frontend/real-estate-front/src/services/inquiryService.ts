@@ -10,7 +10,10 @@ export const inquiryService = {
    */
   async createInquiry(inquiryData: InquiryCreate): Promise<Inquiry> {
     try {
-      return await apiClient.post<Inquiry>(API_ENDPOINTS.INQUIRY.CREATE, inquiryData);
+      return await apiClient.post<Inquiry>(
+        API_ENDPOINTS.INQUIRY.CREATE,
+        inquiryData
+      );
     } catch (error) {
       console.error("Failed to create inquiry:", error);
       throw error;
@@ -29,9 +32,17 @@ export const inquiryService = {
     }
   },
 
-  /**
-   * Get current user's inquiries
-   */
+  async getMyInquiries(): Promise<{ sent: Inquiry[]; received: Inquiry[] }> {
+    try {
+      return await apiClient.get<{ sent: Inquiry[]; received: Inquiry[] }>(
+        API_ENDPOINTS.INQUIRY.MY
+      );
+    } catch (error) {
+      console.error("Failed to get my inquiries:", error);
+      throw error;
+    }
+  },
+
   async getUserInquiries(): Promise<Inquiry[]> {
     try {
       if (!isUserAuthenticated()) {
@@ -94,7 +105,9 @@ export const inquiryService = {
    */
   async getInquiriesByProperty(propertyId: string): Promise<Inquiry[]> {
     try {
-      const url = buildApiUrl(API_ENDPOINTS.INQUIRY.BY_PROPERTY, { propertyId });
+      const url = buildApiUrl(API_ENDPOINTS.INQUIRY.BY_PROPERTY, {
+        propertyId,
+      });
       return await apiClient.get<Inquiry[]>(url);
     } catch (error) {
       console.error("Failed to get inquiries by property:", error);

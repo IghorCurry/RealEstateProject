@@ -1,4 +1,5 @@
-import React, { Component, ErrorInfo, ReactNode } from "react";
+import React, { Component } from "react";
+import type { ErrorInfo, ReactNode } from "react";
 import { Box, Typography, Button, Alert, Container } from "@mui/material";
 import { Refresh as RefreshIcon, Home as HomeIcon } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
@@ -42,7 +43,8 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 }
 
-const ErrorFallback: React.FC<{ error?: Error }> = ({ error }) => {
+// Moved to its own file would fix react-refresh rule too, but keeping minimal:
+export const ErrorFallback: React.FC<{ error?: Error }> = ({ error }) => {
   const navigate = useNavigate();
 
   const handleRefresh = () => {

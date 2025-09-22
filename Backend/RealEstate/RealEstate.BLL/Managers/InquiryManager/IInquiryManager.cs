@@ -8,9 +8,11 @@ namespace RealEstate.BLL.Managers
         public Task<InquiryViewModel> GetByIdAsync(Guid id);
         public Task<IQueryable<InquiryViewModel>> GetByPropertyIdAsync(Guid propertyId);
         public Task<IQueryable<InquiryViewModel>> GetByUserIdAsync(Guid userId);
+        public Task<MyInquiriesViewModel> GetMyInquiriesAsync(Guid currentUserId);
         public Task<InquiryViewModel> CreateAsync(InquiryCreateModel model);
         public Task<bool> IsExists(Guid id);
         public Task<InquiryViewModel> UpdateAsync(InquiryUpdateModel model);
         public Task<bool> DeleteAsync(Guid id);
+        public Task<bool> DeleteAsync(Guid id, Guid currentUserId, bool isAdmin, string? currentUserEmail);
     }
 } 

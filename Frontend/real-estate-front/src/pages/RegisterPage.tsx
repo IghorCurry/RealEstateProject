@@ -26,6 +26,7 @@ import { ROUTES } from "../utils/constants";
 import { isValidEmail, isValidPhone, getUserFullName } from "../utils/helpers";
 import { FormField, PageContainer } from "../components";
 import { useAuth } from "../contexts/AuthContext";
+import { useLanguage } from "../contexts/LanguageContext";
 
 const normalizePhoneE164Like = (input: string) => {
   if (!input) return input;
@@ -94,6 +95,7 @@ type RegisterFormData = yup.InferType<typeof registerSchema>;
 export const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
   const { setUser } = useAuth();
+  const { t } = useLanguage();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -119,9 +121,7 @@ export const RegisterPage: React.FC = () => {
       authService.setAuthData(response);
       setUser(response.user);
       toast.success(
-        `Registration successful! Welcome to Real Estate, ${getUserFullName(
-          response.user
-        )}!`
+        t("auth.register.success", { name: getUserFullName(response.user) })
       );
       navigate(ROUTES.HOME);
     },
@@ -149,39 +149,37 @@ export const RegisterPage: React.FC = () => {
         if (firstField?.toLowerCase().includes("email")) {
           setErrors((prev) => ({
             ...prev,
-            email: firstMsg || "Email already exists",
+            email: firstMsg || t("auth.register.exists.email"),
           }));
         } else if (firstField?.toLowerCase().includes("phone")) {
           setErrors((prev) => ({
             ...prev,
-            phone: firstMsg || "Phone number already exists",
+            phone: firstMsg || t("auth.register.exists.phone"),
           }));
         }
-        toast.error(
-          firstMsg || "Registration failed. Please check your input."
-        );
+        toast.error(firstMsg || t("auth.register.failed.generic"));
         return;
       }
 
       if (status === 409) {
         const lower = (apiMessage || "").toLowerCase();
         if (lower.includes("email")) {
-          setErrors((prev) => ({ ...prev, email: "Email already exists" }));
+          setErrors((prev) => ({
+            ...prev,
+            email: t("auth.register.exists.email"),
+          }));
         }
         if (lower.includes("phone")) {
           setErrors((prev) => ({
             ...prev,
-            phone: "Phone number already exists",
+            phone: t("auth.register.exists.phone"),
           }));
         }
-        toast.error(apiMessage || "Already exists");
+        toast.error(apiMessage || t("auth.register.failed.generic"));
         return;
       }
 
-      toast.error(
-        apiMessage ||
-          "Registration failed. Ensure: unique email/phone and a strong password."
-      );
+      toast.error(apiMessage || t("auth.register.failed.generic"));
     },
   });
 
@@ -257,10 +255,10 @@ export const RegisterPage: React.FC = () => {
               component="h1"
               sx={{ fontWeight: 600, mb: 1 }}
             >
-              Create Account
+              {t("auth.register.title")}
             </Typography>
             <Typography variant="body1" color="text.secondary">
-              Join us and start your real estate journey
+              {t("auth.register.subtitle")}
             </Typography>
           </Box>
 
@@ -270,7 +268,7 @@ export const RegisterPage: React.FC = () => {
               {/* Name Fields */}
               <Box sx={{ display: "flex", gap: 2, mb: 3 }}>
                 <FormField
-                  label="First Name"
+                  label={t("auth.register.firstName")}
                   value={formData.firstName}
                   onChange={handleInputChange("firstName")}
                   error={!!errors.firstName}
@@ -278,7 +276,7 @@ export const RegisterPage: React.FC = () => {
                   icon={<PersonIcon color="action" />}
                 />
                 <FormField
-                  label="Last Name"
+                  label={t("auth.register.lastName")}
                   value={formData.lastName}
                   onChange={handleInputChange("lastName")}
                   error={!!errors.lastName}
@@ -289,7 +287,7 @@ export const RegisterPage: React.FC = () => {
 
               {/* Email Field */}
               <FormField
-                label="Email Address"
+                label={t("auth.register.email")}
                 type="email"
                 value={formData.email}
                 onChange={handleInputChange("email")}
@@ -301,7 +299,7 @@ export const RegisterPage: React.FC = () => {
 
               {/* Phone Field */}
               <FormField
-                label="Phone Number"
+                label={t("auth.register.phone")}
                 value={formData.phone}
                 onChange={handleInputChange("phone")}
                 error={!!errors.phone}
@@ -312,7 +310,7 @@ export const RegisterPage: React.FC = () => {
 
               {/* Password Field */}
               <FormField
-                label="Password"
+                label={t("auth.register.password")}
                 type={showPassword ? "text" : "password"}
                 value={formData.password}
                 onChange={handleInputChange("password")}
@@ -333,7 +331,7 @@ export const RegisterPage: React.FC = () => {
 
               {/* Confirm Password Field */}
               <FormField
-                label="Confirm Password"
+                label={t("auth.register.confirmPassword")}
                 type={showConfirmPassword ? "text" : "password"}
                 value={formData.confirmPassword}
                 onChange={handleInputChange("confirmPassword")}
@@ -369,27 +367,27 @@ export const RegisterPage: React.FC = () => {
               {registerMutation.isPending ? (
                 <CircularProgress size={24} color="inherit" />
               ) : (
-                "Create Account"
+                t("auth.register.submit")
               )}
             </Button>
 
             {/* Divider */}
             <Divider sx={{ my: 3 }}>
               <Typography variant="body2" color="text.secondary">
-                OR
+                {t("common.or")}
               </Typography>
             </Divider>
 
             {/* Login Link */}
             <Box sx={{ textAlign: "center" }}>
               <Typography variant="body2" color="text.secondary">
-                Already have an account?{" "}
+                {t("auth.register.have.account")}{" "}
                 <Link
                   component={RouterLink}
                   to={ROUTES.LOGIN}
                   sx={{ textDecoration: "none", fontWeight: 600 }}
                 >
-                  Sign In
+                  {t("auth.register.login")}
                 </Link>
               </Typography>
             </Box>

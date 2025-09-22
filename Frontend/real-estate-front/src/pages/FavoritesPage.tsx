@@ -103,10 +103,7 @@ export const FavoritesPage: React.FC = () => {
         <>
           <Box sx={{ mb: 3, display: "flex", alignItems: "center", gap: 2 }}>
             <Typography variant="h6" color="primary" sx={{ fontWeight: 600 }}>
-              {t("favorites.count").replace(
-                "{count}",
-                favoritesList.length.toString()
-              )}
+              {t("favorites.count", { count: favoritesList.length })}
             </Typography>
             <Chip
               label={`${favoritesList.length} items`}

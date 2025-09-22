@@ -61,6 +61,9 @@ const DeveloperPage = React.lazy(() =>
     default: module.DeveloperPage,
   }))
 );
+const OopsPage = React.lazy(() =>
+  import("../pages/OopsPage").then((module) => ({ default: module.OopsPage }))
+);
 const NotFoundPage = React.lazy(() =>
   import("../pages/NotFoundPage").then((module) => ({
     default: module.NotFoundPage,
@@ -153,6 +156,8 @@ export const AppRoutes: React.FC = () => {
 
         {/* 404 catch-all route */}
         <Route path="*" element={<NotFoundPage />} />
+        {/* Generic oops route (optional direct link) */}
+        <Route path="/oops" element={<OopsPage />} />
       </Routes>
     </Suspense>
   );

@@ -11,10 +11,15 @@ export interface Inquiry {
   email: string;
   phone: string;
   createdAt: string;
-  propertyId?: string; // Опціональне поле
-  userId?: string; // Опціональне поле
-  property?: Property; // Associated property data
-  user?: User; // Associated user data
+  propertyId?: string;
+  userId?: string;
+  property?: Property;
+  user?: User;
+
+  propertyTitle?: string;
+  propertyOwnerId?: string;
+  propertyOwnerName?: string;
+  senderName?: string;
 }
 
 /**
@@ -46,4 +51,4 @@ export interface InquiryUpdate {
   id: string;
   message?: string;
   status?: InquiryStatus;
-} 
+}

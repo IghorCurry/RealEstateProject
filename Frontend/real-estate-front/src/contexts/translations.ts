@@ -9,14 +9,16 @@ export const translations = {
     "nav.login": "Login",
     "nav.register": "Register",
     "nav.profile": "Profile",
-    "nav.admin": "Admin",
+    "nav.admin": "Admin Panel",
+    "nav.adminPanel": "Admin Panel",
     "nav.logout": "Logout",
     "nav.favorites": "Favorites",
     "nav.inquiries": "Inquiries",
 
     // Home Page
     "home.hero.title": "New Way Of Living",
-    "home.hero.subtitle": "Change the way you live life, closer to nature and luxury.",
+    "home.hero.subtitle":
+      "Change the way you live life, closer to nature and luxury.",
     "home.hero.brand": "REAL ESTATE",
     "home.hero.sideText": "Luxury Real Estate From Ukraine",
     "home.hero.browse": "Browse Properties",
@@ -32,15 +34,19 @@ export const translations = {
     "home.features.subtitle": "Discover what makes us different",
     "home.features.premium.title": "PREMIUM PROPERTIES",
     "home.features.premium.subtitle": "Luxury Real Estate",
-    "home.features.premium.desc": "Discover exclusive properties with stunning architecture, premium locations, and world-class amenities for the discerning buyer.",
+    "home.features.premium.desc":
+      "Discover exclusive properties with stunning architecture, premium locations, and world-class amenities for the discerning buyer.",
     "home.features.expert.title": "EXPERT CONSULTATION",
     "home.features.expert.subtitle": "Professional Guidance",
-    "home.features.expert.desc": "Get personalized advice from our experienced real estate professionals to find the perfect property that matches your lifestyle and investment goals.",
+    "home.features.expert.desc":
+      "Get personalized advice from our experienced real estate professionals to find the perfect property that matches your lifestyle and investment goals.",
     "home.features.seamless.title": "SEAMLESS TRANSACTION",
     "home.features.seamless.subtitle": "Complete Service",
-    "home.features.seamless.desc": "From property search to closing, we handle every detail of your real estate transaction with transparency, efficiency, and peace of mind.",
+    "home.features.seamless.desc":
+      "From property search to closing, we handle every detail of your real estate transaction with transparency, efficiency, and peace of mind.",
     "home.features.cta.title": "Ready to Start Your Real Estate Journey?",
-    "home.features.cta.desc": "Browse our exclusive collection of premium properties and let our experts guide you to your perfect investment or dream home.",
+    "home.features.cta.desc":
+      "Browse our exclusive collection of premium properties and let our experts guide you to your perfect investment or dream home.",
     "home.cta.title": "Ready to Find Your Dream Home?",
     "home.cta.subtitle":
       "Join thousands of satisfied customers who found their perfect property",
@@ -95,6 +101,9 @@ export const translations = {
     "property.details.description": "Description",
     "property.details.amenities": "Amenities",
     "property.details.contact": "Contact Owner",
+    "property.details.id": "Property ID",
+    "property.details.listedDate": "Listed Date",
+    "property.details.lastUpdated": "Last Updated",
     "property.details.favorite": "Add to Favorites",
     "property.details.unfavorite": "Remove from Favorites",
     "property.details.edit": "Edit Property",
@@ -133,12 +142,20 @@ export const translations = {
     "property.type.land": "Land",
 
     // Property Status
+    "property.status.available": "Available",
+    "property.status.underContract": "Under Contract",
     "property.status.for.sale": "For Sale",
     "property.status.for.rent": "For Rent",
     "property.status.sold": "Sold",
     "property.status.rented": "Rented",
 
     // Locations
+    "property.location.downtown": "Downtown",
+    "property.location.suburban": "Suburban",
+    "property.location.rural": "Rural",
+    "property.location.beachfront": "Beachfront",
+    "property.location.mountain": "Mountain",
+    "property.location.urban": "Urban",
     "location.kyiv": "Kyiv",
     "location.lviv": "Lviv",
     "location.kharkiv": "Kharkiv",
@@ -154,6 +171,10 @@ export const translations = {
     "auth.login.forgot": "Forgot password?",
     "auth.login.no.account": "Don't have an account?",
     "auth.login.register": "Register",
+    "auth.login.success": "Login successful! Welcome back, {name}!",
+    "auth.login.failed": "Login failed. Please check your credentials.",
+    "auth.login.demoAdmin": "Demo Admin",
+    "auth.login.demoUser": "Demo User",
     "auth.register.title": "Register",
     "auth.register.subtitle": "Create your account to get started",
     "auth.register.firstName": "First Name",
@@ -165,6 +186,16 @@ export const translations = {
     "auth.register.submit": "Create Account",
     "auth.register.have.account": "Already have an account?",
     "auth.register.login": "Login",
+    // Login toasts & validation
+    "toasts.login.resetSoon": "Password reset functionality coming soon!",
+    "validation.auth.email.required": "Email is required",
+    "validation.auth.email.format": "Please enter a valid email",
+    "validation.auth.password.required": "Password is required",
+    "auth.register.success": "Registration successful! Welcome, {name}!",
+    "auth.register.exists.email": "Email already exists",
+    "auth.register.exists.phone": "Phone number already exists",
+    "auth.register.failed.generic":
+      "Registration failed. Ensure unique email/phone and a strong password.",
 
     // Profile
     "profile.title": "Profile",
@@ -269,6 +300,10 @@ export const translations = {
     "common.yes": "Yes",
     "common.no": "No",
     "common.updating": "Updating...",
+    "common.or": "OR",
+
+    // Forms
+    "form.validationError": "Please fix the validation errors and try again.",
 
     // Favorites
     "favorites.title": "My Favorites",
@@ -288,16 +323,30 @@ export const translations = {
     // Inquiries
     "inquiries.title": "My Inquiries",
     "inquiries.subtitle": "Track your property inquiries",
+    "inquiries.admin.title": "All Inquiries",
+    "inquiries.admin.subtitle": "Manage property inquiries from users",
     "inquiries.empty.title": "No inquiries sent yet",
     "inquiries.empty.description":
       "Start browsing properties and sending inquiries to see them here.",
     "inquiries.empty.browse": "Browse Properties",
     "inquiries.count": "You have {count} inquiries",
+    "inquiries.direction.sent": "Sent",
+    "inquiries.direction.received": "Received",
     "inquiries.reply": "Reply",
     "inquiries.delete": "Delete",
     "inquiries.send": "Send Inquiry",
     "inquiries.sent": "Inquiry sent successfully!",
     "inquiries.reply_sent": "Reply sent successfully!",
+    "inquiries.load.failed": "Failed to load inquiries. Please try again.",
+    "inquiries.auth.required": "Please sign in to view your inquiries.",
+    "inquiries.badge.tooltip": "Received Inquiries: {count}",
+    "inquiries.dialog.replyTo": "Reply to {name}",
+    "inquiries.dialog.contact": "Contact:",
+    "inquiries.dialog.messageLabel": "Reply Message",
+    "inquiries.dialog.messagePlaceholder": "Type your reply message...",
+    "inquiries.dialog.cancel": "Cancel",
+    "inquiries.dialog.send": "Send Reply",
+    "inquiries.anonymous": "Anonymous",
 
     // Footer
     "footer.language": "Language",
@@ -305,6 +354,273 @@ export const translations = {
     "footer.faq": "FAQ",
     "footer.developer": "Developer",
     "footer.paymentMethods": "Payment Methods",
+    "footer.brand": "Real Estate Platform",
+    "footer.tagline":
+      "Your trusted partner in real estate. Find your dream property or list your own with confidence.",
+    "footer.quickLinks": "Useful Links",
+    "footer.contact": "Contact Info",
+    "footer.location.kyiv": "Kyiv, Ukraine",
+    "footer.builtWith": "Built with ❤️ by",
+    "footer.copyright": "© {year} Real Estate Platform. All rights reserved.",
+
+    // Language Labels
+    "lang.en": "EN",
+    "lang.uk": "UK",
+
+    // Validation messages
+    "validation.title.required": "Title is required",
+    "validation.title.min": "Title must be at least 2 characters",
+    "validation.title.max": "Title cannot exceed 100 characters",
+    "validation.title.pattern":
+      "Use letters (incl. Ukrainian), numbers and basic punctuation",
+    "validation.description.required": "Description is required",
+    "validation.description.min": "Description must be at least 3 characters",
+    "validation.description.max": "Description cannot exceed 1000 characters",
+    "validation.price.required": "Price is required",
+    "validation.price.positive": "Price must be positive",
+    "validation.price.min": "Price must be at least $1",
+    "validation.price.max": "Price cannot exceed $100,000,000",
+    "validation.price.integer": "Price must be a whole number",
+    "validation.address.required": "Address is required",
+    "validation.address.min": "Address must be at least 1 character",
+    "validation.address.max": "Address cannot exceed 500 characters",
+    "validation.address.pattern":
+      "Use letters (incl. Ukrainian), numbers and basic punctuation",
+    "validation.location.required": "Location is required",
+    "validation.location.invalid": "Please select a valid location",
+    "validation.propertyType.required": "Property type is required",
+    "validation.propertyType.invalid": "Please select a valid property type",
+    "validation.status.required": "Property status is required",
+    "validation.status.invalid": "Please select a valid status",
+    "validation.bedrooms.required": "Number of bedrooms is required",
+    "validation.bedrooms.nonNegative": "Bedrooms cannot be negative",
+    "validation.bedrooms.max": "Bedrooms cannot exceed 50",
+    "validation.bedrooms.integer": "Bedrooms must be a whole number",
+    "validation.bathrooms.required": "Number of bathrooms is required",
+    "validation.bathrooms.nonNegative": "Bathrooms cannot be negative",
+    "validation.bathrooms.max": "Bathrooms cannot exceed 10",
+    "validation.bathrooms.integer": "Bathrooms must be a whole number",
+    "validation.squareMeters.required": "Square meters is required",
+    "validation.squareMeters.positive": "Square meters must be positive",
+    "validation.squareMeters.min": "Square meters must be at least 1",
+    "validation.squareMeters.max": "Square meters cannot exceed 10,000",
+    "validation.squareMeters.integer": "Square meters must be a whole number",
+    "validation.features.max": "Cannot have more than 20 features",
+    "validation.features.unique": "Features must be unique",
+    "validation.feature.required": "Feature is required",
+    "validation.feature.empty": "Feature cannot be empty",
+    "validation.feature.max": "Feature cannot exceed 100 characters",
+    "validation.feature.maxShort": "Feature cannot exceed 50 characters",
+    "validation.feature.pattern":
+      "Use letters (incl. Ukrainian), numbers and hyphen",
+    "validation.images.size":
+      "One or more images exceed the maximum allowed size",
+    "validation.images.type": "Unsupported image type detected",
+    "validation.images.max": "Cannot upload more than {count} images",
+    "validation.images.min": "At least one image is required",
+
+    // Toasts & dialogs - Create Property
+    "toasts.createProperty.noImages": "At least one image is required",
+    "toasts.createProperty.noFiles": "Please upload at least one image file",
+    "toasts.createProperty.success": "Property created successfully!",
+    "toasts.createProperty.imagesTooLarge":
+      "Images are too large. Please use smaller images.",
+    "toasts.createProperty.invalidData":
+      "Invalid data. Please check your input.",
+    "toasts.createProperty.loginRequired":
+      "Please log in to create a property.",
+    "toasts.createProperty.failedWithMessage":
+      "Failed to create property: {message}",
+    "toasts.createProperty.failed":
+      "Failed to create property. Please try again.",
+
+    // Toasts - Edit Property Images
+    "toasts.imageEdit.upload.success": "{count} image(s) uploaded successfully",
+    "toasts.imageEdit.upload.failedWithMessage":
+      "Failed to upload images: {message}",
+    "toasts.imageEdit.upload.failed": "Failed to upload images",
+    "toasts.imageEdit.delete.success": "{count} image(s) deleted successfully",
+    "toasts.imageEdit.delete.failed": "Failed to delete images",
+
+    // ImageUpload component
+    "toasts.imageUpload.tooManySelected":
+      "Too many files selected. You can add up to {available} more images.",
+    "toasts.imageUpload.added.success": "{count} image(s) added successfully",
+    "toasts.imageUpload.process.failedWithMessage":
+      "Failed to process images: {message}",
+    "toasts.imageUpload.process.failed": "Failed to process images",
+
+    // Property detail page
+    "propertyDetail.toasts.signInRequired":
+      "Please sign in to perform this action.",
+    "propertyDetail.toasts.delete.success": "Property deleted successfully!",
+    "propertyDetail.toasts.delete.failed":
+      "Failed to delete property. Please try again.",
+    "propertyDetail.toasts.linkCopied": "Link copied to clipboard!",
+    "propertyDetail.toasts.scheduleSoon":
+      "Schedule viewing feature coming soon!",
+    "propertyDetail.loadError.withMessage":
+      "Failed to load property details: {message}",
+    "propertyDetail.loadError.generic":
+      "Failed to load property details. Please try again.",
+    "propertyDetail.back": "Back to Properties",
+    "propertyDetail.dialog.delete.title": "Confirm Deletion",
+    "propertyDetail.dialog.delete.message":
+      "Are you sure you want to delete this property? This action cannot be undone.",
+    "propertyDetail.dialog.delete.cancel": "Cancel",
+    "propertyDetail.dialog.delete.submit": "Delete Property",
+    "propertyDetail.dialog.delete.deleting": "Deleting...",
+
+    // Property Contact actions
+    "property.contact.schedule": "Schedule Viewing",
+
+    // Inquiry form
+    "inquiries.form.title": "Contact Property Owner",
+    "inquiries.form.description":
+      "Send a message to the property owner to express your interest or ask questions.",
+    "inquiries.form.name": "Full Name",
+    "inquiries.form.email": "Email",
+    "inquiries.form.phone": "Phone Number",
+    "inquiries.form.message": "Message",
+    "inquiries.form.placeholder":
+      "Tell the owner about your interest in this property...",
+    "inquiries.form.sending": "Sending...",
+    "inquiries.form.info.anonymous":
+      "You can send inquiries without an account, but creating an account will help you track your inquiries.",
+    "inquiries.form.sent.title": "Inquiry Sent Successfully!",
+    "inquiries.form.sent.desc":
+      "Thank you for your interest. The property owner will contact you soon.",
+    "inquiries.form.sent.again": "Send Another Inquiry",
+
+    // Inquiries
+    "inquiries.toasts.delete.success": "Inquiry deleted successfully",
+    "inquiries.toasts.delete.failed": "Failed to delete inquiry",
+    "inquiries.toasts.reply.empty": "Please enter a reply message",
+    "inquiries.toasts.reply.sent": "Reply sent successfully!",
+    "inquiries.confirm.delete": "Are you sure you want to delete this inquiry?",
+
+    // Generic dialogs
+    "dialogs.confirm.title": "Confirm action",
+    "dialogs.confirm.delete": "Are you sure you want to delete this inquiry?",
+    "dialogs.cancel": "Cancel",
+    "dialogs.delete": "Delete",
+
+    // Profile
+    "profile.toasts.update.success": "Profile updated successfully!",
+    "profile.toasts.update.failed": "Failed to update profile",
+    "profile.userNotFound": "User not found",
+    "profile.memberSince": "Member since {date}",
+    "profile.role": "Role: {role}",
+    "profile.chips.properties": "{count} Properties",
+    "profile.chips.inquiries": "{count} Inquiries",
+    "profile.tabs.overview": "Overview",
+    "profile.tabs.myProperties": "My Properties",
+    "profile.tabs.myInquiries": "My Inquiries",
+    "profile.tabs.favorites": "Favorites",
+    "profile.tabs.settings": "Settings",
+    "profile.info.personal": "Personal Information",
+    "profile.info.stats": "Account Statistics",
+    "profile.stats.propertiesListed": "{count} Properties Listed",
+    "profile.stats.inquiriesSent": "{count} Inquiries Sent",
+    "profile.inquiries.sent": "Sent",
+    "profile.inquiries.sentOn": "Sent on {date}",
+    "profile.buttons.edit": "Edit Profile",
+    "profile.buttons.logout": "Logout",
+    "profile.empty.properties.title": "No properties listed yet",
+    "profile.empty.properties.description":
+      "Start by creating your first property listing.",
+    "profile.empty.properties.action": "Add Property",
+    "profile.empty.inquiries.title": "No inquiries sent yet",
+    "profile.empty.inquiries.description":
+      "Start by browsing properties and sending inquiries to property owners.",
+    "profile.empty.inquiries.action": "Browse Properties",
+    "profile.settings.soon.title":
+      "Account settings functionality coming soon!",
+    "profile.settings.soon.description":
+      "You'll be able to manage your account settings and preferences here.",
+    "profile.settings.soon.action": "Edit Profile",
+    "profile.form.firstName": "First Name",
+    "profile.form.lastName": "Last Name",
+    "profile.form.email": "Email",
+    "profile.form.phone": "Phone Number",
+    "profile.dialog.editTitle": "Edit Profile",
+    "profile.dialog.cancel": "Cancel",
+    "profile.dialog.save": "Save Changes",
+    "profile.dialog.saving": "Saving...",
+
+    // Admin Page
+    "adminPage.header.title": "Admin Dashboard",
+    "adminPage.header.subtitle": "Manage your real estate platform",
+    "adminPage.accessDenied": "Access denied. Admin privileges required.",
+    "adminPage.tabs.dashboard": "Dashboard",
+    "adminPage.tabs.users": "Users",
+    "adminPage.features.manageProperties.title": "Manage Properties",
+    "adminPage.features.manageProperties.description":
+      "View, edit, and manage all properties in the system",
+    "adminPage.features.manageInquiries.title": "Manage Inquiries",
+    "adminPage.features.manageInquiries.description":
+      "View and respond to property inquiries",
+    "adminPage.actions.access": "Access",
+    "adminPage.actions.backHome": "Back to Home",
+    "adminPage.users.title": "User Management",
+    "adminPage.users.subtitle":
+      "View and manage user accounts ({count} users total)",
+    "adminPage.users.loadError":
+      "Failed to load users. Please try again later.",
+    "adminPage.users.empty.title": "No users found",
+    "adminPage.users.empty.description": "There are no users in the system.",
+    "adminPage.userCard.current": "Current User",
+    "adminPage.userCard.phone": "Phone:",
+    "adminPage.userCard.notProvided": "Not provided",
+    "adminPage.userCard.joined": "Joined:",
+    "adminPage.userCard.role": "Role:",
+
+    // Create Property Page
+    "createProperty.header.title": "Create Property",
+    "createProperty.header.subtitle": "Add a new property to our listings",
+
+    // Developer Page - project highlight
+    "developer.project.title": "Real Estate Platform",
+    "developer.project.description":
+      "A full-stack real estate platform built with modern technologies. Features include user authentication, property management, search and filtering, image uploads, and responsive design.",
+    "developer.project.stack.reactTs": "React + TypeScript",
+    "developer.project.stack.dotnet": ".NET Core + C#",
+    "developer.project.stack.postgres": "PostgreSQL",
+    "developer.project.stack.mui": "Material-UI",
+
+    // Edit Property Page
+    "editProperty.errors.idRequired": "Property ID is required",
+    "editProperty.errors.permission":
+      "You don't have permission to edit this property",
+    "editProperty.toasts.accessDenied":
+      "Access denied. You can only edit your own properties.",
+    "editProperty.errors.loadFailed": "Failed to load property",
+    "editProperty.toasts.loadFailed":
+      "Failed to load property. Please try again.",
+    "editProperty.errors.notFound": "Property not found.",
+    "editProperty.back": "Back to Properties",
+
+    // Oops Page (generic error)
+    "oops.title": "Something went wrong",
+    "oops.subtitle": "We couldn't complete your request.",
+    "oops.description":
+      "This might be a temporary issue. You can try again later or use one of the options below.",
+    "oops.actions.home": "Go to Home",
+    "oops.actions.browse": "Browse Properties",
+    "oops.actions.back": "Go Back",
+
+    // Not Found Page
+    "notFound.title": "Page Not Found",
+    "notFound.description":
+      "The page you're looking for doesn't exist or has been moved. Don't worry, we'll help you find what you're looking for.",
+    "notFound.actions.home": "Go to Home",
+    "notFound.actions.browse": "Browse Properties",
+    "notFound.actions.back": "Go Back",
+    "notFound.popular": "Popular pages you might be looking for:",
+    "notFound.link.properties": "Properties",
+    "notFound.link.about": "About",
+    "notFound.link.faq": "FAQ",
+    "notFound.link.contact": "Contact",
   },
   uk: {
     // Navigation
@@ -317,6 +633,7 @@ export const translations = {
     "nav.register": "Реєстрація",
     "nav.profile": "Профіль",
     "nav.admin": "Адмін",
+    "nav.adminPanel": "Адмін панель",
     "nav.logout": "Вийти",
     "nav.favorites": "Улюблені",
     "nav.inquiries": "Запити",
@@ -339,15 +656,20 @@ export const translations = {
     "home.features.subtitle": "Дізнайтеся, що робить нас особливими",
     "home.features.premium.title": "ПРЕМІУМ НЕРУХОМІСТЬ",
     "home.features.premium.subtitle": "Розкішна нерухомість",
-    "home.features.premium.desc": "Відкрийте ексклюзивну нерухомість з приголомшливою архітектурою, преміальними локаціями та світового рівня зручностями для вимогливого покупця.",
+    "home.features.premium.desc":
+      "Відкрийте ексклюзивну нерухомість з приголомшливою архітектурою, преміальними локаціями та світового рівня зручностями для вимогливого покупця.",
     "home.features.expert.title": "ЕКСПЕРТНА КОНСУЛЬТАЦІЯ",
     "home.features.expert.subtitle": "Професійне керівництво",
-    "home.features.expert.desc": "Отримайте персональні поради від наших досвідчених професіоналів з нерухомості, щоб знайти ідеальну нерухомість, яка відповідає вашому стилю життя та інвестиційним цілям.",
+    "home.features.expert.desc":
+      "Отримайте персональні поради від наших досвідчених професіоналів з нерухомості, щоб знайти ідеальну нерухомість, яка відповідає вашому стилю життя та інвестиційним цілям.",
     "home.features.seamless.title": "БЕЗШОВНІ ТРАНЗАКЦІЇ",
     "home.features.seamless.subtitle": "Повний сервіс",
-    "home.features.seamless.desc": "Від пошуку нерухомості до закриття угоди, ми керуємо кожним етапом вашої транзакції з нерухомістю з прозорістю, ефективністю та спокоєм.",
-    "home.features.cta.title": "Готові розпочати свою подорож у світ нерухомості?",
-    "home.features.cta.desc": "Перегляньте нашу ексклюзивну колекцію преміум нерухомості та дозвольте нашим експертам провести вас до вашої ідеальної інвестиції або дому мрії.",
+    "home.features.seamless.desc":
+      "Від пошуку нерухомості до закриття угоди, ми керуємо кожним етапом вашої транзакції з нерухомістю з прозорістю, ефективністю та спокоєм.",
+    "home.features.cta.title":
+      "Готові розпочати свою подорож у світ нерухомості?",
+    "home.features.cta.desc":
+      "Перегляньте нашу ексклюзивну колекцію преміум нерухомості та дозвольте нашим експертам провести вас до вашої ідеальної інвестиції або дому мрії.",
     "home.cta.title": "Готові знайти свою мрію?",
     "home.cta.subtitle":
       "Приєднуйтесь до тисяч задоволених клієнтів, які знайшли свою ідеальну нерухомість",
@@ -404,6 +726,9 @@ export const translations = {
     "property.details.description": "Опис",
     "property.details.amenities": "Зручності",
     "property.details.contact": "Зв'язатися з власником",
+    "property.details.id": "ID оголошення",
+    "property.details.listedDate": "Дата розміщення",
+    "property.details.lastUpdated": "Останнє оновлення",
     "property.details.favorite": "Додати до улюблених",
     "property.details.unfavorite": "Видалити з улюблених",
     "property.details.edit": "Редагувати нерухомість",
@@ -442,12 +767,20 @@ export const translations = {
     "property.type.land": "Земельна ділянка",
 
     // Property Status
+    "property.status.available": "Доступно",
+    "property.status.underContract": "Під контрактом",
     "property.status.for.sale": "На продаж",
     "property.status.for.rent": "На оренду",
     "property.status.sold": "Продано",
     "property.status.rented": "Орендовано",
 
     // Locations
+    "property.location.downtown": "Центр",
+    "property.location.suburban": "Передмістя",
+    "property.location.rural": "Сільська місцевість",
+    "property.location.beachfront": "Берег моря",
+    "property.location.mountain": "Гори",
+    "property.location.urban": "Місто",
     "location.kyiv": "Київ",
     "location.lviv": "Львів",
     "location.kharkiv": "Харків",
@@ -464,6 +797,10 @@ export const translations = {
     "auth.login.forgot": "Забули пароль?",
     "auth.login.no.account": "Немає облікового запису?",
     "auth.login.register": "Зареєструватися",
+    "auth.login.success": "Вхід успішний! Радий(і) вас бачити, {name}!",
+    "auth.login.failed": "Не вдалося увійти. Перевірте облікові дані.",
+    "auth.login.demoAdmin": "Демо Адмін",
+    "auth.login.demoUser": "Демо Користувач",
     "auth.register.title": "Реєстрація",
     "auth.register.subtitle": "Створіть свій обліковий запис, щоб почати",
     "auth.register.firstName": "Ім'я",
@@ -475,6 +812,16 @@ export const translations = {
     "auth.register.submit": "Створити обліковий запис",
     "auth.register.have.account": "Вже є обліковий запис?",
     "auth.register.login": "Увійти",
+    // Login toasts & validation
+    "toasts.login.resetSoon": "Функція відновлення паролю з'явиться незабаром!",
+    "validation.auth.email.required": "Потрібно вказати email",
+    "validation.auth.email.format": "Будь ласка, введіть коректний email",
+    "validation.auth.password.required": "Потрібно вказати пароль",
+    "auth.register.success": "Реєстрація успішна! Вітаємо, {name}!",
+    "auth.register.exists.email": "Email вже існує",
+    "auth.register.exists.phone": "Номер телефону вже існує",
+    "auth.register.failed.generic":
+      "Помилка реєстрації. Переконайтеся, що email/телефон унікальні та пароль надійний.",
 
     // Profile
     "profile.title": "Профіль",
@@ -582,6 +929,11 @@ export const translations = {
     "common.yes": "Так",
     "common.no": "Ні",
     "common.updating": "Оновлення...",
+    "common.or": "АБО",
+
+    // Forms
+    "form.validationError":
+      "Будь ласка, виправте помилки валідації та спробуйте ще раз.",
 
     // Favorites
     "favorites.title": "Мої улюблені",
@@ -603,16 +955,31 @@ export const translations = {
     // Inquiries
     "inquiries.title": "Мої запити",
     "inquiries.subtitle": "Відстежуйте ваші запити про нерухомість",
+    "inquiries.admin.title": "Всі запити",
+    "inquiries.admin.subtitle": "Керуйте запитами користувачів",
     "inquiries.empty.title": "Поки що немає відправлених запитів",
     "inquiries.empty.description":
       "Почніть переглядати нерухомість та надсилати запити, щоб бачити їх тут.",
     "inquiries.empty.browse": "Переглянути нерухомість",
     "inquiries.count": "У вас {count} запитів",
+    "inquiries.direction.sent": "Надіслані",
+    "inquiries.direction.received": "Отримані",
     "inquiries.reply": "Відповісти",
     "inquiries.delete": "Видалити",
     "inquiries.send": "Надіслати запит",
     "inquiries.sent": "Запит успішно надіслано!",
     "inquiries.reply_sent": "Відповідь успішно надіслано!",
+    "inquiries.load.failed": "Не вдалося завантажити запити. Спробуйте ще раз.",
+    "inquiries.auth.required":
+      "Будь ласка, увійдіть, щоб переглянути свої запити.",
+    "inquiries.badge.tooltip": "Отриманих запитів: {count}",
+    "inquiries.dialog.replyTo": "Відповідь для {name}",
+    "inquiries.dialog.contact": "Контакти:",
+    "inquiries.dialog.messageLabel": "Повідомлення відповіді",
+    "inquiries.dialog.messagePlaceholder": "Введіть текст відповіді...",
+    "inquiries.dialog.cancel": "Скасувати",
+    "inquiries.dialog.send": "Надіслати відповідь",
+    "inquiries.anonymous": "Анонімний",
 
     // Footer
     "footer.language": "Мова",
@@ -620,5 +987,278 @@ export const translations = {
     "footer.faq": "Часті запитання",
     "footer.developer": "Розробник",
     "footer.paymentMethods": "Способи оплати",
+    "footer.brand": "Платформа Нерухомості",
+    "footer.tagline":
+      "Ваш надійний партнер на ринку нерухомості. Знаходьте дім мрії або розміщуйте власні оголошення.",
+    "footer.quickLinks": "Корисні посилання",
+    "footer.contact": "Контакти",
+    "footer.location.kyiv": "Київ, Україна",
+    "footer.builtWith": "Розроблено з ❤️",
+    "footer.copyright": "© {year} Платформа нерухомості. Всі права захищені.",
+
+    // Language Labels
+    "lang.en": "АНГ",
+    "lang.uk": "УКР",
+
+    // Validation messages
+    "validation.title.required": "Потрібно вказати назву",
+    "validation.title.min": "Назва має містити щонайменше 2 символи",
+    "validation.title.max": "Назва не може перевищувати 100 символів",
+    "validation.title.pattern":
+      "Використовуйте літери (включно з українськими), цифри та базову пунктуацію",
+    "validation.description.required": "Потрібно вказати опис",
+    "validation.description.min": "Опис має містити щонайменше 3 символи",
+    "validation.description.max": "Опис не може перевищувати 1000 символів",
+    "validation.price.required": "Потрібно вказати ціну",
+    "validation.price.positive": "Ціна має бути додатною",
+    "validation.price.min": "Мінімальна ціна — $1",
+    "validation.price.max": "Ціна не може перевищувати $100,000,000",
+    "validation.price.integer": "Ціна має бути цілим числом",
+    "validation.address.required": "Потрібно вказати адресу",
+    "validation.address.min": "Адреса має містити щонайменше 1 символ",
+    "validation.address.max": "Адреса не може перевищувати 500 символів",
+    "validation.address.pattern":
+      "Використовуйте літери (включно з українськими), цифри та базову пунктуацію",
+    "validation.location.required": "Потрібно вибрати розташування",
+    "validation.location.invalid": "Будь ласка, виберіть коректне розташування",
+    "validation.propertyType.required": "Потрібно вибрати тип нерухомості",
+    "validation.propertyType.invalid": "Будь ласка, виберіть коректний тип",
+    "validation.status.required": "Потрібно вибрати статус",
+    "validation.status.invalid": "Будь ласка, виберіть коректний статус",
+    "validation.bedrooms.required": "Потрібно вказати кількість спалень",
+    "validation.bedrooms.nonNegative":
+      "Кількість спалень не може бути від'ємною",
+    "validation.bedrooms.max": "Кількість спалень не може перевищувати 50",
+    "validation.bedrooms.integer": "Кількість спалень має бути цілим числом",
+    "validation.bathrooms.required": "Потрібно вказати кількість ванних кімнат",
+    "validation.bathrooms.nonNegative":
+      "Кількість ванних кімнат не може бути від'ємною",
+    "validation.bathrooms.max":
+      "Кількість ванних кімнат не може перевищувати 10",
+    "validation.bathrooms.integer":
+      "Кількість ванних кімнат має бути цілим числом",
+    "validation.squareMeters.required": "Потрібно вказати площу",
+    "validation.squareMeters.positive": "Площа має бути додатною",
+    "validation.squareMeters.min": "Мінімальна площа — 1",
+    "validation.squareMeters.max": "Площа не може перевищувати 10 000",
+    "validation.squareMeters.integer": "Площа має бути цілим числом",
+    "validation.features.max": "Не можна мати більше 20 зручностей",
+    "validation.features.unique": "Зручності мають бути унікальними",
+    "validation.feature.required": "Потрібно вказати зручність",
+    "validation.feature.empty": "Зручність не може бути порожньою",
+    "validation.feature.max": "Зручність не може перевищувати 100 символів",
+    "validation.feature.maxShort": "Зручність не може перевищувати 50 символів",
+    "validation.feature.pattern":
+      "Використовуйте літери (включно з українськими), цифри та дефіс",
+    "validation.images.size":
+      "Одне або декілька зображень перевищують максимальний розмір",
+    "validation.images.type": "Виявлено непідтримуваний тип зображення",
+    "validation.images.max":
+      "Не можна завантажити більше ніж {count} зображень",
+    "validation.images.min": "Потрібно завантажити щонайменше одне зображення",
+
+    // Toasts & dialogs - Create Property
+    "toasts.createProperty.noImages": "Потрібно щонайменше одне зображення",
+    "toasts.createProperty.noFiles":
+      "Будь ласка, завантажте хоча б один файл зображення",
+    "toasts.createProperty.success": "Оголошення успішно створено!",
+    "toasts.createProperty.imagesTooLarge":
+      "Зображення завеликі. Будь ласка, використовуйте менші файли.",
+    "toasts.createProperty.invalidData":
+      "Некоректні дані. Перевірте введену інформацію.",
+    "toasts.createProperty.loginRequired":
+      "Будь ласка, увійдіть, щоб створити оголошення.",
+    "toasts.createProperty.failedWithMessage":
+      "Не вдалося створити оголошення: {message}",
+    "toasts.createProperty.failed":
+      "Не вдалося створити оголошення. Спробуйте ще раз.",
+
+    // Toasts - Edit Property Images
+    "toasts.imageEdit.upload.success": "Успішно завантажено {count} зображень",
+    "toasts.imageEdit.upload.failedWithMessage":
+      "Не вдалося завантажити зображення: {message}",
+    "toasts.imageEdit.upload.failed": "Не вдалося завантажити зображення",
+    "toasts.imageEdit.delete.success": "Успішно видалено {count} зображень",
+    "toasts.imageEdit.delete.failed": "Не вдалося видалити зображення",
+
+    // ImageUpload component
+    "toasts.imageUpload.tooManySelected":
+      "Забагато файлів. Можна додати ще щонайбільше {available} зображень.",
+    "toasts.imageUpload.added.success": "Додано {count} зображень",
+    "toasts.imageUpload.process.failedWithMessage":
+      "Не вдалося обробити зображення: {message}",
+    "toasts.imageUpload.process.failed": "Не вдалося обробити зображення",
+
+    // Property detail page
+    "propertyDetail.toasts.signInRequired":
+      "Будь ласка, увійдіть, щоб виконати цю дію.",
+    "propertyDetail.toasts.delete.success": "Оголошення успішно видалено!",
+    "propertyDetail.toasts.delete.failed":
+      "Не вдалося видалити оголошення. Спробуйте ще раз.",
+    "propertyDetail.toasts.linkCopied": "Посилання скопійовано у буфер обміну!",
+    "propertyDetail.toasts.scheduleSoon":
+      "Функція планування перегляду з'явиться незабаром!",
+    "propertyDetail.loadError.withMessage":
+      "Не вдалося завантажити деталі оголошення: {message}",
+    "propertyDetail.loadError.generic":
+      "Не вдалося завантажити деталі оголошення. Спробуйте ще раз.",
+    "propertyDetail.back": "Повернутися до списку",
+    "propertyDetail.dialog.delete.title": "Підтвердження видалення",
+    "propertyDetail.dialog.delete.message":
+      "Ви впевнені, що хочете видалити це оголошення? Цю дію неможливо скасувати.",
+    "propertyDetail.dialog.delete.cancel": "Скасувати",
+    "propertyDetail.dialog.delete.submit": "Видалити оголошення",
+    "propertyDetail.dialog.delete.deleting": "Видалення...",
+
+    // Property Contact actions
+    "property.contact.schedule": "Запланувати перегляд",
+
+    // Inquiry form
+    "inquiries.form.title": "Зв'язатися з власником",
+    "inquiries.form.description":
+      "Надішліть повідомлення власнику, щоб виразити інтерес або поставити запитання.",
+    "inquiries.form.name": "Повне ім'я",
+    "inquiries.form.email": "Email",
+    "inquiries.form.phone": "Номер телефону",
+    "inquiries.form.message": "Повідомлення",
+    "inquiries.form.placeholder":
+      "Розкажіть власнику про ваш інтерес до цієї нерухомості...",
+    "inquiries.form.sending": "Надсилання...",
+    "inquiries.form.info.anonymous":
+      "Ви можете надсилати запити без облікового запису, але створення облікового запису допоможе відстежувати ваші запити.",
+    "inquiries.form.sent.title": "Запит успішно надіслано!",
+    "inquiries.form.sent.desc":
+      "Дякуємо за інтерес. Власник незабаром з вами зв'яжеться.",
+    "inquiries.form.sent.again": "Надіслати ще один запит",
+
+    // Inquiries
+    "inquiries.toasts.delete.success": "Запит успішно видалено",
+    "inquiries.toasts.delete.failed": "Не вдалося видалити запит",
+    "inquiries.toasts.reply.empty": "Будь ласка, введіть текст відповіді",
+    "inquiries.toasts.reply.sent": "Відповідь надіслано!",
+    "inquiries.confirm.delete": "Ви впевнені, що хочете видалити цей запит?",
+
+    // Generic dialogs
+    "dialogs.confirm.title": "Підтвердьте дію",
+    "dialogs.confirm.delete": "Ви впевнені, що хочете видалити цей запит?",
+    "dialogs.cancel": "Скасувати",
+    "dialogs.delete": "Видалити",
+
+    // Profile
+    "profile.toasts.update.success": "Профіль успішно оновлено!",
+    "profile.toasts.update.failed": "Не вдалося оновити профіль",
+    "profile.userNotFound": "Користувача не знайдено",
+    "profile.memberSince": "З нами з {date}",
+    "profile.role": "Роль: {role}",
+    "profile.chips.properties": "{count} оголошень",
+    "profile.chips.inquiries": "{count} запитів",
+    "profile.tabs.overview": "Огляд",
+    "profile.tabs.myProperties": "Моя нерухомість",
+    "profile.tabs.myInquiries": "Мої запити",
+    "profile.tabs.favorites": "Улюблені",
+    "profile.tabs.settings": "Налаштування",
+    "profile.info.personal": "Особиста інформація",
+    "profile.info.stats": "Статистика облікового запису",
+    "profile.stats.propertiesListed": "{count} розміщених оголошень",
+    "profile.stats.inquiriesSent": "{count} надісланих запитів",
+    "profile.inquiries.sent": "Надіслано",
+    "profile.inquiries.sentOn": "Надіслано {date}",
+    "profile.buttons.edit": "Редагувати профіль",
+    "profile.buttons.logout": "Вийти",
+    "profile.empty.properties.title": "Поки що немає оголошень",
+    "profile.empty.properties.description":
+      "Почніть зі створення вашого першого оголошення.",
+    "profile.empty.properties.action": "Додати оголошення",
+    "profile.empty.inquiries.title": "Поки що немає запитів",
+    "profile.empty.inquiries.description":
+      "Почніть переглядати нерухомість та надсилати запити власникам.",
+    "profile.empty.inquiries.action": "Переглянути нерухомість",
+    "profile.settings.soon.title": "Функція налаштувань з'явиться незабаром!",
+    "profile.settings.soon.description":
+      "Тут ви зможете керувати налаштуваннями та вподобаннями.",
+    "profile.settings.soon.action": "Редагувати профіль",
+    "profile.form.firstName": "Ім'я",
+    "profile.form.lastName": "Прізвище",
+    "profile.form.email": "Email",
+    "profile.form.phone": "Телефон",
+    "profile.dialog.editTitle": "Редагувати профіль",
+    "profile.dialog.cancel": "Скасувати",
+    "profile.dialog.save": "Зберегти зміни",
+    "profile.dialog.saving": "Збереження...",
+
+    // Admin Page
+    "adminPage.header.title": "Адмін панель",
+    "adminPage.header.subtitle": "Керуйте платформою нерухомості",
+    "adminPage.accessDenied":
+      "Доступ заборонено. Потрібні права адміністратора.",
+    "adminPage.tabs.dashboard": "Панель",
+    "adminPage.tabs.users": "Користувачі",
+    "adminPage.features.manageProperties.title": "Управління нерухомістю",
+    "adminPage.features.manageProperties.description":
+      "Перегляд, редагування та керування всіма оголошеннями в системі",
+    "adminPage.features.manageInquiries.title": "Управління запитами",
+    "adminPage.features.manageInquiries.description":
+      "Перегляд і відповіді на запити користувачів",
+    "adminPage.actions.access": "Перейти",
+    "adminPage.actions.backHome": "Повернутися на головну",
+    "adminPage.users.title": "Керування користувачами",
+    "adminPage.users.subtitle":
+      "Перегляд та керування обліковими записами (усього: {count})",
+    "adminPage.users.loadError":
+      "Не вдалося завантажити користувачів. Спробуйте пізніше.",
+    "adminPage.users.empty.title": "Користувачів не знайдено",
+    "adminPage.users.empty.description": "У системі немає користувачів.",
+    "adminPage.userCard.current": "Поточний користувач",
+    "adminPage.userCard.phone": "Телефон:",
+    "adminPage.userCard.notProvided": "Не вказано",
+    "adminPage.userCard.joined": "Приєднався:",
+    "adminPage.userCard.role": "Роль:",
+
+    // Create Property Page
+    "createProperty.header.title": "Створити оголошення",
+    "createProperty.header.subtitle": "Додайте новий об'єкт нерухомості",
+
+    // Developer Page - project highlight
+    "developer.project.title": "Платформа нерухомості",
+    "developer.project.description":
+      "Повноцінна платформа нерухомості, створена на сучасних технологіях. Містить авторизацію користувачів, керування оголошеннями, пошук і фільтри, завантаження зображень та адаптивний інтерфейс.",
+    "developer.project.stack.reactTs": "React + TypeScript",
+    "developer.project.stack.dotnet": ".NET Core + C#",
+    "developer.project.stack.postgres": "PostgreSQL",
+    "developer.project.stack.mui": "Material-UI",
+
+    // Edit Property Page
+    "editProperty.errors.idRequired": "Потрібен ID оголошення",
+    "editProperty.errors.permission":
+      "У вас немає прав для редагування цього оголошення",
+    "editProperty.toasts.accessDenied":
+      "Доступ заборонено. Ви можете редагувати лише власні оголошення.",
+    "editProperty.errors.loadFailed": "Не вдалося завантажити оголошення",
+    "editProperty.toasts.loadFailed":
+      "Не вдалося завантажити оголошення. Спробуйте ще раз.",
+    "editProperty.errors.notFound": "Оголошення не знайдено.",
+    "editProperty.back": "Повернутися до списку",
+
+    // Oops Page (generic error)
+    "oops.title": "Щось пішло не так",
+    "oops.subtitle": "Не вдалося виконати ваш запит.",
+    "oops.description":
+      "Можливо, це тимчасова проблема. Спробуйте пізніше або скористайтеся варіантами нижче.",
+    "oops.actions.home": "На головну",
+    "oops.actions.browse": "Переглянути нерухомість",
+    "oops.actions.back": "Назад",
+
+    // Not Found Page
+    "notFound.title": "Сторінку не знайдено",
+    "notFound.description":
+      "Сторінка, яку ви шукаєте, не існує або була переміщена. Не хвилюйтеся, ми допоможемо знайти потрібне.",
+    "notFound.actions.home": "На головну",
+    "notFound.actions.browse": "Переглянути нерухомість",
+    "notFound.actions.back": "Назад",
+    "notFound.popular": "Можливо, вас цікавлять ці сторінки:",
+    "notFound.link.properties": "Нерухомість",
+    "notFound.link.about": "Про нас",
+    "notFound.link.faq": "FAQ",
+    "notFound.link.contact": "Контакти",
   },
 };

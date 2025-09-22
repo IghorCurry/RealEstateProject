@@ -8,6 +8,7 @@ import {
   LocationOn as LocationIcon,
 } from "@mui/icons-material";
 import { formatDate, getLocationLabel } from "../../utils/helpers";
+import { useLanguage } from "../../contexts/LanguageContext";
 import type { PropertyDetailed } from "../../types/property";
 
 interface PropertyDetailsCardProps {
@@ -17,13 +18,14 @@ interface PropertyDetailsCardProps {
 export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({
   property,
 }) => {
+  const { t } = useLanguage();
   return (
     <>
       {/* Property Details */}
       <Card sx={{ mb: 4 }}>
         <CardContent>
           <Typography variant="h5" sx={{ mb: 3, fontWeight: 600 }}>
-            Property Details
+            {t("property.details.title")}
           </Typography>
 
           <Grid container spacing={3}>
@@ -32,7 +34,7 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({
                 <BedIcon sx={{ fontSize: 32, color: "primary.main", mb: 1 }} />
                 <Typography variant="h6">{property.bedrooms}</Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Bedrooms
+                  {t("property.details.bedrooms")}
                 </Typography>
               </Box>
             </Grid>
@@ -41,7 +43,7 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({
                 <BathIcon sx={{ fontSize: 32, color: "primary.main", mb: 1 }} />
                 <Typography variant="h6">{property.bathrooms}</Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Bathrooms
+                  {t("property.details.bathrooms")}
                 </Typography>
               </Box>
             </Grid>
@@ -50,7 +52,7 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({
                 <AreaIcon sx={{ fontSize: 32, color: "primary.main", mb: 1 }} />
                 <Typography variant="h6">{property.squareMeters} m²</Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Area
+                  {t("property.details.area")}
                 </Typography>
               </Box>
             </Grid>
@@ -63,7 +65,7 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({
                   {formatDate(property.createdAt)}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Listed Date
+                  {t("property.details.listedDate")}
                 </Typography>
               </Box>
             </Grid>
@@ -75,7 +77,7 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({
       <Card sx={{ mb: 4 }}>
         <CardContent>
           <Typography variant="h5" sx={{ mb: 3, fontWeight: 600 }}>
-            Description
+            {t("property.details.description")}
           </Typography>
           <Typography variant="body1" sx={{ lineHeight: 1.7 }}>
             {property.description}
@@ -88,7 +90,7 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({
         <Card sx={{ mb: 4 }}>
           <CardContent>
             <Typography variant="h5" sx={{ mb: 3, fontWeight: 600 }}>
-              Features & Amenities
+              {t("property.details.amenities")}
             </Typography>
             <Grid container spacing={2}>
               {property.features.map((feature, index) => (
@@ -118,7 +120,7 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({
       <Card sx={{ mb: 4 }}>
         <CardContent>
           <Typography variant="h5" sx={{ mb: 3, fontWeight: 600 }}>
-            Location
+            {t("property.details.location")}
           </Typography>
           <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
             <LocationIcon sx={{ mr: 2, color: "primary.main" }} />

@@ -56,6 +56,7 @@ export const API_ENDPOINTS = {
   INQUIRY: {
     ALL: "/Inquiry",
     BY_ID: "/Inquiry/:id",
+    MY: "/Inquiry/my",
     USER: "/Inquiry/user",
     BY_USER: "/Inquiry/by-user/:userId",
     BY_PROPERTY: "/Inquiry/by-property/:propertyId",

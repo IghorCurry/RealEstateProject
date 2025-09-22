@@ -32,6 +32,7 @@ import { useLanguage } from "../../contexts/LanguageContext";
 import { ROUTES } from "../../utils/constants";
 import { getUserFullName, getInitials } from "../../utils/helpers";
 import { FavoriteCount } from "./FavoriteCount";
+import { InquiryReceivedCount } from "./InquiryReceivedCount";
 
 export const Header = React.memo(() => {
   const theme = useTheme();
@@ -308,7 +309,7 @@ export const Header = React.memo(() => {
               {/* Admin Badge */}
               {isAdmin && (
                 <Chip
-                  label={t("Admin")}
+                  label={t("nav.admin")}
                   size="small"
                   color="secondary"
                   sx={{
@@ -321,6 +322,8 @@ export const Header = React.memo(() => {
 
               {/* Favorite Count */}
               <FavoriteCount />
+              {/* Inquiry Count */}
+              <InquiryReceivedCount />
 
               {/* Profile Menu */}
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -406,7 +409,7 @@ export const Header = React.memo(() => {
                     },
                   }}
                 >
-                  {t("Login")}
+                  {t("nav.login")}
                 </Button>
                 <Button
                   variant="contained"
@@ -423,7 +426,7 @@ export const Header = React.memo(() => {
                     },
                   }}
                 >
-                  {t("Register")}
+                  {t("nav.register")}
                 </Button>
               </Box>
             </Fade>
@@ -449,7 +452,7 @@ export const Header = React.memo(() => {
       >
         <MenuItem onClick={handleProfileClick} sx={{ py: 1.5 }}>
           <AccountCircle sx={{ mr: 2, color: "text.secondary" }} />
-          {t("Profile")}
+          {t("nav.profile")}
         </MenuItem>
         <MenuItem
           onClick={() => {
@@ -474,12 +477,12 @@ export const Header = React.memo(() => {
         {isAdmin && (
           <MenuItem onClick={handleAdminClick} sx={{ py: 1.5 }}>
             <Dashboard sx={{ mr: 2, color: "text.secondary" }} />
-            {t("Admin Panel")}
+            {t("nav.admin")}
           </MenuItem>
         )}
         <MenuItem onClick={handleLogout} sx={{ py: 1.5, color: "error.main" }}>
           <Logout sx={{ mr: 2 }} />
-          {t("Logout")}
+          {t("nav.logout")}
         </MenuItem>
       </Menu>
 
@@ -501,12 +504,12 @@ export const Header = React.memo(() => {
       >
         <MenuItem onClick={handleHomeClick}>
           <HomeIcon sx={{ mr: 2, color: "text.secondary" }} />
-          {t("Home")}
+          {t("nav.home")}
         </MenuItem>
         {!isActiveRoute(ROUTES.PROPERTIES) && (
           <MenuItem onClick={handlePropertiesClick}>
             <SearchIcon sx={{ mr: 2, color: "text.secondary" }} />
-            {t("Properties")}
+            {t("nav.properties")}
           </MenuItem>
         )}
         <MenuItem
@@ -522,7 +525,7 @@ export const Header = React.memo(() => {
           <>
             <MenuItem onClick={handleProfileClick}>
               <AccountCircle sx={{ mr: 2, color: "text.secondary" }} />
-              {t("Profile")}
+              {t("nav.profile")}
             </MenuItem>
             <MenuItem
               onClick={() => {
@@ -545,12 +548,12 @@ export const Header = React.memo(() => {
             {isAdmin && (
               <MenuItem onClick={handleAdminClick}>
                 <Dashboard sx={{ mr: 2, color: "text.secondary" }} />
-                {t("Admin Panel")}
+                {t("nav.admin")}
               </MenuItem>
             )}
             <MenuItem onClick={handleLogout} sx={{ color: "error.main" }}>
               <Logout sx={{ mr: 2 }} />
-              {t("Logout")}
+              {t("nav.logout")}
             </MenuItem>
           </>
         )}

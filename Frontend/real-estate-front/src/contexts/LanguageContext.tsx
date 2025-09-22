@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState } from "react";
 import type { ReactNode } from "react";
 import { translations } from "./translations";
@@ -7,7 +8,7 @@ export type Language = "en" | "uk";
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: (key: string) => string;
+  t: (key: string, params?: Record<string, string | number>) => string;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(
@@ -22,12 +23,20 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({
     return (saved as Language) || "en";
   });
 
-  const t = (key: string): string => {
-    return (
+  const t = (key: string, params?: Record<string, string | number>): string => {
+    let template =
       translations[language][
         key as keyof (typeof translations)[typeof language]
-      ] || key
-    );
+      ] || key;
+
+    if (params && typeof template === "string") {
+      for (const [paramKey, paramValue] of Object.entries(params)) {
+        const pattern = new RegExp(`\\{${paramKey}\\}`, "g");
+        template = template.replace(pattern, String(paramValue));
+      }
+    }
+
+    return template;
   };
 
   const handleSetLanguage = (lang: Language) => {

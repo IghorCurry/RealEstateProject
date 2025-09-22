@@ -1,10 +1,6 @@
 import React from "react";
-import {
-  Card,
-  CardContent,
-  Typography,
-  Box,
-} from "@mui/material";
+import { Card, CardContent, Typography, Box } from "@mui/material";
+import { useLanguage } from "../../contexts/LanguageContext";
 import { formatDate } from "../../utils/helpers";
 import type { PropertyDetailed } from "../../types/property";
 
@@ -17,17 +13,18 @@ export const PropertyInfoCard: React.FC<PropertyInfoCardProps> = ({
   property,
   isAdmin,
 }) => {
+  const { t } = useLanguage();
   return (
     <Card>
       <CardContent>
         <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
-          Property Information
+          {t("property.details.title")}
         </Typography>
 
         {isAdmin && (
           <Box sx={{ mb: 2 }}>
             <Typography variant="body2" color="text.secondary">
-              Property ID
+              {t("property.details.id") || "Property ID"}
             </Typography>
             <Typography variant="body1" sx={{ fontWeight: 500 }}>
               {property.id}
@@ -37,7 +34,7 @@ export const PropertyInfoCard: React.FC<PropertyInfoCardProps> = ({
 
         <Box sx={{ mb: 2 }}>
           <Typography variant="body2" color="text.secondary">
-            Listed Date
+            {t("property.details.listedDate") || "Listed Date"}
           </Typography>
           <Typography variant="body1" sx={{ fontWeight: 500 }}>
             {formatDate(property.createdAt)}
@@ -46,7 +43,7 @@ export const PropertyInfoCard: React.FC<PropertyInfoCardProps> = ({
 
         <Box sx={{ mb: 2 }}>
           <Typography variant="body2" color="text.secondary">
-            Last Updated
+            {t("property.details.lastUpdated") || "Last Updated"}
           </Typography>
           <Typography variant="body1" sx={{ fontWeight: 500 }}>
             {property.updatedAt

@@ -1,0 +1,167 @@
+.developer-page {
+  position: relative;
+  min-height: 100vh;
+  isolation: isolate;
+  /* Blue palette to match Silk */
+  --silk-base: #3b82f6;
+  --surface: rgba(22, 20, 24, 0.35);
+  --stroke: rgba(255, 255, 255, 0.12);
+  --text: #eef2ff; /* slightly brighter text */
+  --muted: #c9c3d0;
+  --chip-bg: rgba(255, 255, 255, 0.1);
+  --chip-stroke: rgba(255, 255, 255, 0.18);
+}
+
+.developer-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.developer-bg canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.developer-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* Glassmorphism surface */
+.developer-card {
+  /* Stronger background + more blur for readability */
+  background: linear-gradient(
+    to bottom right,
+    rgba(0, 10, 25, 0.35),
+    rgba(0, 10, 25, 0.55)
+  );
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: var(--text);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* Accent card for highlights */
+.developer-card-accent {
+  /* Plain glass variant replacing previous gradient */
+  background: rgba(8, 20, 40, 0.28) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #eaf2ff;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Readable titles/text */
+.developer-title,
+.developer-subtitle,
+.developer-text {
+  color: var(--text);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* SectionHeader lighter tones on developer page */
+.route-developer .MuiTypography-h1 {
+  color: #eaf2ff !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+.route-developer .MuiTypography-body1 {
+  color: #cbd5ff !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+/* Chips that stand out on Silk */
+.developer-chip {
+  background: var(--chip-bg);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: var(--text);
+  backdrop-filter: blur(3px);
+}
+
+/* Icons inside developer cards */
+.route-developer .developer-card .MuiSvgIcon-root {
+  color: #cbd5ff !important;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+/* Soft halo around avatar */
+.developer-avatar-ring {
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.07);
+}
+
+/* Subtle hover for avatar */
+.developer-avatar {
+  transition: transform 220ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 220ms cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+.developer-avatar:hover {
+  transform: scale(1.03);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35),
+    0 0 0 4px rgba(59, 130, 246, 0.35);
+}
+
+/* Mobile perf tweaks */
+@media (max-width: 600px) {
+  .developer-card {
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+  }
+}
+
+/* Reduced motion: hide animated background */
+@media (prefers-reduced-motion: reduce) {
+  .developer-bg {
+    display: none;
+  }
+}
+
+/* Route-scoped Header/Footer overrides for developer page */
+.route-developer .MuiAppBar-root {
+  background: rgba(8, 20, 40, 0.35) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  color: #eef2ff;
+}
+.route-developer .MuiAppBar-root .MuiTypography-root,
+.route-developer .MuiAppBar-root .MuiButton-root,
+.route-developer .MuiAppBar-root .MuiIconButton-root {
+  color: #eef2ff !important;
+}
+.route-developer .MuiAppBar-root .MuiButton-root:hover,
+.route-developer .MuiAppBar-root .MuiIconButton-root:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff !important;
+}
+
+.route-developer footer {
+  background: linear-gradient(
+    to bottom right,
+    rgba(0, 10, 25, 0.35),
+    rgba(0, 10, 25, 0.55)
+  ) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  color: #eef2ff;
+}
+.route-developer footer .MuiTypography-root,
+.route-developer footer .MuiButton-root {
+  color: #eef2ff !important;
+}
+.route-developer footer .MuiSvgIcon-root {
+  color: #cbd5ff !important;
+}
+.route-developer footer .MuiButton-root:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+.route-developer footer .MuiIconButton-root {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}

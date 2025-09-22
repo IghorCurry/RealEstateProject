@@ -123,6 +123,7 @@ export const queryKeys = {
   inquiries: {
     all: ["inquiries"] as const,
     lists: () => [...queryKeys.inquiries.all, "list"] as const,
+    my: (userId?: string) => [...queryKeys.inquiries.all, "my", userId] as const,
     byUser: (userId?: string) =>
       [...queryKeys.inquiries.lists(), userId] as const,
     byProperty: (propertyId: string) =>

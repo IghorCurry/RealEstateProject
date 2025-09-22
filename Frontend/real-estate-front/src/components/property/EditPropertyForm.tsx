@@ -9,6 +9,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useForm, FormProvider } from "react-hook-form";
+import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
@@ -21,10 +22,7 @@ import { ImageUpload } from "./ImageUpload";
 import { PropertyFormFields } from "./PropertyFormFields";
 import { filterValidImages } from "../../utils/imageHelpers";
 import { usePropertyFeatures } from "../../hooks/usePropertyFeatures";
-import {
-  propertyFormSchema,
-  type PropertyFormData,
-} from "../../utils/validationSchemas";
+import { createPropertyFormSchema } from "../../utils/validationSchemas";
 import type {
   Property,
   PropertyImage,
@@ -58,8 +56,11 @@ export const EditPropertyForm: React.FC<EditPropertyFormProps> = ({
   const { features, newFeature, setNewFeature, addFeature, removeFeature } =
     usePropertyFeatures(initialFeatures);
 
+  const schema = createPropertyFormSchema(t);
+  type PropertyFormData = yup.InferType<typeof schema>;
+
   const methods = useForm<PropertyFormData>({
-    resolver: yupResolver(propertyFormSchema),
+    resolver: yupResolver(schema),
     defaultValues: {
       title: property.title,
       description: property.description,
@@ -122,12 +123,12 @@ export const EditPropertyForm: React.FC<EditPropertyFormProps> = ({
         return updatedImages;
       });
 
-      toast.success(`${files.length} image(s) uploaded successfully`);
+      toast.success(t("toasts.imageEdit.upload.success", { count: files.length }));
     } catch (error) {
       if (error instanceof Error) {
-        toast.error(`Failed to upload images: ${error.message}`);
+        toast.error(t("toasts.imageEdit.upload.failedWithMessage", { message: error.message }));
       } else {
-        toast.error("Failed to upload images");
+        toast.error(t("toasts.imageEdit.upload.failed"));
       }
 
       throw error;
@@ -144,9 +145,9 @@ export const EditPropertyForm: React.FC<EditPropertyFormProps> = ({
         prevImages.filter((img) => !imageIds.includes(img.id))
       );
 
-      toast.success(`${imageIds.length} image(s) deleted successfully`);
+      toast.success(t("toasts.imageEdit.delete.success", { count: imageIds.length }));
     } catch {
-      toast.error("Failed to delete images");
+      toast.error(t("toasts.imageEdit.delete.failed"));
     }
   };
 

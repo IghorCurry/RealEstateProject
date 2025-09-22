@@ -16,7 +16,7 @@ import {
 import { Add as AddIcon, Close as CloseIcon } from "@mui/icons-material";
 import { Controller, useFormContext } from "react-hook-form";
 import { useLanguage } from "../../contexts/LanguageContext";
-import { featureValidationSchema } from "../../utils/validationSchemas";
+import { createFeatureValidationSchema } from "../../utils/validationSchemas";
 
 interface PropertyFormFieldsProps {
   features: string[];
@@ -49,7 +49,9 @@ export const PropertyFormFields: React.FC<PropertyFormFieldsProps> = ({
       const cleanedFeature = newFeature.replace(/["'[\]]/g, "").trim();
 
       // Валідуємо нову feature
-      await featureValidationSchema.validate({ feature: cleanedFeature });
+      await createFeatureValidationSchema(t).validate({
+        feature: cleanedFeature,
+      });
 
       // Перевіряємо на дублікати
       const normalizedNewFeature = cleanedFeature.toLowerCase().trim();
@@ -150,7 +152,7 @@ export const PropertyFormFields: React.FC<PropertyFormFieldsProps> = ({
           render={({ field }) => (
             <TextField
               {...field}
-              label="Address"
+              label={t("property.form.address")}
               fullWidth
               error={!!errors.address}
               helperText={errors.address?.message?.toString()}
@@ -166,18 +168,20 @@ export const PropertyFormFields: React.FC<PropertyFormFieldsProps> = ({
           control={control}
           render={({ field }) => (
             <FormControl fullWidth error={!!errors.location}>
-              <InputLabel>Location</InputLabel>
+              <InputLabel>{t("property.form.location")}</InputLabel>
               <Select
                 {...field}
-                label="Location"
+                label={t("property.form.location")}
                 onChange={(e) => field.onChange(Number(e.target.value))}
               >
-                <MenuItem value={1}>Downtown</MenuItem>
-                <MenuItem value={2}>Suburban</MenuItem>
-                <MenuItem value={3}>Rural</MenuItem>
-                <MenuItem value={4}>Beachfront</MenuItem>
-                <MenuItem value={5}>Mountain</MenuItem>
-                <MenuItem value={6}>Urban</MenuItem>
+                <MenuItem value={1}>{t("property.location.downtown")}</MenuItem>
+                <MenuItem value={2}>{t("property.location.suburban")}</MenuItem>
+                <MenuItem value={3}>{t("property.location.rural")}</MenuItem>
+                <MenuItem value={4}>
+                  {t("property.location.beachfront")}
+                </MenuItem>
+                <MenuItem value={5}>{t("property.location.mountain")}</MenuItem>
+                <MenuItem value={6}>{t("property.location.urban")}</MenuItem>
               </Select>
               {errors.location?.message && (
                 <FormHelperText>
@@ -195,18 +199,18 @@ export const PropertyFormFields: React.FC<PropertyFormFieldsProps> = ({
           control={control}
           render={({ field }) => (
             <FormControl fullWidth error={!!errors.propertyType}>
-              <InputLabel>Property Type</InputLabel>
+              <InputLabel>{t("property.form.propertyType")}</InputLabel>
               <Select
                 {...field}
-                label="Property Type"
+                label={t("property.form.propertyType")}
                 onChange={(e) => field.onChange(Number(e.target.value))}
               >
-                <MenuItem value={1}>House</MenuItem>
-                <MenuItem value={2}>Apartment</MenuItem>
-                <MenuItem value={3}>Condo</MenuItem>
-                <MenuItem value={4}>Townhouse</MenuItem>
-                <MenuItem value={5}>Villa</MenuItem>
-                <MenuItem value={6}>Land</MenuItem>
+                <MenuItem value={1}>{t("property.type.house")}</MenuItem>
+                <MenuItem value={2}>{t("property.type.apartment")}</MenuItem>
+                <MenuItem value={3}>{t("property.type.condo")}</MenuItem>
+                <MenuItem value={4}>{t("property.type.townhouse")}</MenuItem>
+                <MenuItem value={5}>{t("property.type.villa")}</MenuItem>
+                <MenuItem value={6}>{t("property.type.land")}</MenuItem>
                 <MenuItem value={7}>Commercial</MenuItem>
               </Select>
               {errors.propertyType?.message && (
@@ -226,16 +230,18 @@ export const PropertyFormFields: React.FC<PropertyFormFieldsProps> = ({
           control={control}
           render={({ field }) => (
             <FormControl fullWidth error={!!errors.status}>
-              <InputLabel>Status</InputLabel>
+              <InputLabel>{t("property.form.status")}</InputLabel>
               <Select
                 {...field}
-                label="Status"
+                label={t("property.form.status")}
                 onChange={(e) => field.onChange(Number(e.target.value))}
               >
-                <MenuItem value={1}>Available</MenuItem>
-                <MenuItem value={4}>Under Contract</MenuItem>
-                <MenuItem value={2}>Sold</MenuItem>
-                <MenuItem value={3}>Rented</MenuItem>
+                <MenuItem value={1}>{t("property.status.available")}</MenuItem>
+                <MenuItem value={4}>
+                  {t("property.status.underContract")}
+                </MenuItem>
+                <MenuItem value={2}>{t("property.status.sold")}</MenuItem>
+                <MenuItem value={3}>{t("property.status.rented")}</MenuItem>
               </Select>
               {errors.status?.message && (
                 <FormHelperText>{String(errors.status.message)}</FormHelperText>
@@ -253,7 +259,7 @@ export const PropertyFormFields: React.FC<PropertyFormFieldsProps> = ({
           render={({ field }) => (
             <TextField
               {...field}
-              label="Bedrooms"
+              label={t("property.form.bedrooms")}
               type="number"
               fullWidth
               onChange={(e) => {
@@ -274,7 +280,7 @@ export const PropertyFormFields: React.FC<PropertyFormFieldsProps> = ({
           render={({ field }) => (
             <TextField
               {...field}
-              label="Bathrooms"
+              label={t("property.form.bathrooms")}
               type="number"
               fullWidth
               onChange={(e) => {
@@ -296,7 +302,7 @@ export const PropertyFormFields: React.FC<PropertyFormFieldsProps> = ({
           render={({ field }) => (
             <TextField
               {...field}
-              label="Square Meters"
+              label={t("property.form.squareMeters")}
               type="number"
               fullWidth
               onChange={(e) => {
@@ -321,7 +327,7 @@ export const PropertyFormFields: React.FC<PropertyFormFieldsProps> = ({
               onNewFeatureChange(cleaned);
               setFeatureError(""); // Очищаємо помилку при зміні
             }}
-            placeholder="Add a feature (e.g., Pool, Garage)"
+            placeholder={t("property.form.addFeature")}
             size="small"
             sx={{ flexGrow: 1 }}
             error={!!featureError}

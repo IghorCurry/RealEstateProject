@@ -28,6 +28,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useLanguage } from "../../contexts/LanguageContext";
 import { getUserFullName, getInitials } from "../../utils/helpers";
 import { FavoriteCount } from "./FavoriteCount";
+import { InquiryReceivedCount } from "./InquiryReceivedCount";
 
 export const ModernHero: React.FC = () => {
   const theme = useTheme();
@@ -271,6 +272,7 @@ export const ModernHero: React.FC = () => {
                   )}
 
                   <FavoriteCount />
+                  <InquiryReceivedCount />
 
                   {user && (
                     <Typography
@@ -353,7 +355,7 @@ export const ModernHero: React.FC = () => {
                       },
                     }}
                   >
-                    Login
+                    {t("nav.login")}
                   </Button>
                   <Button
                     variant="contained"
@@ -379,7 +381,7 @@ export const ModernHero: React.FC = () => {
                       },
                     }}
                   >
-                    Register
+                    {t("nav.register")}
                   </Button>
                 </Box>
               )}
@@ -618,7 +620,7 @@ export const ModernHero: React.FC = () => {
       >
         <MenuItem onClick={handleProfileClick} sx={{ py: 1.5 }}>
           <AccountCircle sx={{ mr: 2, color: "text.secondary" }} />
-          {t("Profile")}
+          {t("nav.profile")}
         </MenuItem>
         <MenuItem onClick={handleFavoritesClick} sx={{ py: 1.5 }}>
           <FavoriteIcon sx={{ mr: 2, color: "text.secondary" }} />
@@ -631,12 +633,12 @@ export const ModernHero: React.FC = () => {
         {isAdmin && (
           <MenuItem onClick={handleAdminClick} sx={{ py: 1.5 }}>
             <Dashboard sx={{ mr: 2, color: "text.secondary" }} />
-            {t("Admin Panel")}
+            {t("nav.adminPanel")}
           </MenuItem>
         )}
         <MenuItem onClick={handleLogout} sx={{ py: 1.5, color: "error.main" }}>
           <LogoutIcon sx={{ mr: 2 }} />
-          {t("Logout")}
+          {t("nav.logout")}
         </MenuItem>
       </Menu>
     </Box>

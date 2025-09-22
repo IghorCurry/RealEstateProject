@@ -30,36 +30,42 @@ export const getPropertyTypeLabel = (type: PropertyType | string): string => {
   // Якщо type - це рядок (наприклад, "Apartment", "House")
   if (typeof type === "string") {
     const stringLabels: Record<string, string> = {
-      Apartment: "Квартира",
-      House: "Будинок",
-      Condo: "Кондо",
-      Townhouse: "Таунхаус",
-      Villa: "Вілла",
-      Land: "Земельна ділянка",
-      Commercial: "Комерційне",
+      Apartment:
+        localStorage.getItem("language") === "uk" ? "Квартира" : "Apartment",
+      House: localStorage.getItem("language") === "uk" ? "Будинок" : "House",
+      Condo: localStorage.getItem("language") === "uk" ? "Кондо" : "Condo",
+      Townhouse:
+        localStorage.getItem("language") === "uk" ? "Таунхаус" : "Townhouse",
+      Villa: localStorage.getItem("language") === "uk" ? "Вілла" : "Villa",
+      Land:
+        localStorage.getItem("language") === "uk" ? "Земельна ділянка" : "Land",
+      Commercial:
+        localStorage.getItem("language") === "uk" ? "Комерційне" : "Commercial",
     };
     return stringLabels[type] || type;
   }
 
   // Якщо type - це число (enum)
+  const isUk = localStorage.getItem("language") === "uk";
   const labels: Record<PropertyType, string> = {
-    1: "House",
-    2: "Apartment",
-    3: "Condo",
-    4: "Townhouse",
-    5: "Villa",
-    6: "Land",
-    7: "Commercial",
+    1: isUk ? "Будинок" : "House",
+    2: isUk ? "Квартира" : "Apartment",
+    3: isUk ? "Кондо" : "Condo",
+    4: isUk ? "Таунхаус" : "Townhouse",
+    5: isUk ? "Вілла" : "Villa",
+    6: isUk ? "Земельна ділянка" : "Land",
+    7: isUk ? "Комерційне" : "Commercial",
   };
   return labels[type] || "Unknown";
 };
 
 export const getPropertyStatusLabel = (status: PropertyStatus): string => {
+  const isUk = localStorage.getItem("language") === "uk";
   const labels: Record<PropertyStatus, string> = {
-    1: "Available",
-    2: "Under Contract",
-    3: "Sold",
-    4: "Rented",
+    1: isUk ? "Доступно" : "Available",
+    2: isUk ? "Під контрактом" : "Under Contract",
+    3: isUk ? "Продано" : "Sold",
+    4: isUk ? "Орендовано" : "Rented",
   };
   return labels[status] || "Unknown";
 };
@@ -67,25 +73,27 @@ export const getPropertyStatusLabel = (status: PropertyStatus): string => {
 export const getLocationLabel = (location: Location | string): string => {
   // Якщо location - це рядок (наприклад, "Urban", "Suburban")
   if (typeof location === "string") {
+    const isUk = localStorage.getItem("language") === "uk";
     const stringLabels: Record<string, string> = {
-      Urban: "Місто",
-      Suburban: "Передмістя",
-      Downtown: "Центр",
-      Rural: "Сільська місцевість",
-      Beachfront: "Берег моря",
-      Mountain: "Гори",
+      Urban: isUk ? "Місто" : "Urban",
+      Suburban: isUk ? "Передмістя" : "Suburban",
+      Downtown: isUk ? "Центр" : "Downtown",
+      Rural: isUk ? "Сільська місцевість" : "Rural",
+      Beachfront: isUk ? "Берег моря" : "Beachfront",
+      Mountain: isUk ? "Гори" : "Mountain",
     };
     return stringLabels[location] || location;
   }
 
   // Якщо location - це число (enum)
+  const isUk = localStorage.getItem("language") === "uk";
   const labels: Record<Location, string> = {
-    1: "Downtown",
-    2: "Suburban",
-    3: "Rural",
-    4: "Beachfront",
-    5: "Mountain",
-    6: "Urban",
+    1: isUk ? "Центр" : "Downtown",
+    2: isUk ? "Передмістя" : "Suburban",
+    3: isUk ? "Сільська місцевість" : "Rural",
+    4: isUk ? "Берег моря" : "Beachfront",
+    5: isUk ? "Гори" : "Mountain",
+    6: isUk ? "Місто" : "Urban",
   };
   return labels[location] || "Unknown";
 };
