@@ -87,12 +87,24 @@
 .developer-chip {
   background: var(--chip-bg);
   border: 1px solid rgba(255, 255, 255, 0.25);
-  color: var(--text);
+  color: #ffffff !important;
   backdrop-filter: blur(3px);
 }
 
-/* keep text white on hover regardless of bg */
-.developer-chip:hover {
+/* Force white text in all states */
+.developer-chip,
+.developer-chip:hover,
+.developer-chip:focus,
+.developer-chip:active,
+.developer-chip .MuiChip-label {
+  color: #ffffff !important;
+}
+
+/* Override Material-UI styles with higher specificity */
+.route-developer .developer-card .developer-chip,
+.route-developer .developer-card .developer-chip .MuiChip-label,
+.route-developer .developer-card .developer-chip:hover,
+.route-developer .developer-card .developer-chip:hover .MuiChip-label {
   color: #ffffff !important;
 }
 

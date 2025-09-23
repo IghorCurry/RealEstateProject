@@ -321,9 +321,16 @@ export const DeveloperPage: React.FC = () => {
                                   borderRadius: 1,
                                   fontWeight: 500,
                                   borderColor: `${category.color}.main`,
+                                  color: "#ffffff !important",
+                                  "& .MuiChip-label": {
+                                    color: "#ffffff !important",
+                                  },
                                   "&:hover": {
                                     bgcolor: `${category.color}.main`,
-                                    color: "#ffffff",
+                                    color: "#ffffff !important",
+                                    "& .MuiChip-label": {
+                                      color: "#ffffff !important",
+                                    },
                                   },
                                 }}
                               />
