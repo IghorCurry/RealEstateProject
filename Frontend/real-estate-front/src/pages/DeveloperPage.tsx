@@ -213,7 +213,6 @@ export const DeveloperPage: React.FC = () => {
                       sx={{
                         fontWeight: 700,
                         mb: 2,
-                        color: "text.primary",
                       }}
                     >
                       {t("developer.name")}
@@ -221,7 +220,6 @@ export const DeveloperPage: React.FC = () => {
                     <Typography
                       variant="body1"
                       className="developer-text"
-                      color="text.secondary"
                       sx={{
                         lineHeight: 1.7,
                         mb: 3,
@@ -274,7 +272,6 @@ export const DeveloperPage: React.FC = () => {
                       sx={{
                         fontWeight: 600,
                         mb: 3,
-                        color: "text.primary",
                       }}
                     >
                       {t("developer.skills.title")}
@@ -290,15 +287,17 @@ export const DeveloperPage: React.FC = () => {
                               mb: 2,
                               color: `${category.color}.main`,
                             }}
+                            className={`developer-category developer-category-${category.color}`}
                           >
-                            {category.icon}
+                            <Box className="developer-category-icon">
+                              {category.icon}
+                            </Box>
                             <Typography
                               variant="h6"
                               className="developer-title"
                               sx={{
                                 fontWeight: 600,
                                 ml: 1,
-                                color: "text.primary",
                               }}
                             >
                               {t(category.titleKey)}
@@ -322,7 +321,6 @@ export const DeveloperPage: React.FC = () => {
                                   borderRadius: 1,
                                   fontWeight: 500,
                                   borderColor: `${category.color}.main`,
-                                  color: `${category.color}.main`,
                                   "&:hover": {
                                     bgcolor: `${category.color}.main`,
                                     color: "#ffffff",
@@ -410,6 +408,46 @@ export const DeveloperPage: React.FC = () => {
                       <Grid item>
                         <Chip
                           label={t("developer.project.stack.mui")}
+                          sx={{
+                            bgcolor: "rgba(255,255,255,0.2)",
+                            color: "white",
+                            fontWeight: 600,
+                          }}
+                        />
+                      </Grid>
+                      <Grid item>
+                        <Chip
+                          label="Serilog"
+                          sx={{
+                            bgcolor: "rgba(255,255,255,0.2)",
+                            color: "white",
+                            fontWeight: 600,
+                          }}
+                        />
+                      </Grid>
+                      <Grid item>
+                        <Chip
+                          label="Docker"
+                          sx={{
+                            bgcolor: "rgba(255,255,255,0.2)",
+                            color: "white",
+                            fontWeight: 600,
+                          }}
+                        />
+                      </Grid>
+                      <Grid item>
+                        <Chip
+                          label="Azure"
+                          sx={{
+                            bgcolor: "rgba(255,255,255,0.2)",
+                            color: "white",
+                            fontWeight: 600,
+                          }}
+                        />
+                      </Grid>
+                      <Grid item>
+                        <Chip
+                          label="GitHub Actions"
                           sx={{
                             bgcolor: "rgba(255,255,255,0.2)",
                             color: "white",

@@ -521,38 +521,64 @@ export const ModernHero: React.FC = () => {
                     whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
                     style={{ willChange: "transform" }}
                   >
-                    <Button
-                      variant="outlined"
-                      size="large"
-                      onClick={() => {
-                        if (isAuthenticated) {
-                          navigate(ROUTES.CREATE_PROPERTY);
-                        } else {
-                          navigate(ROUTES.LOGIN);
-                        }
-                      }}
+                    <Box
                       sx={{
-                        borderColor: "rgba(255, 255, 255, 0.5)",
-                        color: "white",
-                        px: { xs: 2.5, md: 4 },
-                        py: { xs: 0.8, md: 1.5 },
-                        fontSize: { xs: "0.9rem", md: "1rem" },
-                        fontWeight: 500,
-                        borderRadius: 2,
-                        textTransform: "none",
-                        backdropFilter: "blur(10px)",
-                        transition: "all 0.3s ease",
-                        "&:hover": {
-                          borderColor: "white",
-                          bgcolor: "rgba(255, 255, 255, 0.1)",
-                          transform: "translateY(-2px)",
+                        position: "relative",
+                        display: "inline-block",
+                        "&::before": {
+                          content: '""',
+                          position: "absolute",
+                          top: -2,
+                          left: -2,
+                          right: -2,
+                          bottom: -2,
+                          background: "rgba(0, 0, 0, 0.4)",
+                          backdropFilter: "blur(20px)",
+                          WebkitBackdropFilter: "blur(20px)",
+                          borderRadius: 3,
+                          zIndex: -1,
                         },
                       }}
                     >
-                      {isAuthenticated
-                        ? t("home.hero.list")
-                        : t("home.hero.getStarted")}
-                    </Button>
+                      <Button
+                        variant="outlined"
+                        size="large"
+                        onClick={() => {
+                          if (isAuthenticated) {
+                            navigate(ROUTES.CREATE_PROPERTY);
+                          } else {
+                            navigate(ROUTES.LOGIN);
+                          }
+                        }}
+                        sx={{
+                          borderColor: "rgba(255, 255, 255, 0.8)",
+                          color: "white",
+                          px: { xs: 2.5, md: 4 },
+                          py: { xs: 0.8, md: 1.5 },
+                          fontSize: { xs: "0.9rem", md: "1rem" },
+                          fontWeight: 700,
+                          borderRadius: 2,
+                          textTransform: "none",
+                          background: "rgba(0, 0, 0, 0.3)",
+                          boxShadow:
+                            "0 4px 20px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2)",
+                          transition: "all 0.3s ease",
+                          position: "relative",
+                          zIndex: 1,
+                          "&:hover": {
+                            borderColor: "white",
+                            background: "rgba(0, 0, 0, 0.5)",
+                            transform: "translateY(-2px)",
+                            boxShadow:
+                              "0 6px 25px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3)",
+                          },
+                        }}
+                      >
+                        {isAuthenticated
+                          ? t("home.hero.list")
+                          : t("home.hero.getStarted")}
+                      </Button>
+                    </Box>
                   </motion.div>
                 </Box>
               </motion.div>

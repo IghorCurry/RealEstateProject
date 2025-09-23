@@ -25,19 +25,19 @@ export const formatImageUrl = (imageUrl: string): string => {
   }
 
   if (imageUrl.startsWith("blob:")) {
-    return imageUrl; // Blob URL для тимчасових зображень
+    return imageUrl; 
   }
 
   if (imageUrl.startsWith("http")) {
-    return imageUrl; // Повний URL
+    return imageUrl; 
   }
 
   if (imageUrl.startsWith("/")) {
     const fullUrl = `${
       import.meta.env.VITE_API_URL || "http://localhost:5158"
     }${imageUrl}`;
-    return fullUrl; // Відносний шлях
+    return fullUrl; 
   }
 
-  return imageUrl; // Інші випадки
+  return imageUrl; 
 };

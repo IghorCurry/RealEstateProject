@@ -19,11 +19,9 @@ using RealEstate.WebApi.Validators.PropertyValidators;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Визначаємо середовище
 var environment = builder.Configuration["Environment"] ?? "Development";
 Console.WriteLine($"🚀 Starting application in {environment} environment");
 
-// Serilog
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .WriteTo.File("logs/app-.log", 
@@ -36,14 +34,12 @@ builder.Host.UseSerilog();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// Add CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
         policy.SetIsOriginAllowed(origin =>
         {
-            // Дозволяємо localhost для розробки та Azure Static Web App
             return origin.StartsWith("http://localhost:") ||
                    origin.StartsWith("http://127.0.0.1:") ||
                    origin.StartsWith("https://real-estate-front-") ||
@@ -58,7 +54,6 @@ builder.Services.AddCors(options =>
     });
 });
 
-// FluentValidation
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
 builder.Services.AddScoped<FavoriteCreateValidator>();
@@ -92,7 +87,6 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
-// Database connection
 var dbConnectionString = builder.Configuration.GetConnectionString("REDatabase");
 var azureStorageConnectionString = builder.Configuration.GetConnectionString("AzureStorage");
 
@@ -104,7 +98,6 @@ builder.Services.AddDbContext<RealEstateDbContext>(options =>
 
 builder.Services.AddIdentity<User, IdentityRole<Guid>>(options =>
 {
-    // Налаштування вимог до паролів
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
     options.Password.RequireUppercase = true;
@@ -112,7 +105,6 @@ builder.Services.AddIdentity<User, IdentityRole<Guid>>(options =>
     options.Password.RequiredLength = 8;
     options.Password.RequiredUniqueChars = 1;
     
-    // Налаштування користувача
     options.User.RequireUniqueEmail = true;
     options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
 })
@@ -165,7 +157,6 @@ builder.Services.AddAuthentication(options =>
 });
 builder.Services.AddHttpContextAccessor();
 
-// Add HttpClient for Supabase Storage
 builder.Services.AddHttpClient();
 
 builder.Services.AddMemoryCache();
@@ -177,7 +168,8 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-// Use CORS
+app.UseRouting();
+
 app.UseCors("AllowFrontend");
 
 

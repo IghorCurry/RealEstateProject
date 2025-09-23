@@ -96,10 +96,51 @@
   color: #ffffff !important;
 }
 
-/* Icons inside developer cards */
-.route-developer .developer-card .MuiSvgIcon-root {
-  color: #cbd5ff !important;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+/* Icons inside developer cards: keep default, color comes from context */
+
+/* Category icon colors + hover spin */
+.developer-category-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: transform 220ms ease, box-shadow 220ms ease, background 220ms ease;
+}
+.developer-category:hover .developer-category-icon {
+  transform: rotate(10deg) scale(1.04);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.1);
+}
+/* Color accents per MUI palette by inheriting current color of container */
+.developer-category {
+  color: inherit;
+}
+/* Category-specific icon colors */
+.developer-category-primary .developer-category-icon .MuiSvgIcon-root {
+  color: #a855f7 !important; /* Frontend - light purple */
+}
+.developer-category-secondary .developer-category-icon .MuiSvgIcon-root {
+  color: #dc2626 !important; /* Backend - dark red */
+}
+.developer-category-success .developer-category-icon .MuiSvgIcon-root {
+  color: #16a34a !important; /* Database - green */
+}
+.developer-category-info .developer-category-icon .MuiSvgIcon-root {
+  color: #2563eb !important; /* Tools - blue */
+}
+.developer-category-error .developer-category-icon .MuiSvgIcon-root {
+  color: #ef4444 !important; /* AI Tools - light red */
+}
+.developer-category-warning .developer-category-icon .MuiSvgIcon-root {
+  color: #ea580c !important; /* Soft Skills - orange */
 }
 
 /* Soft halo around avatar */
