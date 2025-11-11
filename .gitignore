@@ -1,8 +1,5 @@
 Education/
-Documentation/**
-!Documentation/API_DOCUMENTATION.md
-!Documentation/PROJECT_OVERVIEW.md
-!Documentation/USER_GUIDE.md
+Documentation/
 # .NET
 bin/
 obj/
@@ -75,4 +72,10 @@ coverage/
 pids
 *.pid
 *.seed
-*.pid.lock 
+*.pid.lock
+
+# Accidental files from git commands (PowerShell artifacts)
+-remote --heads origin
+how origin
+ionTable.PSVersion
+main 
